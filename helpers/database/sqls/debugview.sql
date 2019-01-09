@@ -11,5 +11,4 @@ select
 from developer as d
   join developer_team_relation as r on (r.developer = d.id)
   join team as t on (r.team = t.id)
-group by d.id, t.id, r.id
 order by t.name;
