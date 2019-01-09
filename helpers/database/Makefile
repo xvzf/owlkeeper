@@ -1,13 +1,21 @@
+PSQL="PGPASSWORD=owlkeeper psql -h 127.0.0.1 owlkeeper owlkeeper"
 
+sh:
+	sh -c ${PSQL}
 
-db-start:
+start:
 	docker-compose up -d
 
-db-stop:
+stop:
 	docker-compose down
 
-db-kill:
-	docker-compose kill
+bootstrap:
+	sh -c ${PSQL} < ./sqls/bootstrap.sql
 
-db-shell:
-	PGPASSWORD="owlkeeper" psql -h 127.0.0.1 owlkeeper owlkeeper
+dummydata:
+	sh -c ${PSQL} < ./sqls/dummydata.sql
+
+debug:
+	sh -c ${PSQL} < ./sqls/debugview.sql
+
+clean: bootstrap dummydata debug
