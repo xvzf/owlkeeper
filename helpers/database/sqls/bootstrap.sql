@@ -1,8 +1,6 @@
 -----------------------------------------
 -- SQL database bootstrap for Owlkeeper
 -----------------------------------------
--- Changelog:
---   09.01.19 Matthias Riegler <me@xvzf.tech> Added developer/team related tables
 
 \echo
 \echo '----------------------------'
