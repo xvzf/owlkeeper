@@ -125,6 +125,7 @@ do $tasks$ begin
   create table if not exists task (
     id serial primary key
     , created time default now()
+    , deadline time not null
     , name text not null
     , description text not null
     , fullfilled time
