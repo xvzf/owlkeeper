@@ -23,7 +23,8 @@ raise notice '[+] Deleting possibly existing tables';
 do $dropall$ begin
   drop table if exists
     -- Developer; Team related tables
-    developer
+    sysconf
+    , developer
     , team
     , developer_team_relation
     -- Project related
@@ -35,6 +36,20 @@ do $dropall$ begin
   ;
 
 end $dropall$;
+
+raise notice '[+] Creating sysconf schema and add migration stamp';
+do $sysconf$ begin
+
+  create table if not exists sysconf (
+    id serial primary key
+    , created time default now()
+    , param text not null unique
+    , value text not null
+  );
+
+  insert into sysconf (param, value) values ('migration', 'bootstrap');
+end $sysconf$;
+
 
 --
 -- User and team related schemas
