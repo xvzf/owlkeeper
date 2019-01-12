@@ -1,5 +1,8 @@
 package de.htwsaar.owlkeeper.storage.db;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,6 +12,8 @@ import java.util.Properties;
  * DBConnection
  */
 public class DBConnection {
+    private static Logger logger = LogManager.getLogger(DBConnection.class);
+
     // The default connection to the Database
     protected static Connection currentConnection = null;
 
@@ -30,7 +35,7 @@ public class DBConnection {
      */
     public static Connection getConnection() throws SQLException {
         if (currentConnection == null) {
-            currentConnection = DriverManager.getConnection(url, props);
+            currentConnection = DBConnection.getNewConnection();
         }
 
         return currentConnection;
@@ -45,6 +50,7 @@ public class DBConnection {
      * @throws SQLException
      */
     public static Connection getNewConnection() throws SQLException {
+        logger.info("Instantiating new connection to the database");
         return DriverManager.getConnection(url, props);
     }
 
@@ -56,8 +62,9 @@ public class DBConnection {
             if (currentConnection != null) {
                 currentConnection.close();
             }
+            logger.info("Closed default database connection");
         } catch (SQLException se) {
-            // LOG @TODO
+            logger.error("Could not close Database connection", se);
         }
         currentConnection = null;
     }
