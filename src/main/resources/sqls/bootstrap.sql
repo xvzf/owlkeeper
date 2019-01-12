@@ -40,7 +40,7 @@ do $sysconf$ begin
 
   create table if not exists sysconf (
     id serial primary key
-    , created time default now()
+    , created timestamp default now()
     , param text not null unique
     , value text not null
   );
@@ -58,7 +58,7 @@ do $developers$ begin
   -- Users
   create table if not exists developer (
     id serial primary key
-    , created time default now()
+    , created timestamp default now()
     , name text not null
     , email text not null unique check(email like '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
     , isChief boolean default FALSE
@@ -67,7 +67,7 @@ do $developers$ begin
   -- Team
   create table if not exists team (
     id serial primary key
-    , created time default now()
+    , created timestamp default now()
     , name text not null unique
     , leader integer references developer (id)
   );
@@ -75,7 +75,7 @@ do $developers$ begin
   -- Relation; Developers can be part of multiple teams
   create table if not exists developer_team_relation (
     id serial primary key
-    , created time default now()
+    , created timestamp default now()
     , developer integer not null references developer (id)
     , team integer not null references team (id)
     -- Constraints
@@ -92,7 +92,7 @@ do $projects$ begin
 
   create table if not exists project (
     id serial primary key
-    , created time default now()
+    , created timestamp default now()
     , name text unique
     , description text
     -- Limit project types
@@ -106,7 +106,7 @@ do $projects$ begin
 
   create table if not exists project_stage (
     id serial primary key
-    , created time default now()
+    , created timestamp default now()
     , name text not null
     , project integer not null references project (id)
     , index integer not null
@@ -124,11 +124,11 @@ do $tasks$ begin
 
   create table if not exists task (
     id serial primary key
-    , created time default now()
-    , deadline time not null
+    , created timestamp default now()
+    , deadline timestamp not null
     , name text not null
     , description text not null
-    , fullfilled time
+    , fullfilled timestamp
     , project_stage integer not null references project_stage (id)
     -- Ensure that there are not tasks with the same name for the each project stage
     , constraint name_project_stage_unique unique (project_stage, name)
@@ -136,7 +136,7 @@ do $tasks$ begin
 
   create table if not exists task_comment (
     id serial primary key
-    , created time default now()
+    , created timestamp default now()
     , content text not null
     , developer integer not null references developer (id)
     , task integer not null references task (id)
