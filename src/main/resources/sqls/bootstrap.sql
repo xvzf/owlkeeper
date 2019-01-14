@@ -143,7 +143,7 @@ do $tasks$ begin
     , description text not null
     , fullfilled timestamp
     , project_stage integer not null references project_stage (id)
-    , team integer not null references team (id)
+    , team integer references team (id)
     -- Ensure that there are not tasks with the same name for the each project stage
     , constraint name_project_stage_unique unique (project_stage, name)
   );
