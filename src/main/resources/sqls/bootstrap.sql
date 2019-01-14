@@ -74,6 +74,7 @@ do $developers$ begin
     , created timestamp default now()
     , name text not null
     , email text not null unique check(email like '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
+    , pwhash varchar(100)
     , isChief boolean default FALSE
   );
 
