@@ -30,6 +30,7 @@ do $dropall$ begin
     , project_stage
     -- Task related
     , task
+    , task_dependency
     , task_comment
   ;
 
@@ -130,9 +131,42 @@ do $tasks$ begin
     , description text not null
     , fullfilled timestamp
     , project_stage integer not null references project_stage (id)
+    , team integer not null references team (id)
     -- Ensure that there are not tasks with the same name for the each project stage
     , constraint name_project_stage_unique unique (project_stage, name)
   );
+
+  create table if not exists task_dependency (
+    id serial primary key
+    , created timestamp default now()
+    -- , task integer not null references task (id)
+    -- , depends integer not null references task (id)
+    , task integer not null
+    , depends integer not null
+    -- Ensure tasks don't refer to itself
+    , constraint task_no_depends_self check ( task != depends )
+  );
+
+  -- Ensure there are no circular dependencies
+  create or replace function task_dependency_before_insert() returns trigger as $trigger$
+  declare
+    found int;
+  begin
+    -- Query existing dependencies
+    found := count(*) from task_dependency where (task = new.task and depends = new.depends)
+                                                 or (task = new.depends and depends = new.task);
+
+    if found > 0 then
+      raise exception 'duplicate entry or circular dependency';
+    end if;
+
+    return new;
+  end;
+  $trigger$ language 'plpgsql';
+
+  create trigger task_dependency_before_insert_trigger
+    before insert or update on task_dependency for each row
+    execute procedure task_dependency_before_insert();
 
   create table if not exists task_comment (
     id serial primary key
