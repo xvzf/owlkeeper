@@ -17,8 +17,20 @@ do language plpgsql $$ begin
 --
 -- Clearup Database befor starting the bootstrap
 --
+raise notice '[+] Deleting possibly existing triggers';
+do $drop$ begin
+  drop trigger if exists task_dependency_before_insert_trigger on task_dependency;
+end $drop$;
+
+raise notice '[+] Deleting possibly existing functions';
+do $drop$ begin
+  drop function if exists
+    task_dependency_before_insert
+  ;
+end $drop$;
+
 raise notice '[+] Deleting possibly existing tables';
-do $dropall$ begin
+do $drop$ begin
   drop table if exists
     -- Developer; Team related tables
     sysconf
@@ -33,8 +45,8 @@ do $dropall$ begin
     , task_dependency
     , task_comment
   ;
+end $drop$;
 
-end $dropall$;
 
 raise notice '[+] Creating sysconf schema and add migration stamp';
 do $sysconf$ begin
@@ -120,7 +132,7 @@ end $projects$;
 --
 -- Task related schemas
 --
-raise notice '[+] Creating task related schemas';
+raise notice '[+] Creating task related schemas, functions and triggers';
 do $tasks$ begin
 
   create table if not exists task (
