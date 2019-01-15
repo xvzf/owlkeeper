@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +27,20 @@ public class Resource {
     private static final String SQL_TRIM = " +";
 
     /**
+     * Creates an input stream from a resource
+     *
+     * @param o Current object
+     * @param path Path to the resource
+     * @return InputStream
+     */
+    private static InputStream getResourceAsStream(Object o, String path) {
+        if (o == null) {
+            return null;
+        }
+        return o.getClass().getResourceAsStream(path);
+    }
+
+    /**
      * Loads a resource into a string
      *
      * @param o    Current object
@@ -34,7 +49,7 @@ public class Resource {
      * @throws ResourceNotFoundException Resource could not be accessed
      */
     public static String getResourceAsString(Object o, String path) throws ResourceNotFoundException {
-        InputStream inputStream = o.getClass().getResourceAsStream(path);
+        InputStream inputStream = getResourceAsStream(o, path);
 
         if (inputStream == null) {
             logger.error("Could not open resource @ " + path);
@@ -75,6 +90,26 @@ public class Resource {
         }
 
         return parsedSQL.get();
+    }
+
+    /**
+     * Read properties
+     *
+     * @param name Filename
+     * @return Properties
+     */
+    public static Properties getProperties(String name) {
+        InputStream inputStream = getResourceAsStream(new Resource(), name);
+
+        Properties toReturn = new Properties();
+
+        try {
+            toReturn.load(inputStream);
+        } catch (IOException ie) {
+            logger.error(ie);
+        }
+
+        return toReturn;
     }
 
 }
