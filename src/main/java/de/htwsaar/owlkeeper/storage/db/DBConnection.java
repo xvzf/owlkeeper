@@ -1,12 +1,13 @@
 package de.htwsaar.owlkeeper.storage.db;
 
+import de.htwsaar.owlkeeper.storage.local.config.ConfigLoader;
+import de.htwsaar.owlkeeper.storage.local.config.DatabaseConnectionConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 /**
  * DBConnection
@@ -17,15 +18,7 @@ public class DBConnection {
     // The default connection to the Database
     protected static Connection currentConnection = null;
 
-    private static final String url;
-    private static final Properties props = new Properties();
-    // @TODO load configuration out of config file or environment
-    static {
-        url = "jdbc:postgresql://localhost:5432/owlkeeper";
-        props.setProperty("user", "owlkeeper");
-        props.setProperty("password", "owlkeeper");
-        props.setProperty("use_ssl", "true");
-    }
+    private static DatabaseConnectionConfig config = ConfigLoader.loadDatabaseConnection();
 
     /**
      * Returns the default Database connection
@@ -51,7 +44,7 @@ public class DBConnection {
      */
     public static Connection getNewConnection() throws SQLException {
         logger.info("Instantiating new connection to the database");
-        return DriverManager.getConnection(url, props);
+        return DriverManager.getConnection(config.getUrl(), config.connectionProperties());
     }
 
     /**
