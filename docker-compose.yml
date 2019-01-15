@@ -1,0 +1,24 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: owlkeeper
+      POSTGRES_PASSWORD: owlkeeper
+      POSTGRES_DB: owlkeeper
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 127.0.0.1:5432:5432
+      - 127.0.0.1:5433:5433
+
+  adminer:
+    image: adminer
+    ports:
+      - 127.0.0.1:8080:8080
+
+
+volumes:
+  db_data:
