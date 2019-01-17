@@ -5,11 +5,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  *
@@ -23,7 +23,7 @@ public class ConfigurationManager {
     private ConfigurationManager() {
         availableProperties = new HashMap<>();
         try {
-            new ConfigFilePaser("/home/mark/GitHub Studium/owlkeeper/src/main/resources/owlkeeper.properties").parse();
+            new ConfigFilePaser("/owlkeeper.properties").parse();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,6 +52,27 @@ public class ConfigurationManager {
         return availableProperties.get(section);
     }
 
+    /*
+     * Retrieves a set of available configs.
+     *
+     * @return A set containing all available configs.
+     */
+    public Set<String> listConfigs() {
+        return availableProperties.keySet();
+    }
+
+    /**
+     *
+     * @param section
+     * @param key
+     * @param value
+     */
+    public void changeConfig(String section, String key, String value) {
+        getConfig(section).setProperty(key, value);
+
+        // TODO Write to file.
+    }
+
     private class ConfigFilePaser {
         private final String path; // path to the loaded config file.
 
@@ -60,7 +81,8 @@ public class ConfigurationManager {
         }
 
         private void parse() throws IOException, ConfigurationException {
-            BufferedReader br = Resource.loadFile(path);
+            BufferedReader br = new BufferedReader(
+                    new FileReader(this.getClass().getResource(path).getPath().replace("%20", " ")));
             String line;
             String currentlyActiveConfigSection = ""; // The config section which is currently being read.
 
@@ -70,7 +92,6 @@ public class ConfigurationManager {
                 if (line.isEmpty()) {
                     // Skip
                 } else if (line.startsWith("[")) { // Found a new config section
-                    System.out.println("Found one " + line);
                     try {
                         currentlyActiveConfigSection = line.substring(line.indexOf("[") + 1, line.indexOf("]"));
                     } catch (IndexOutOfBoundsException ioe) {
@@ -95,7 +116,6 @@ public class ConfigurationManager {
                         logger.error(e);
                         throw e;
                     }
-                    //System.out.println(currentlyActiveConfigSection + " - "+ entries[0] + "::" + entries[1]);
                     getConfig(currentlyActiveConfigSection).setProperty(entries[0], entries[1]);
                 }
 
