@@ -152,10 +152,8 @@ do $tasks$ begin
   create table if not exists task_dependency (
     id serial primary key
     , created timestamp default now()
-    -- , task integer not null references task (id)
-    -- , depends integer not null references task (id)
-    , task integer not null
-    , depends integer not null
+    , task integer not null references task (id)
+    , depends integer not null references task (id)
     -- Ensure tasks don't refer to itself
     , constraint task_no_depends_self check ( task != depends )
   );
