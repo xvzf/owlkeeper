@@ -1,8 +1,6 @@
-
 package de.htwsaar.owlkeeper.helper;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,16 +18,15 @@ import org.apache.logging.log4j.Logger;
  * Resource helper class
  */
 public class Resource {
-    private static Logger logger = LogManager.getLogger(Resource.class);
-
     private static final String SQL_COMMENT = "(.*)--.*$";
     private static final String SQL_PGSQL = "^ *\\\\.*$";
     private static final String SQL_TRIM = " +";
+    private static Logger logger = LogManager.getLogger(Resource.class);
 
     /**
      * Creates an input stream from a resource
      *
-     * @param o Current object
+     * @param o    Current object
      * @param path Path to the resource
      * @return InputStream
      */
@@ -110,6 +107,22 @@ public class Resource {
         }
 
         return toReturn;
+    }
+
+    /**
+     * Reads a file from a given path and returns it as a BufferedReader.
+     *
+     * @param filePath the path of the file to read.
+     * @return A BufferedReader pointing to the loaded file.
+     */
+    public static BufferedReader loadFile(String filePath) throws ResourceNotFoundException {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            return reader;
+        } catch (IOException e) {
+            logger.error(e);
+            throw new ResourceNotFoundException("Resource at path " + filePath + " could not be found.");
+        }
     }
 
 }
