@@ -30,7 +30,7 @@ public class Resource {
      * @param path Path to the resource
      * @return InputStream
      */
-    private static InputStream getResourceAsStream(Object o, String path) {
+    public static InputStream getResourceAsStream(Object o, String path) {
         if (o == null) {
             return null;
         }
@@ -107,22 +107,6 @@ public class Resource {
         }
 
         return toReturn;
-    }
-
-    /**
-     * Reads a file from a given path and returns it as a BufferedReader.
-     *
-     * @param filePath the path of the file to read.
-     * @return A BufferedReader pointing to the loaded file.
-     */
-    public static BufferedReader loadFile(String filePath) throws ResourceNotFoundException {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
-            return reader;
-        } catch (IOException e) {
-            logger.error(e);
-            throw new ResourceNotFoundException("Resource at path " + filePath + " could not be found.");
-        }
     }
 
 }
