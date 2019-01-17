@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class DBTransactionTest {
 
     @AfterAll
-    public void closeDefaultDatabaseConnection() {
-        DBConnection.closeConnection();
+    public void closeDefaultDatabaseConnection() throws SQLException {
+        DBConnection.getInstance().closeConnection();
     }
 
     @Test
@@ -28,7 +28,7 @@ class DBTransactionTest {
     @Test
     public void testTransactionGetDefaultConnection() throws SQLException {
         new DBTransaction(conn -> {
-            assertEquals(DBConnection.getConnection(), conn);
+            assertEquals(DBConnection.getInstance().getSQLConnection(), conn);
         });
     }
 
@@ -46,7 +46,7 @@ class DBTransactionTest {
         });
 
         // Retrieve and validate that everything worked
-        Statement st = DBConnection.getConnection().createStatement();
+        Statement st = DBConnection.getInstance().getSQLConnection().createStatement();
         ResultSet rs = st.executeQuery("select * from developer where email = '" + email + "';");
         rs.next();
         assertEquals(username, rs.getString("name"));
@@ -69,7 +69,7 @@ class DBTransactionTest {
         });
 
         // Retrieve and validate that nothing was committed to the db
-        Statement st = DBConnection.getConnection().createStatement();
+        Statement st = DBConnection.getInstance().getSQLConnection().createStatement();
         ResultSet rs = st.executeQuery("select * from developer where email = '" + email + "';");
 
         // Shouldn't be stored in DB
@@ -78,15 +78,15 @@ class DBTransactionTest {
 
     @Test
     public void testCustomConnectionTransaction() throws SQLException {
-        Connection conn0 = DBConnection.getConnection();
-        Connection conn1 = DBConnection.getNewConnection();
+        DBConnection conn0 = DBConnection.getInstance();
+        DBConnection conn1 = DBConnection.getNewConnection();
 
         new DBTransaction(conn1, conn -> {
-            assertNotEquals(conn0, conn);
-            assertEquals(conn1, conn);
+            assertNotEquals(conn0.getSQLConnection(), conn);
+            assertEquals(conn1.getSQLConnection(), conn);
         });
 
         // Custom connection needs to be closed
-        conn1.close();
+        conn1.closeConnection();
     }
 }
