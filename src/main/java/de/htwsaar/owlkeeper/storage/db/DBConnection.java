@@ -18,22 +18,23 @@ public class DBConnection {
     private static Logger logger = LogManager.getLogger(DBConnection.class);
 
     // The default connection to the Database
-    protected static Connection currentConnection = null;
-
+    private static DBConnection instance;
     private static Properties config = Resource.getProperties("/owlkeeper.properties");
 
-    /**
-     * Returns the default Database connection
-     *
-     * @return Defaut database connectiogetConnectionn
-     * @throws SQLException
-     */
-    public static Connection getConnection() throws SQLException {
-        if (currentConnection == null) {
-            currentConnection = DBConnection.getNewConnection();
+    public static DBConnection getInstance() throws SQLException {
+        // Check if instance is null or SQL Connection is null
+        if (instance == null || instance.getSQLConnection() == null) {
+            instance = new DBConnection();
         }
+        return instance;
+    }
 
-        return currentConnection;
+    // Connection
+    private  Connection conn;
+
+    private DBConnection() throws SQLException {
+        logger.info("Instantiating new connection to the database");
+        this.conn = DriverManager.getConnection(config.getProperty("url"), config);
     }
 
     /**
@@ -44,24 +45,27 @@ public class DBConnection {
      * @return New connection to the Database
      * @throws SQLException
      */
-    public static Connection getNewConnection() throws SQLException {
-        logger.info("Instantiating new connection to the database");
-        return DriverManager.getConnection(config.getProperty("url"), config);
+    public static DBConnection getNewConnection() throws SQLException {
+        return new DBConnection();
     }
 
     /**
      * Closes the default database connection
      */
-    public static void closeConnection() {
+    public void closeConnection() {
         try {
-            if (currentConnection != null) {
-                currentConnection.close();
+            if (conn != null) {
+                conn.close();
             }
             logger.info("Closed default database connection");
         } catch (SQLException se) {
             logger.error("Could not close Database connection", se);
         }
-        currentConnection = null;
+        conn = null;
+    }
+
+    public Connection getSQLConnection() {
+        return conn;
     }
 
 }

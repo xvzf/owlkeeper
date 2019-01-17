@@ -1,16 +1,12 @@
 package de.htwsaar.owlkeeper.storage.db;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * DBConnectionTest
@@ -21,8 +17,8 @@ import org.junit.jupiter.api.Test;
 public class DBConnectionTest {
 
     @AfterEach
-    public void cleanUp() {
-        DBConnection.closeConnection();
+    public void cleanUp() throws SQLException {
+        DBConnection.getInstance().closeConnection();
     }
 
     /**
@@ -32,7 +28,7 @@ public class DBConnectionTest {
      */
     @Test
     public void testGetConnection() throws SQLException {
-        assertNotNull(DBConnection.getConnection());
+        assertNotNull(DBConnection.getInstance());
     }
 
     /**
@@ -43,10 +39,10 @@ public class DBConnectionTest {
     @Test
     public void testMultipleDefaultConnectionsEqual() throws SQLException {
         // Initial connection
-        Connection conn0 = DBConnection.getConnection();
+        DBConnection conn0 = DBConnection.getInstance();
 
         for (int i = 0; i < 100; i++) {
-            assertEquals(conn0, DBConnection.getConnection());
+            assertEquals(conn0, DBConnection.getInstance());
         }
     }
 
@@ -57,9 +53,10 @@ public class DBConnectionTest {
      */
     @Test
     public void testCloseDefaultConnection() throws SQLException {
-        assertNotNull(DBConnection.getConnection());
-        DBConnection.closeConnection();
-        assertNull(DBConnection.currentConnection);
+        assertNotNull(DBConnection.getInstance());
+        DBConnection conn = DBConnection.getInstance();
+        conn.closeConnection();
+        assertNotEquals(conn, DBConnection.getInstance());
     }
 
     /**
@@ -69,21 +66,21 @@ public class DBConnectionTest {
      */
     @Test
     public void testMultipleConnections() throws SQLException {
-        LinkedList<Connection> connections = new LinkedList<Connection>();
+        LinkedList<DBConnection> connections = new LinkedList<DBConnection>();
 
         // Default connections
-        connections.push(DBConnection.getConnection());
+        connections.push(DBConnection.getInstance());
 
         // 5 additional connections
         for (int i = 0; i < 5; i++) {
-            Connection conn = DBConnection.getNewConnection();
+            DBConnection conn = DBConnection.getNewConnection();
             assertFalse(connections.contains(conn));
             connections.push(conn);
         }
 
         // Close all
-        for (Connection conn : connections) {
-            conn.close();
+        for (DBConnection conn : connections) {
+            conn.closeConnection();
         }
     }
 

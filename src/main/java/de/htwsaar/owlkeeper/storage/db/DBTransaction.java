@@ -24,7 +24,7 @@ public class DBTransaction {
      * @throws DBTransactionException Error happened while committing the transaction
      */
     public DBTransaction(DBTransactionInterface exec) throws SQLException, DBTransactionException {
-        this(DBConnection.getConnection(), exec);
+        this(DBConnection.getInstance(), exec);
     }
     /**
      * Database transaction helper
@@ -34,8 +34,8 @@ public class DBTransaction {
      * @throws SQLException Generic SQL Error happened (e.g. while connecting to the DB
      * @throws DBTransactionException Error happened while committing the transaction
      */
-    public DBTransaction(Connection conn, DBTransactionInterface exec) throws SQLException, DBTransactionException {
-        this.conn = conn;
+    public DBTransaction(DBConnection conn, DBTransactionInterface exec) throws SQLException, DBTransactionException {
+        this.conn = conn.getSQLConnection();
         this.exec = exec;
         this.run();
     }
