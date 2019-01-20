@@ -1,8 +1,6 @@
 package de.htwsaar.owlkeeper.storage.db;
 
 import de.htwsaar.owlkeeper.helper.Resource;
-import de.htwsaar.owlkeeper.helper.constants.DatabaseConstants.DATABASE_CONFIGS;
-import de.htwsaar.owlkeeper.storage.local.config.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
