@@ -1,18 +1,15 @@
 package de.htwsaar.owlkeeper.helper;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.Properties;
 
 /**
  * Resource helper class
@@ -30,13 +27,22 @@ public class Resource {
      * @param path Path to the resource
      * @return InputStream
      */
-    public static InputStream getResourceAsStream(Object o, String path) {
+    private static InputStream getResourceAsStream(Object o, String path) {
         if (o == null) {
             return null;
         }
         return o.getClass().getResourceAsStream(path);
     }
 
+    /**
+     * Returns the absolute path of a resource
+     *
+     * @param resourcePath The relative path to the resource in the resources folder.
+     * @return The absolute file system path of the resource.
+     */
+    public static String resourceToAbsolutePath(String resourcePath) {
+        return Resource.class.getResource(resourcePath).getPath().replace("%20", " ");
+    }
     /**
      * Loads a resource into a string
      *
