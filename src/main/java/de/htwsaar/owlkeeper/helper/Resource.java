@@ -43,6 +43,11 @@ public class Resource {
     public static String resourceToAbsolutePath(String resourcePath) {
         return Resource.class.getResource(resourcePath).getPath().replace("%20", " ");
     }
+
+    public static String resourceToAbsolutePath(Class<?> clazz, String resourcePath) {
+        return clazz.getResource(resourcePath).getPath().replace("%20", " ");
+    }
+
     /**
      * Loads a resource into a string
      *
@@ -102,7 +107,17 @@ public class Resource {
      * @return Properties
      */
     public static Properties getProperties(String name) {
-        InputStream inputStream = getResourceAsStream(new Resource(), name);
+        return getProperties(new Resource(), name);
+    }
+
+    /**
+     * Read properties
+     *
+     * @param name Filename
+     * @return Properties
+     */
+    public static Properties getProperties(Object o, String name) {
+        InputStream inputStream = getResourceAsStream(o, name);
 
         Properties toReturn = new Properties();
 

@@ -47,13 +47,6 @@ public class ConfigurationManager {
     private final HashMap<String, Properties> availableProperties;
 
     /**
-     * Creates a Configuration Manager with the default config location.
-     */
-    private ConfigurationManager() {
-        this(DEFAULT_CONFIG);
-    }
-
-    /**
      * Creates a Configuration Manager which loads to config from the given config.
      *
      * @param path the relative path to the config in the resource folder.
@@ -64,6 +57,18 @@ public class ConfigurationManager {
         try {
             new ConfigFileParser().parse();
         } catch (IOException e) {
+            logger.error(e);
+            e.printStackTrace();
+        }
+    }
+
+    private ConfigurationManager(Class<?> clazz, String path) {
+        availableProperties = new HashMap<>();
+        this.path = Resource.resourceToAbsolutePath(clazz, path);
+        try {
+            new ConfigFileParser().parse();
+        } catch (IOException e) {
+            logger.error(e);
             e.printStackTrace();
         }
     }
@@ -75,8 +80,14 @@ public class ConfigurationManager {
      */
     public static ConfigurationManager getConfigManager() {
         if (manager == null) {
-            manager = new ConfigurationManager();
+            manager = new ConfigurationManager(DEFAULT_CONFIG);
         }
+        return manager;
+    }
+
+    public static ConfigurationManager getConfigManager(Class<?> clazz, String path) {
+        if (manager == null) manager = new ConfigurationManager(clazz, path);
+
         return manager;
     }
 
@@ -115,6 +126,13 @@ public class ConfigurationManager {
      */
     public Set<String> listSections() {
         return availableProperties.keySet();
+    }
+
+    /**
+     * Resets the Config Manager for the case if a different one shall be loaded.
+     */
+    public static void reset() {
+        manager = null;
     }
 
     /**
