@@ -33,4 +33,12 @@ public interface TaskDao {
     @SqlQuery("select * from task where project_stage = ? and developer = ?;")
     @RegisterBeanMapper(Task.class)
     List<Task> getTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
+
+    @SqlQuery("select * from task where project_stage = ? and developer = ? and fullfilled is not null;")
+    @RegisterBeanMapper(Task.class)
+    List<Task> getFullfilledTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
+
+    @SqlQuery("select * from task where project_stage = ? and developer = ? and fullfilled is null;")
+    @RegisterBeanMapper(Task.class)
+    List<Task> getPendingTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
 }
