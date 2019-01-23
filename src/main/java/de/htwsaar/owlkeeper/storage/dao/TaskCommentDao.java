@@ -1,6 +1,5 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
-import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.TaskComment;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;

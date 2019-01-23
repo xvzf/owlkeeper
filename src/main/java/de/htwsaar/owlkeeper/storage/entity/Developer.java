@@ -1,6 +1,5 @@
 package de.htwsaar.owlkeeper.storage.entity;
 
-import java.beans.ConstructorProperties;
 import java.sql.Timestamp;
 
 /**
