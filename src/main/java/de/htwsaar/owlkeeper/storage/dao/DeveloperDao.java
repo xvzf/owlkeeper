@@ -16,5 +16,14 @@ public interface DeveloperDao {
      */
     @SqlQuery("select * from developer;")
     @RegisterBeanMapper(Developer.class)
-    List<Developer> getDeveloper();
+    List<Developer> getDevelopers();
+
+    /**
+     * Get developer by id
+     *
+     * @return
+     */
+    @SqlQuery("select * from developer where id = ?")
+    @RegisterBeanMapper(Developer.class)
+    Developer getDeveloper(long id);
 }
