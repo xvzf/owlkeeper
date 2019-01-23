@@ -1,0 +1,39 @@
+version: 2
+jobs:
+  build:
+
+    working_directory: ~/circleci-demo-java-spring
+
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+      - image: circleci/postgres:11-alpine-ram
+        environment:
+          POSTGRES_USER: owlkeeper
+          POSTGRES_PASSWORD: owlkeeper
+          POSTGRES_DB: owlkeeper
+
+    steps:
+
+      - checkout
+
+      - restore_cache:
+          name: Restoring cached maven dependencies
+          key: owlkeeper-{{ checksum "pom.xml" }}
+
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      - run:
+          name: Installing Dependencies
+          command: |
+            sudo apt-get install make postgresql-client
+
+
+      - run: make test
+
+      - save_cache:
+          name: Storing cached maven dependencies
+          paths:
+            - ~/.m2
+          key: owlkeeper-{{ checksum "pom.xml" }}
