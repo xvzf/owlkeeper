@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
@@ -179,42 +180,49 @@ public class ConfigurationManager {
             // Read the file line by line
             while ((line = br.readLine()) != null) {
                 line = line.trim(); // Remove leading and trailing whitespace
-                if (line.isEmpty()) {
-                    // Skip
-                } else if (line.startsWith("[")) { // Found a new config section
-                    try {
-                        currentlyActiveConfigSection = line.substring(line.indexOf("[") + 1, line.indexOf("]"));
-                    } catch (IndexOutOfBoundsException ioe) {
+                if (line.isEmpty()) { // Ignore empty lines
+                    continue;
+                }
+                if (line.startsWith("[")) { // Found a new config section
+                    if (!line.endsWith("]")) { // config sections must end with ]
                         ConfigurationException e = new ConfigurationException(
-                                "An error occurred reading the configuration at the line \" " + line + "\". It doesn't seem to adhere to the syntax.");
+                                "An error occurred reading the configuration at the line \" " + line + "\". Missing \"]\"");
                         logger.error(e);
+                        br.close();
                         throw e;
                     }
-
-                    if (currentlyActiveConfigSection.isEmpty()) { // TODO More sophisticated checks for correct syntax.
+                    currentlyActiveConfigSection = line.substring(1, line.length() - 1).trim();  // Remove [] at beginning and end
+                    if (currentlyActiveConfigSection.isEmpty()) {
                         ConfigurationException e = new ConfigurationException(
-                                "An error occurred reading the configuration at the line \" " + line + "\".");
+                                "An error occurred reading the configuration at the line \" " + line + "\". Empty section name");
                         logger.error(e);
-                        throw e;
-                    }
-
-                } else {
-                    line = line.replace(" ", ""); // Remove all whitespace.
-                    String[] entries = line.trim()
-                            .split("="); // Split the line at the = sign, left is the key, right the value.
-                    if (entries.length < 2) {
-                        ConfigurationException e = new ConfigurationException(
-                                "An error occurred reading the configuration at the line \" " + line + "\".");
-                        logger.error(e);
+                        br.close();
                         throw e;
                     }
                     addSection(currentlyActiveConfigSection);
-                    getConfig(currentlyActiveConfigSection).setProperty(entries[0], entries[1]);
+
+                } else { // Line isn't a section line. Assume it's a key value line
+                    // Split the line at the = sign, left is the key, right the value.
+                    String[] entries = line.split("=");
+                    String value;
+                    String key;
+                    if (entries.length < 2) {
+                        ConfigurationException e = new ConfigurationException(
+                                "An error occurred reading the configuration at the line \" " + line + "\". Invalid Syntax");
+                        logger.error(e);
+                        br.close();
+                        throw e;
+                    }
+                    // In case there's a = sign in the value, it unfortunately gets splitted. Lets put it back in
+                    value = String.join("=", Arrays.copyOfRange(entries, 1, entries.length));
+
+                    // Remove leading and trailing whitespaces
+                    value = value.trim();
+                    key = entries[0].trim();
+                    getConfig(currentlyActiveConfigSection).setProperty(key, value);
                 }
             }
             br.close();
         }
-
-
     }
 }
