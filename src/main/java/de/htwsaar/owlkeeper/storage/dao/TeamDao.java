@@ -46,7 +46,7 @@ public interface TeamDao {
     /**
      * Get teams a developer is member of
      *
-     * @param teamId
+     * @param developerId
      * @return
      */
     @SqlQuery(
@@ -56,7 +56,7 @@ public interface TeamDao {
                     + "where tdr.developer = ?;"
     )
     @RegisterBeanMapper(Team.class)
-    List<Team> getTeamForDeveloper(long teamId);
+    List<Team> getTeamForDeveloper(long developerId);
 
 
 }
