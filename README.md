@@ -1,4 +1,5 @@
 # OWLKEEPER
+[![CircleCI](https://circleci.com/gh/xvzf/owlkeeper/tree/master.svg?style=svg)](https://circleci.com/gh/xvzf/owlkeeper/tree/master)
 
 ## Database bootstrap
 We are using docker based database for development and testing.
