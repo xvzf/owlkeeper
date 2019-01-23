@@ -18,7 +18,7 @@ class ResourceTest {
     void getResourceAsStringException() {
         // Check if an exception is thrown correctly if file not exists
         assertThrows(ResourceNotFoundException.class, () -> {
-            Resource.getResourceAsString(new Resource(), "afssafasfsafsafsakhfsafksajh"); // Let's hope this file does not exist
+            Resource.getResourceAsString(new Resource(), "//srslynotexisting"); // Unsupported file name in all OS
         });
     }
 
@@ -33,7 +33,7 @@ class ResourceTest {
     void getSQLResourceException() {
         // Check if an exception is thrown correctly if file not exists
         assertThrows(ResourceNotFoundException.class, () -> {
-            Resource.getSQLResource("afssafasfsafsafsakhfsafksajh"); // Let's hope this file does not exist
+            Resource.getSQLResource("//afssafasfsafsafsakhfsafksajh"); // Unsupported file name in all OS
         });
     }
 }
