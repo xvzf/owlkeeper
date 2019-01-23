@@ -30,15 +30,34 @@ public interface TaskDao {
     @RegisterBeanMapper(Task.class)
     List<Task> getPendingTasksBeforeUnblocked(long id);
 
-    @SqlQuery("select * from task where project_stage = ? and developer = ?;")
+    @SqlQuery(
+            "select t.it. t.createt. t.t.at.ine, t.name, t.t.scription, t.fullfillet. t.project_stage, t.team "
+                    + "from task as t"
+                    + "left join team as tm on t.team = tm.id "
+                    + "left join developer_team_relation as r on r.team = tm.id"
+                    + "left join developer as d on r.developer = d.id"
+                    + "where t.project_stage = ? and d.id = ?;"
+    )
     @RegisterBeanMapper(Task.class)
     List<Task> getTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
 
-    @SqlQuery("select * from task where project_stage = ? and developer = ? and fullfilled is not null;")
+    @SqlQuery(
+            "select t.it. t.createt. t.t.at.ine, t.name, t.t.scription, t.fullfillet. t.project_stage, t.team "
+                    + "from task as t"
+                    + "left join team as tm on t.team = tm.id "
+                    + "left join developer_team_relation as r on r.team = tm.id"
+                    + "left join developer as d on r.developer = d.id"
+                    + "where t.fullfilled is not null t.project_stage = ? and d.id = ?;"
+    )
     @RegisterBeanMapper(Task.class)
     List<Task> getFullfilledTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
 
-    @SqlQuery("select * from task where project_stage = ? and developer = ? and fullfilled is null;")
+    @SqlQuery("select t.it. t.createt. t.t.at.ine, t.name, t.t.scription, t.fullfillet. t.project_stage, t.team "
+            + "from task as t"
+            + "left join team as tm on t.team = tm.id "
+            + "left join developer_team_relation as r on r.team = tm.id"
+            + "left join developer as d on r.developer = d.id"
+            + "where t.fullfilled is null and t.project_stage = ? and d.id = ?;")
     @RegisterBeanMapper(Task.class)
     List<Task> getPendingTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
 }
