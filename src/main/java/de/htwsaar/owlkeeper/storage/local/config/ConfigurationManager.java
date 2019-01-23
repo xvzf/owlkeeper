@@ -132,7 +132,7 @@ public class ConfigurationManager {
         Properties p = getConfig(section);
         p.setProperty(key, value);
 
-        writeConfig(); //TODO Don't write instantly? Maybe write on program exit?
+        writeConfig();
     }
 
     private boolean sectionExists(String section) {
