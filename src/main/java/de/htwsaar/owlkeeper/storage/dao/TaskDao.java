@@ -9,6 +9,16 @@ import java.util.List;
 public interface TaskDao {
 
     /**
+     * Query task by id
+     *
+     * @param id
+     * @return
+     */
+    @SqlQuery("select * from task where id = ?;")
+    @RegisterBeanMapper(Task.class)
+    Task getTask(long id);
+
+    /**
      * Retrieves all tasks for a sepecific project stage
      *
      * @param id project stage id
