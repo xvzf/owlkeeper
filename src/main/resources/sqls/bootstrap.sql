@@ -143,7 +143,7 @@ do $tasks$ begin
     , deadline timestamp not null
     , name text not null
     , description text not null
-    , fullfilled timestamp
+    , fulfilled timestamp
     , project_stage integer not null references project_stage (id)
     , team integer references team (id)
     -- Ensure that there are not tasks with the same name for the each project stage

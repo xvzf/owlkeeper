@@ -8,7 +8,7 @@ public class Task {
     Timestamp deadline;
     String name;
     String description;
-    Timestamp fullfilled;
+    Timestamp fulfilled;
     long projectStage;
     long team;
 
@@ -52,12 +52,12 @@ public class Task {
         this.description = description;
     }
 
-    public Timestamp getFullfilled() {
-        return fullfilled;
+    public Timestamp getFulfilled() {
+        return fulfilled;
     }
 
-    public void setFullfilled(Timestamp fullfilled) {
-        this.fullfilled = fullfilled;
+    public void setFulfilled(Timestamp fulfilled) {
+        this.fulfilled = fulfilled;
     }
 
     public long getProjectStage() {
@@ -84,7 +84,7 @@ public class Task {
                 ", deadline=" + deadline +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", fullfilled=" + fullfilled +
+                ", fulfilled=" + fulfilled +
                 ", projectStage=" + projectStage +
                 ", team=" + team +
                 '}';
