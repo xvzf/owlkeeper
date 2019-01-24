@@ -9,7 +9,7 @@ public class Task {
     String name;
     String description;
     Timestamp fullfilled;
-    long project_stage;
+    long projectStage;
     long team;
 
     public long getId() {
@@ -60,12 +60,12 @@ public class Task {
         this.fullfilled = fullfilled;
     }
 
-    public long getProject_stage() {
-        return project_stage;
+    public long getProjectStage() {
+        return projectStage;
     }
 
-    public void setProject_stage(long project_stage) {
-        this.project_stage = project_stage;
+    public void setProjectStage(long projectStage) {
+        this.projectStage = projectStage;
     }
 
     public long getTeam() {
@@ -85,7 +85,7 @@ public class Task {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", fullfilled=" + fullfilled +
-                ", project_stage=" + project_stage +
+                ", projectStage=" + projectStage +
                 ", team=" + team +
                 '}';
     }
