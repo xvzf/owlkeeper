@@ -63,6 +63,12 @@ do $fill$ begin
     'waterfall'
   );
 
+  insert into project (name, description, type) values (
+    'Testproject2',
+    'TestProject2 Dummy blubdidupdadalalaland',
+    'spiral'
+  );
+
   insert into project_stage (name, project, index) values (
     'Stage 1'
     , (select id from project where name = 'Testproject1')
