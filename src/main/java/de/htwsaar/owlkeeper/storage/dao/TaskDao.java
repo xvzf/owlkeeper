@@ -73,11 +73,11 @@ public interface TaskDao {
      */
     @SqlQuery(
             "select t.id, t.created, t.deadline, t.name, t.description, t.fulfilled, t.project_stage, t.team "
-                    + "from task as t"
+                    + "from task as t "
                     + "left join team as tm on t.team = tm.id "
-                    + "left join developer_team_relation as r on r.team = tm.id"
-                    + "left join developer as d on r.developer = d.id"
-                    + "where t.project_stage = ? and d.id = ?;"
+                    + "left join developer_team_relation as r on r.team = tm.id "
+                    + "left join developer as d on r.developer = d.id "
+                    + "where t.project_stage = ? and d.id = ?; "
     )
     @RegisterBeanMapper(Task.class)
     List<Task> getTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
@@ -91,11 +91,11 @@ public interface TaskDao {
      */
     @SqlQuery(
             "select t.id, t.created, t.deadline, t.name, t.description, t.fulfilled, t.project_stage, t.team "
-                    + "from task as t"
+                    + "from task as t "
                     + "left join team as tm on t.team = tm.id "
-                    + "left join developer_team_relation as r on r.team = tm.id"
-                    + "left join developer as d on r.developer = d.id"
-                    + "where t.fulfilled is not null t.project_stage = ? and d.id = ?;"
+                    + "left join developer_team_relation as r on r.team = tm.id "
+                    + "left join developer as d on r.developer = d.id "
+                    + "where t.fulfilled is not null and t.project_stage = ? and d.id = ?;"
     )
     @RegisterBeanMapper(Task.class)
     List<Task> getFulfilledTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
@@ -107,11 +107,11 @@ public interface TaskDao {
      * @param developerId
      * @return
      */
-    @SqlQuery("select t.id t.created, t.deadline, t.name, t.description, t.fulfilled, t.project_stage, t.team "
-            + "from task as t"
+    @SqlQuery("select t.id, t.created, t.deadline, t.name, t.description, t.fulfilled, t.project_stage, t.team "
+            + "from task as t "
             + "left join team as tm on t.team = tm.id "
-            + "left join developer_team_relation as r on r.team = tm.id"
-            + "left join developer as d on r.developer = d.id"
+            + "left join developer_team_relation as r on r.team = tm.id "
+            + "left join developer as d on r.developer = d.id "
             + "where t.fulfilled is null and t.project_stage = ? and d.id = ?;")
     @RegisterBeanMapper(Task.class)
     List<Task> getPendingTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
