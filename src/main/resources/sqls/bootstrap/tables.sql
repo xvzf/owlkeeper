@@ -1,51 +1,13 @@
------------------------------------------
--- SQL database bootstrap for Owlkeeper
------------------------------------------
-
 \echo
-\echo '----------------------------'
-\echo 'Owlkeeper Database Bootstrap'
-\echo '----------------------------'
+\echo '--------------------------'
+\echo 'Owlkeeper Table Bootstrap '
+\echo '--------------------------'
 \echo
 
 \set VERBOSITY terse
 \set ON_ERROR_STOP true
 
 do language plpgsql $$ begin
-
-
---
--- Clearup Database befor starting the bootstrap
---
-raise notice '[+] Deleting possibly existing triggers';
-do $drop$ begin
-  drop trigger if exists task_dependency_before_insert_trigger on task_dependency;
-end $drop$;
-
-raise notice '[+] Deleting possibly existing functions';
-do $drop$ begin
-  drop function if exists
-    task_dependency_before_insert
-  ;
-end $drop$;
-
-raise notice '[+] Deleting possibly existing tables';
-do $drop$ begin
-  drop table if exists
-    -- Developer; Team related tables
-    sysconf
-    , developer
-    , team
-    , developer_team_relation
-    -- Project related
-    , project
-    , project_stage
-    -- Task related
-    , task
-    , task_dependency
-    , task_comment
-  ;
-end $drop$;
 
 
 raise notice '[+] Creating sysconf schema and add migration stamp';
