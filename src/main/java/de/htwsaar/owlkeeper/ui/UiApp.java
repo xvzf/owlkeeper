@@ -30,8 +30,8 @@ public class UiApp extends ViewApplication{
     @Override
     void boot(Stage primaryStage) throws Exception{
         UiApp.scenes.forEach(scene -> this.addScene(scene.getName(), scene.getBuilder()));
-        if (this.hasScene("default")) {
-            throw new Exception("Scene with the name 'key' must be defined");
+        if (!this.hasScene("default")) {
+            throw new Exception("Scene with the name 'default' must be defined");
         }
         this.switchScene("default");
         primaryStage.show();

@@ -23,7 +23,6 @@ abstract public class ViewApplication extends Application{
     private HashMap<String, Scene> scenes = new HashMap<>();
     private Stage stage = null;
 
-
     /**
      * Main entry point for JavaFX application and starting point for the GUI
      * @param primaryStage the primary stage for this application
