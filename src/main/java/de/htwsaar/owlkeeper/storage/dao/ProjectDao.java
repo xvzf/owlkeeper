@@ -10,9 +10,9 @@ import java.util.List;
 public interface ProjectDao {
 
     /**
-     * Get all developers
+     * Get all projects
      *
-     * @return List of developers
+     * @return List of projects
      */
     @SqlQuery("select * from project;")
     @RegisterBeanMapper(Project.class)
