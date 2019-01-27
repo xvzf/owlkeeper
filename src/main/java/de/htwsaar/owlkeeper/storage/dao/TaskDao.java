@@ -29,7 +29,7 @@ public interface TaskDao {
     List<Task> getTasksForProjectStage(long id);
 
     /**
-     * Retriefes fulfilled tasks for a specific project stage
+     * Retrieves fulfilled tasks for a specific project stage
      *
      * @param id project stage id
      * @return
@@ -39,7 +39,7 @@ public interface TaskDao {
     List<Task> getFulfilledTasksforProjectStage(long id);
 
     /**
-     * Retriefes pending tasks for a specific project stage
+     * Retrieves pending tasks for a specific project stage
      *
      * @param id project stage id
      * @return
@@ -49,7 +49,7 @@ public interface TaskDao {
     List<Task> getPendingTasksForProjectStage(long id);
 
     /**
-     * Retriefes pending tasks a list of tasks which block the current task directly(!)
+     * Retrieves pending tasks in a list of tasks which block the current task directly(!)
      *
      * @param id task id
      * @return
