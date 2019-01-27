@@ -1,0 +1,119 @@
+% !TeX encoding=utf8
+% !TeX spellcheck = de-DE
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PACKAGES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[
+	pdftex,%              PDFTex verwenden
+	a4paper,%             A4 Papier
+	oneside,%             Einseitig
+	bibtotoc,%    			Literaturverzeichnis einfï¿½gen bibtotocnumbered: nummeriert
+	liststotoc,%			Verzeichnisse einbinden in toc
+	halfparskip,%        Europï¿½ischer Satz mit abstand zwischen Absï¿½tzen
+	chapterprefix,%       Kapitel anschreiben als Kapitel
+	headsepline,%         Linie nach Kopfzeile
+	12pt%                 Grï¿½ssere Schrift, besser lesbar am bildschrim
+]{scrartcl}
+
+
+\usepackage[ngerman]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[babel,french=guillemets,german=swiss]{csquotes} % Quotes
+% Better Tables
+\usepackage{array} 
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{graphicx} % Pictures
+\usepackage{wrapfig}   
+\usepackage[
+	dvipsnames, % Load a set of predefined colors 
+	table,      % Load the colortbl package
+	hyperref,   % Support  the  hyperref  package
+	fixinclude, % Prevent dvips color reset before .eps file inclusion
+]{xcolor} % Colors in PDF
+
+\usepackage[%
+	automark,
+	komastyle,
+	nouppercase,
+]{scrpage2}
+
+
+\usepackage[savemem]{listings} % Listings (Code snippets)
+
+\usepackage{amsmath}
+
+\usepackage{vmargin}
+
+\usepackage[%
+	tocindentauto,     % all widths at the TOCs are calculated by tocindentauto
+	tocgraduated,      % standard
+	tocbreaksstrict,   % sets a lot of penalties before and after TOC entries 
+	toctextentriesleft,   % indented as if they have an empty number.
+]{tocstyle}
+
+\usepackage[
+	,backref=page       % Adds backlink text to the end of each item in the
+	,pagebackref=false  % Adds backlink text to the end of each item in the
+	,hyperindex=true    % Makes the page numbers of index entries into
+hyperlinks.
+	,hyperfootnotes=false % Makes the footnote marks into hyperlinks to the
+	,bookmarks=true 
+	,pdfpagelabels=true % set PDF page labels
+]{hyperref}
+
+
+\graphicspath{{images/}}
+
+
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Configurations
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\setmarginsrb{2.6 cm}{1 cm}{2.6 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+%%% set layout of PDF pages
+\hypersetup{pdfpagelayout=OneColumn}
+
+\pagestyle{scrheadings}
+\automark[subsection]{section} %[right]{left}
+\clearscrheadings
+\ohead{\pagemark} % header outside: page number
+\ihead{\headmark} % header inside: chapter and section titles
+
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\title{Vorläufiges Pflichtenheft}									% Title
+\author{Stroustrup}										% Author
+\date{\today}											% Date
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+\begin{document}
+	
+	% Configure page numbering - required for hyperref (not displayed)
+	\pagenumbering{arabic}\setcounter{page}{1}%
+
+	% Title Page
+	\include{content/titlepage}
+		
+	% -- table of contents --
+	%
+	% add table of contents to pdf bookmarks
+	\pdfbookmark[1]{\contentsname}{toc}
+	\tableofcontents
+	\pagebreak
+	
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Main Document starts here
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+\include{content/1-Zielbestimmungen}
+\include{content/2-Produkteinsatz}
+\include{content/3-Produktuebersicht}
+\include{content/4_Produktdaten}
+\include{content/5_Produktfunktionen}
+\include{content/6_Benutzeroberflache}
+
+\end{document}
