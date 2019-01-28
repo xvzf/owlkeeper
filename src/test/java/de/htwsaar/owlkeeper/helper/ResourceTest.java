@@ -25,7 +25,7 @@ class ResourceTest {
     @Test
     void getSQLResource() throws ResourceNotFoundException {
         assertFalse(
-                Resource.getSQLResource("bootstrap.sql").trim().length() == 0
+                Resource.getSQLResource("bootstrap/tables.sql").trim().length() == 0
         );
     }
 
