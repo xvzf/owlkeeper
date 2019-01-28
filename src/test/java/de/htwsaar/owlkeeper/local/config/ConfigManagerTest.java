@@ -5,6 +5,7 @@ import de.htwsaar.owlkeeper.helper.Resource;
 import de.htwsaar.owlkeeper.storage.local.config.ConfigurationException;
 import de.htwsaar.owlkeeper.storage.local.config.ConfigurationManager;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -15,6 +16,11 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ConfigManagerTest {
+
+    @BeforeAll
+    static void setup() {
+        ConfigurationManager.reset();
+    }
 
     @AfterEach
     void teardown() {
