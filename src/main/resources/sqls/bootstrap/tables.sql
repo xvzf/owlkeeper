@@ -38,7 +38,7 @@ do $developers$ begin
     , role text default ''
     , email text not null unique check(email like '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
     , pwhash varchar(100)
-    , isChief boolean default FALSE
+    , is_chief boolean default FALSE
   );
 
   -- Team

@@ -35,7 +35,7 @@ public interface TeamDao {
      * @return
      */
     @SqlQuery(
-            "select d.id, d.created, d.name, d.role, d.email, d.pwhash, d.isChief "
+            "select d.id, d.created, d.name, d.role, d.email, d.pwhash, d.is_chief "
                     + "from developer_team_relation as tdr "
                     + "left join developer as d on tdr.developer = d.id "
                     + "where tdr.team = ?;"
