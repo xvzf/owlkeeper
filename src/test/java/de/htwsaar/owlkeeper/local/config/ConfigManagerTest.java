@@ -59,19 +59,19 @@ public class ConfigManagerTest {
 
     @Test
     void testWhitespaceInValue() { // All whitespace inside should be preserved
-        ConfigurationManager man = getManager("/configManagerTest/configWhiteSpaceTest2");
+        ConfigurationManager man = getManager("/configManagerTest/configWhiteSpaceTest2.properties");
         assertEquals("something that has a whitespace.", man.getConfig("section1").getProperty("valueWhitespace"));
     }
 
     @Test
     void testWhitespaceInKey() {
-        ConfigurationManager man = getManager("/configManagerTest/configWhiteSpaceTest2");
+        ConfigurationManager man = getManager("/configManagerTest/configWhiteSpaceTest2.properties");
         assertTrue(man.getConfig("section2").stringPropertyNames().contains("key space"));
     }
 
     @Test
     void testWhitespaceInSection() {
-        ConfigurationManager man = getManager("/configManagerTest/configWhiteSpaceTest2");
+        ConfigurationManager man = getManager("/configManagerTest/configWhiteSpaceTest2.properties");
         List<String> expected = new ArrayList<>();
         expected.add("section1");
         expected.add("section2");
