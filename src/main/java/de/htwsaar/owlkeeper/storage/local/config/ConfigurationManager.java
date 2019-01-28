@@ -48,13 +48,6 @@ public class ConfigurationManager {
     private final HashMap<String, Properties> availableProperties;
 
     /**
-     * Creates a Configuration Manager with the default config location.
-     */
-    private ConfigurationManager() {
-        this(DEFAULT_CONFIG);
-    }
-
-    /**
      * Creates a Configuration Manager which loads to config from the given config.
      *
      * @param path the relative path to the config in the resource folder.
@@ -65,6 +58,18 @@ public class ConfigurationManager {
         try {
             new ConfigFileParser().parse();
         } catch (IOException e) {
+            logger.error(e);
+            e.printStackTrace();
+        }
+    }
+
+    private ConfigurationManager(Class<?> clazz, String path) {
+        availableProperties = new HashMap<>();
+        this.path = Resource.resourceToAbsolutePath(clazz, path);
+        try {
+            new ConfigFileParser().parse();
+        } catch (IOException e) {
+            logger.error(e);
             e.printStackTrace();
         }
     }
@@ -76,8 +81,14 @@ public class ConfigurationManager {
      */
     public static ConfigurationManager getConfigManager() {
         if (manager == null) {
-            manager = new ConfigurationManager();
+            manager = new ConfigurationManager(DEFAULT_CONFIG);
         }
+        return manager;
+    }
+
+    public static ConfigurationManager getConfigManager(Class<?> clazz, String path) {
+        if (manager == null) manager = new ConfigurationManager(clazz, path);
+
         return manager;
     }
 
@@ -116,6 +127,13 @@ public class ConfigurationManager {
      */
     public Set<String> listSections() {
         return availableProperties.keySet();
+    }
+
+    /**
+     * Resets the Config Manager for the case if a different one shall be loaded.
+     */
+    public static void reset() {
+        manager = null;
     }
 
     /**
@@ -176,6 +194,7 @@ public class ConfigurationManager {
             BufferedReader br = new BufferedReader(new FileReader(path));
             String line;
             String currentlyActiveConfigSection = ""; // The config section which is currently being read.
+            int readSectionCounter = 0;
 
             // Read the file line by line
             while ((line = br.readLine()) != null) {
@@ -200,25 +219,43 @@ public class ConfigurationManager {
                         throw e;
                     }
                     addSection(currentlyActiveConfigSection);
+                    readSectionCounter++;
 
                 } else { // Line isn't a section line. Assume it's a key value line
                     // Split the line at the = sign, left is the key, right the value.
                     String[] entries = line.split("=");
                     String value;
                     String key;
-                    if (entries.length < 2) {
+                    if (readSectionCounter == 0 || currentlyActiveConfigSection.isEmpty()) {
                         ConfigurationException e = new ConfigurationException(
-                                "An error occurred reading the configuration at the line \" " + line + "\". Invalid Syntax");
+                                "The configuration file started without a section tag.");
                         logger.error(e);
                         br.close();
                         throw e;
                     }
-                    // In case there's a = sign in the value, it unfortunately gets splitted. Lets put it back in
+
+                    if (entries.length < 2) {
+                        ConfigurationException e = new ConfigurationException(
+                                "An error occurred reading the configuration at the line \"" + line + "\". Invalid Syntax");
+                        logger.error(e);
+                        br.close();
+                        throw e;
+                    }
+
+                    // In case there's a = sign in the value, it unfortunately gets split. Lets put it back in
                     value = String.join("=", Arrays.copyOfRange(entries, 1, entries.length));
 
                     // Remove leading and trailing whitespaces
                     value = value.trim();
                     key = entries[0].trim();
+
+                    if (key.isEmpty()) {
+                        ConfigurationException e = new ConfigurationException(
+                                "An error occurred reading the configuration at the line \"" + line + "\". Invalid Syntax, empty key");
+                        logger.error(e);
+                        br.close();
+                        throw e;
+                    }
                     getConfig(currentlyActiveConfigSection).setProperty(key, value);
                 }
             }
