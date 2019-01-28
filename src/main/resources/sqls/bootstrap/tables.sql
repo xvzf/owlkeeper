@@ -1,51 +1,13 @@
------------------------------------------
--- SQL database bootstrap for Owlkeeper
------------------------------------------
-
 \echo
-\echo '----------------------------'
-\echo 'Owlkeeper Database Bootstrap'
-\echo '----------------------------'
+\echo '--------------------------'
+\echo 'Owlkeeper Table Bootstrap '
+\echo '--------------------------'
 \echo
 
 \set VERBOSITY terse
 \set ON_ERROR_STOP true
 
 do language plpgsql $$ begin
-
-
---
--- Clearup Database befor starting the bootstrap
---
-raise notice '[+] Deleting possibly existing triggers';
-do $drop$ begin
-  drop trigger if exists task_dependency_before_insert_trigger on task_dependency;
-end $drop$;
-
-raise notice '[+] Deleting possibly existing functions';
-do $drop$ begin
-  drop function if exists
-    task_dependency_before_insert
-  ;
-end $drop$;
-
-raise notice '[+] Deleting possibly existing tables';
-do $drop$ begin
-  drop table if exists
-    -- Developer; Team related tables
-    sysconf
-    , developer
-    , team
-    , developer_team_relation
-    -- Project related
-    , project
-    , project_stage
-    -- Task related
-    , task
-    , task_dependency
-    , task_comment
-  ;
-end $drop$;
 
 
 raise notice '[+] Creating sysconf schema and add migration stamp';
@@ -73,9 +35,10 @@ do $developers$ begin
     id serial primary key
     , created timestamp default now()
     , name text not null
+    , role text default ''
     , email text not null unique check(email like '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
     , pwhash varchar(100)
-    , isChief boolean default FALSE
+    , is_chief boolean default FALSE
   );
 
   -- Team
@@ -142,7 +105,7 @@ do $tasks$ begin
     , deadline timestamp not null
     , name text not null
     , description text not null
-    , fullfilled timestamp
+    , fulfilled timestamp
     , project_stage integer not null references project_stage (id)
     , team integer references team (id)
     -- Ensure that there are not tasks with the same name for the each project stage
@@ -152,10 +115,8 @@ do $tasks$ begin
   create table if not exists task_dependency (
     id serial primary key
     , created timestamp default now()
-    -- , task integer not null references task (id)
-    -- , depends integer not null references task (id)
-    , task integer not null
-    , depends integer not null
+    , task integer not null references task (id)
+    , depends integer not null references task (id)
     -- Ensure tasks don't refer to itself
     , constraint task_no_depends_self check ( task != depends )
   );
