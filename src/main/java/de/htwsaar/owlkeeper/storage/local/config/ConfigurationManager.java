@@ -151,7 +151,7 @@ public class ConfigurationManager {
         Properties p = getConfig(section);
         p.setProperty(key, value);
 
-        writeConfig(); //TODO Don't write instantly? Maybe write on program exit?
+        writeConfig();
     }
 
     private boolean sectionExists(String section) {
@@ -226,7 +226,7 @@ public class ConfigurationManager {
                     String[] entries = line.split("=");
                     String value;
                     String key;
-                    if (readSectionCounter == 0) {
+                    if (readSectionCounter == 0 || currentlyActiveConfigSection.isEmpty()) {
                         ConfigurationException e = new ConfigurationException(
                                 "The configuration file started without a section tag.");
                         logger.error(e);
@@ -241,6 +241,7 @@ public class ConfigurationManager {
                         br.close();
                         throw e;
                     }
+
                     // In case there's a = sign in the value, it unfortunately gets split. Lets put it back in
                     value = String.join("=", Arrays.copyOfRange(entries, 1, entries.length));
 
@@ -260,7 +261,5 @@ public class ConfigurationManager {
             }
             br.close();
         }
-
-
     }
 }
