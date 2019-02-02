@@ -22,7 +22,8 @@ public class Ui{
         UiApp.stageScene(new PageIteration());
         UiApp.stageScene(new PageTeam());
 
-        UiApp.STARTING_SCENE = "install-select";
+        // Change this to test individual scenes
+        UiApp.STARTING_SCENE = "page-iteration";
         UiApp.startUi();
     }
 
