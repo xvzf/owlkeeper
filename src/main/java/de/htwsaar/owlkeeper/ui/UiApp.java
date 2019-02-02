@@ -15,6 +15,7 @@ public class UiApp extends ViewApplication{
 
     /**
      * Adds a new Scene to the application
+     *
      * @param scene new Scene instance to register in the applications GUI
      */
     public static void stageScene(UiScene scene){
@@ -24,16 +25,23 @@ public class UiApp extends ViewApplication{
     /**
      * Main starting point for the GUI
      * Here all scenes are finally registered and defined
+     *
      * @param primaryStage the primary stage for this application
      * @throws Exception The main entry scene named "default" must be defined before the GUI is launched
      */
     @Override
     void boot(Stage primaryStage) throws Exception{
-        UiApp.scenes.forEach(scene -> this.addScene(scene.getName(), scene.getBuilder()));
-        if (!this.hasScene("default")) {
-            throw new Exception("Scene with the name 'default' must be defined");
+        UiApp.scenes.forEach(scene -> {
+            try {
+                this.addScene(scene.getName(), scene.getBuilder());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        if (!this.hasScene(this.getCurrentSceneName())) {
+            throw new Exception("Scene with the name '"+this.getCurrentSceneName()+"' must be defined");
         }
-        this.switchScene("default");
+        this.switchScene(this.getCurrentSceneName());
         primaryStage.show();
     }
 

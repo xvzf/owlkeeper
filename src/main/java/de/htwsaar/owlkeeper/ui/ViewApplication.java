@@ -12,19 +12,24 @@ import java.util.HashMap;
  */
 abstract public class ViewApplication extends Application{
 
+    public static String STARTING_SCENE = "default";
+
     /**
      * Interface used to define build processes
      * for the individual scenes
      */
     public interface SceneBuilder{
-        Scene build(ViewApplication application);
+        Scene build(ViewApplication application) throws Exception;
     }
 
     private HashMap<String, Scene> scenes = new HashMap<>();
     private Stage stage = null;
+    private String currentScene = ViewApplication.STARTING_SCENE;
+
 
     /**
      * Main entry point for JavaFX application and starting point for the GUI
+     *
      * @param primaryStage the primary stage for this application
      * @throws Exception if something goes wrong
      */
@@ -36,6 +41,7 @@ abstract public class ViewApplication extends Application{
 
     /**
      * Returns the HashMap containing all currently defined scenes
+     *
      * @return HashMap of all defined Scenes with their registered name
      */
     public HashMap<String, Scene> getScenes(){
@@ -44,6 +50,7 @@ abstract public class ViewApplication extends Application{
 
     /**
      * Returns the current primary stage
+     *
      * @return The primary application stage
      */
     public Stage getStage(){
@@ -52,23 +59,27 @@ abstract public class ViewApplication extends Application{
 
     /**
      * Switches the scene to the one defined by the given key
+     *
      * @param key name of the new scene
      */
     public void switchScene(String key){
         this.getStage().setScene(this.scenes.get(key));
+        this.currentScene = key;
     }
 
     /**
      * Adds a new scene to the GUI
-     * @param key the scenes name
+     *
+     * @param key     the scenes name
      * @param builder the scenes build process
      */
-    public void addScene(String key, SceneBuilder builder){
+    public void addScene(String key, SceneBuilder builder) throws Exception{
         this.scenes.put(key, builder.build(this));
     }
 
     /**
      * Checks if the given scene is currently registered
+     *
      * @param key name of the scene
      * @return true if a scene with the given name is registered
      */
@@ -79,10 +90,20 @@ abstract public class ViewApplication extends Application{
     /**
      * Main starting point for the GUI
      * Here all scenes are finally registered and defined
+     *
      * @param primaryStage the primary stage for this application
      * @throws Exception if something goes wrong
      */
     abstract void boot(Stage primaryStage) throws Exception;
+
+    /**
+     * Returns the current Scene name
+     *
+     * @return current scene name
+     */
+    public String getCurrentSceneName(){
+        return this.currentScene;
+    }
 
 }
 
