@@ -2,6 +2,7 @@ package de.htwsaar.owlkeeper.storage.dao;
 
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
+import org.jdbi.v3.sqlobject.config.RegisterFieldMapper;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
@@ -34,11 +35,12 @@ public interface DeveloperDao {
      * @param d
      * @return Inserted id
      */
-    @SqlUpdate("insert into developer "
+    @SqlQuery("insert into developer "
             + "(name, role, email, pwhash, chief) values "
             + "(:name, :role, :email, :pwhash, :chief) returning id;"
     )
-    long insertDeveloper(@BindBean Developer d);
+    @RegisterFieldMapper(String.class)
+    int insertDeveloper(@BindBean Developer d);
 
 
     /**
@@ -47,14 +49,15 @@ public interface DeveloperDao {
      * @param d
      * @return
      */
-    @SqlUpdate("update developer set "
-            + "name = :name "
-            + "role = :role "
-            + "email = :email "
-            + "pwhash = :pwhash "
-            + "chief = :chief "
+    @SqlQuery("update developer set "
+            + "name = :name"
+            + ", role = :role"
+            + ", email = :email"
+            + ", pwhash = :pwhash"
+            + ", is_chief = :chief "
             + "where id = :id returning id;"
     )
-    long updateDeveloper(@BindBean Developer d);
+    @RegisterFieldMapper(String.class)
+    int updateDeveloper(@BindBean Developer d);
 
 }

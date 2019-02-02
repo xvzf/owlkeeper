@@ -3,8 +3,11 @@ package de.htwsaar.owlkeeper.storage.model;
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.DeveloperDao;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DeveloperModel {
+    private static Logger logger = LogManager.getLogger(DeveloperModel.class);
     private Developer d;
 
     /**
@@ -60,7 +63,7 @@ public class DeveloperModel {
      * @return
      */
     public boolean save() {
-        long newId = DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> {
+        int newId = DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> {
             if(d.getId() != 0) {
                 return dao.updateDeveloper(d);
             } else {
@@ -68,10 +71,17 @@ public class DeveloperModel {
             }
         });
 
+        logger.info(newId);
+
         // Refresh every time
         getFromDB(newId);
 
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return d.toString();
     }
 
 }
