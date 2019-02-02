@@ -39,7 +39,6 @@ public interface DeveloperDao {
             + "(name, role, email, pwhash, chief) values "
             + "(:name, :role, :email, :pwhash, :chief) returning id;"
     )
-    @RegisterFieldMapper(String.class)
     int insertDeveloper(@BindBean Developer d);
 
 
@@ -57,7 +56,6 @@ public interface DeveloperDao {
             + ", is_chief = :chief "
             + "where id = :id returning id;"
     )
-    @RegisterFieldMapper(String.class)
     int updateDeveloper(@BindBean Developer d);
 
 }
