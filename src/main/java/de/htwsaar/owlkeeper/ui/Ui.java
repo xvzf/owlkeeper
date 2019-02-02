@@ -12,6 +12,9 @@ public class Ui{
      * Here all Scenes are stages to the UiApp class and the GUI is launched
      */
     Ui(){
+        // @todo remove absolute positions
+        // @todo minimize inline styles
+        // @todo fix issue with resized images
         UiApp.stageScene(new InstallConnect());
         UiApp.stageScene(new InstallDB());
         UiApp.stageScene(new InstallLogin());
