@@ -2,7 +2,7 @@ package de.htwsaar.owlkeeper.storage.entity;
 
 import java.sql.Timestamp;
 
-public class Task {
+public class Task implements IDable {
     long id;
     Timestamp created;
     Timestamp deadline;

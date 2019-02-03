@@ -2,7 +2,7 @@ package de.htwsaar.owlkeeper.storage.entity;
 
 import java.sql.Timestamp;
 
-public class Team {
+public class Team implements IDable {
     private long id;
     private Timestamp created;
     private String name;

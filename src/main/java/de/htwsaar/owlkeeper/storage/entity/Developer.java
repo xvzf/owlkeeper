@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 /**
  * Developer Container
  */
-public class Developer {
+public class Developer implements IDable {
     private long id;
     private Timestamp created;
     private String name;
