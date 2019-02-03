@@ -1,26 +1,34 @@
 package de.htwsaar.owlkeeper.storage.model;
 
-import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.DeveloperDao;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdbi.v3.core.extension.ExtensionCallback;
 
-public class DeveloperModel {
+import java.util.function.Function;
+
+public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
+
     private static Logger logger = LogManager.getLogger(DeveloperModel.class);
-    private Developer d;
+    private static Function<Long, ExtensionCallback<Developer, DeveloperDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getDeveloper(id));
+    private static Function<Long, ExtensionCallback<Integer, DeveloperDao, RuntimeException>> removeCallbackFactory = id -> (dao -> dao.removeDeveloper(id));
+    private static Function<Developer, ExtensionCallback<Integer, DeveloperDao, RuntimeException>> saveCallbackFactory1 =
+            dev -> (dao -> (dev.getId() != 0 ? dao.updateDeveloper(dev) : dao.insertDeveloper(dev)));
 
     /**
      * Developer Model, creates a new developer
      *
-     * @param name
-     * @param role
-     * @param email
-     * @param pwhash
-     * @param chief
+     * @param name   Name
+     * @param role   Role
+     * @param email  Email
+     * @param pwhash Passwordhash
+     * @param chief  chief
      */
     public DeveloperModel(String name, String role, String email, String pwhash, boolean chief) {
-        d = new Developer();
+        super(logger, DeveloperDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
+        setContainer(new Developer());
+        Developer d = getContainer();
         d.setName(name);
         d.setRole(role);
         d.setEmail(email);
@@ -31,57 +39,19 @@ public class DeveloperModel {
     /**
      * Queries a developer out of the db
      *
-     * @param id
+     * @param id Id in the db
      */
     public DeveloperModel(long id) {
+        super(logger, DeveloperDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
         getFromDB(id);
     }
 
     /**
-     * Data container
+     * Constructor for already existing Developers
      *
-     * @return
+     * @param dev Developer
      */
-    public Developer getContainer() {
-        return d;
+    public DeveloperModel(Developer dev) {
+        super(dev, logger, DeveloperDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
     }
-
-    /**
-     * Refreshes local data
-     *
-     * @param id
-     */
-    private void getFromDB(long id) {
-        d = DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> {
-            return dao.getDeveloper(id);
-        });
-    }
-
-    /**
-     * Saves changes to the DB
-     *
-     * @return
-     */
-    public boolean save() {
-        int newId = DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> {
-            if(d.getId() != 0) {
-                return dao.updateDeveloper(d);
-            } else {
-                return dao.insertDeveloper(d);
-            }
-        });
-
-        logger.info(newId);
-
-        // Refresh every time
-        getFromDB(newId);
-
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return d.toString();
-    }
-
 }

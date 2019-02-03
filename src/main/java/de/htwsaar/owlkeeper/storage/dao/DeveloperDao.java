@@ -58,4 +58,17 @@ public interface DeveloperDao {
     )
     int updateDeveloper(@BindBean Developer d);
 
+
+    /**
+     * Removes a developer from the database
+     *
+     * @param id
+     * @return Removed id
+     */
+    @SqlQuery("delete from developer "
+            + "where id = ?"
+            + "returning id;"
+    )
+    @RegisterBeanMapper(Developer.class)
+    int removeDeveloper(long id);
 }
