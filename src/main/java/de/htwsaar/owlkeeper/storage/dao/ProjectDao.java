@@ -76,5 +76,5 @@ public interface ProjectDao {
             + "where id = ? returning id;"
     )
     @RegisterBeanMapper(Project.class)
-    int removeProject(long id);
+    int deleteProject(long id);
 }

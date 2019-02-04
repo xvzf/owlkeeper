@@ -12,7 +12,7 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
 
     private static Logger logger = LogManager.getLogger(DeveloperModel.class);
     private static Function<Long, ExtensionCallback<Developer, DeveloperDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getDeveloper(id));
-    private static Function<Long, ExtensionCallback<Integer, DeveloperDao, RuntimeException>> removeCallbackFactory = id -> (dao -> dao.removeDeveloper(id));
+    private static Function<Long, ExtensionCallback<Integer, DeveloperDao, RuntimeException>> deleteCallbackFactory = id -> (dao -> dao.deleteDeveloper(id));
     private static Function<Developer, ExtensionCallback<Integer, DeveloperDao, RuntimeException>> saveCallbackFactory1 =
             dev -> (dao -> (dev.getId() != 0 ? dao.updateDeveloper(dev) : dao.insertDeveloper(dev)));
 
@@ -26,7 +26,7 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * @param chief  chief
      */
     public DeveloperModel(String name, String role, String email, String pwhash, boolean chief) {
-        super(logger, DeveloperDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
+        super(logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
         setContainer(new Developer());
         Developer d = getContainer();
         d.setName(name);
@@ -42,7 +42,7 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * @param id Id in the db
      */
     public DeveloperModel(long id) {
-        super(logger, DeveloperDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
+        super(logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
         getFromDB(id);
     }
 
@@ -52,6 +52,6 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * @param dev Developer
      */
     public DeveloperModel(Developer dev) {
-        super(dev, logger, DeveloperDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
+        super(dev, logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
     }
 }

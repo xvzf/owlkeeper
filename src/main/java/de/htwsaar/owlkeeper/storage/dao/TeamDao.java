@@ -97,7 +97,7 @@ public interface TeamDao {
             + "returning id;"
     )
     @RegisterBeanMapper(Team.class)
-    int removeTeam(long id);
+    int deleteTeam(long id);
 
 
 }
