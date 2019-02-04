@@ -2,6 +2,7 @@ package de.htwsaar.owlkeeper.storage.dao;
 
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
+import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 
 import java.util.List;
@@ -17,6 +18,36 @@ public interface TaskDao {
     @SqlQuery("select * from task where id = ?;")
     @RegisterBeanMapper(Task.class)
     Task getTask(long id);
+
+    /**
+     * Insert task into db
+     *
+     * @param t
+     * @return
+     */
+    @SqlQuery("insert into task"
+            + "(deadline, name, description, fulfilled, project_stage, team values ( "
+            + "(:deadline, :name, :description, :fulfilled, :project_stage, :team) "
+            + "returning id;"
+    )
+    int insertTask(@BindBean Task t);
+
+    /**
+     * Update task
+     *
+     * @param t
+     * @return
+     */
+    @SqlQuery("update task set"
+            + "deadline = :deadline"
+            + ", set name = :name"
+            + ", set description = :description"
+            + ", set fulfilled = :fulfilled"
+            + ", set project_stage = :project_stage"
+            + ", set team = :team "
+            + "where id = :id returning id;"
+    )
+    int updateTask(@BindBean Task t);
 
     /**
      * Retrieves all tasks for a sepecific project stage
@@ -65,7 +96,7 @@ public interface TaskDao {
     List<Task> getPendingTasksBeforeUnblocked(long id);
 
     /**
-     *  Retrieves tasks for a specific developer and project stage
+     * Retrieves tasks for a specific developer and project stage
      *
      * @param projectStageId
      * @param developerId
@@ -83,7 +114,7 @@ public interface TaskDao {
     List<Task> getTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
 
     /**
-     *  Retrieves fulfilled tasks for a specific developer and project stage
+     * Retrieves fulfilled tasks for a specific developer and project stage
      *
      * @param projectStageId
      * @param developerId
@@ -101,7 +132,7 @@ public interface TaskDao {
     List<Task> getFulfilledTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
 
     /**
-     *  Retrieves pending tasks for a specific developer and project stage
+     * Retrieves pending tasks for a specific developer and project stage
      *
      * @param projectStageId
      * @param developerId
