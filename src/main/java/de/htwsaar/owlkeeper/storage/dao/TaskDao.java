@@ -49,6 +49,16 @@ public interface TaskDao {
     )
     int updateTask(@BindBean Task t);
 
+
+    /**
+     * Deletes a task
+     *
+     * @param id
+     * @return
+     */
+    @SqlQuery("delte from task where id = ?")
+    int deleteTask(long id);
+
     /**
      * Retrieves all tasks for a sepecific project stage
      *
