@@ -56,7 +56,7 @@ public interface TaskDao {
      * @param id
      * @return
      */
-    @SqlQuery("delte from task where id = ?")
+    @SqlQuery("delete from task where id = ?")
     int deleteTask(long id);
 
     /**
