@@ -58,7 +58,6 @@ public interface ProjectDao {
      * @return
      */
     @SqlQuery("update project set "
-            + "created = :created"
             + "name = :name"
             + ", role = :role"
             + ", description = :description"
