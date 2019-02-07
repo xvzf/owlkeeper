@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  * Keys within the same section must be unique but different section can have the same keys. Arbitrary amounts of whitespace are allowed too but will be overwritten.
  */
 public class ConfigurationManager {
-    private static final String DEFAULT_CONFIG = "/owlkeeper.properties";
+    public static final String DEFAULT_CONFIG = "/owlkeeper.properties";
     private static ConfigurationManager manager;
     private static Logger logger = LogManager.getLogger(ConfigurationManager.class);
     private final String path; // path to the loaded config file.
@@ -53,24 +53,18 @@ public class ConfigurationManager {
      * @param path the relative path to the config in the resource folder.
      */
     private ConfigurationManager(String path) {
-        availableProperties = new HashMap<>();
-        this.path = Resource.resourceToAbsolutePath(path);
-        try {
-            new ConfigFileParser().parse();
-        } catch (IOException e) {
-            logger.error(e);
-            e.printStackTrace();
-        }
+        this(ConfigurationManager.class, path);
     }
 
     private ConfigurationManager(Class<?> clazz, String path) {
         availableProperties = new HashMap<>();
-        this.path = Resource.resourceToAbsolutePath(clazz, path);
+
         try {
+            this.path = Resource.resourceToAbsolutePath(clazz, path);
             new ConfigFileParser().parse();
         } catch (IOException e) {
             logger.error(e);
-            e.printStackTrace();
+            throw new ConfigurationException(e.getMessage());
         }
     }
 

@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Optional;
@@ -44,8 +45,13 @@ public class Resource {
         return Resource.class.getResource(resourcePath).getPath().replace("%20", " ");
     }
 
-    public static String resourceToAbsolutePath(Class<?> clazz, String resourcePath) {
-        return clazz.getResource(resourcePath).getPath().replace("%20", " ");
+    public static String resourceToAbsolutePath(Class<?> clazz, String resourcePath) throws ResourceNotFoundException {
+        URL resource = clazz.getResource(resourcePath);
+        if (resource == null) { // Didnt find the resource.
+            throw new ResourceNotFoundException("Resource " + resourcePath + " does not exist.");
+        } else {
+            return resource.getPath().replace("%20", " ");
+        }
     }
 
     /**
