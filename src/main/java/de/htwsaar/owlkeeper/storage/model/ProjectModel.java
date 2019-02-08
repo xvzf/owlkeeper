@@ -2,9 +2,12 @@ package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
 import de.htwsaar.owlkeeper.storage.entity.Project;
+import de.htwsaar.owlkeeper.storage.DBConnection;
+import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
+import java.util.List;
 
 import java.util.function.Function;
 
@@ -49,12 +52,11 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
     /**
      * Retrieves List with all Project Stages for a Project
      *
-     * @param project Projekt
      * @return ps List with all Stages
      */
-    public List<ProjectStage> getStages(Project project) {
-        long id = project.getId();
-        List<ProjectStage> ps = DBConnection.getJdbi().withExtension(ProjectDAO.class, (dao -> dao.getStagesForProject(id)));
+    public List<ProjectStage> getStages() {
+        long id = getContainer().getId();
+        List<ProjectStage> ps = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getStagesForProject(id)));
         return ps;
     }
 }
