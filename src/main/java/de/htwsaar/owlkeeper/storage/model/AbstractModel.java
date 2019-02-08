@@ -1,7 +1,7 @@
 package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.DBConnection;
-import de.htwsaar.owlkeeper.storage.entity.IDable;
+import de.htwsaar.owlkeeper.storage.entity.HasID;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
@@ -11,10 +11,10 @@ import java.util.function.Function;
  * AbstractModel class provides basic Model functionalities for Model classes
  * (Model classes generate, save, remove and load Object from/to/for/whatever the database)
  *
- * @param <R> The type of the container. Must implement IDable
+ * @param <R> The type of the container. Must implement HasID
  * @param <E> The DAO responsible for retrieving the container from db
  */
-public abstract class AbstractModel<R extends IDable, E> {
+public abstract class AbstractModel<R extends HasID, E> {
     private Logger logger;
     private Class<E> DAOClass;  // Save E in DAOClass because java generics are awful
     private Function<Long, ExtensionCallback<R, E, RuntimeException>> loadCallbackFactory;

@@ -2,7 +2,7 @@ package de.htwsaar.owlkeeper.storage.entity;
 
 import java.sql.Timestamp;
 
-public class TaskComment implements IDable {
+public class TaskComment implements HasID{
     long id;
     Timestamp created;
     String content;
