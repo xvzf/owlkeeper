@@ -1,6 +1,7 @@
 package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.entity.Project;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,5 +43,12 @@ class ProjectModelTest {
         assertEquals(p.getDescription(), ploaded.getDescription());
         assertEquals(p.getName(), p.getName());
         pmloaded.removeFromDB();
+    }
+
+    @Test
+    void testGetStages() {
+        ProjectModel pm = new ProjectModel(1);
+        List ps = pm.getStages();
+        assertEquals(ps.size(), 2);
     }
 }
