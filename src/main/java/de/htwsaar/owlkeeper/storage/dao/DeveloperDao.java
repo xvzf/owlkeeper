@@ -70,5 +70,5 @@ public interface DeveloperDao {
             + "returning id;"
     )
     @RegisterBeanMapper(Developer.class)
-    int removeDeveloper(long id);
+    int deleteDeveloper(long id);
 }

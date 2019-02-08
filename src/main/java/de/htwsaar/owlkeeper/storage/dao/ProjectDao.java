@@ -58,7 +58,6 @@ public interface ProjectDao {
      * @return
      */
     @SqlQuery("update project set "
-            + "created = :created"
             + "name = :name"
             + ", role = :role"
             + ", description = :description"
@@ -77,5 +76,5 @@ public interface ProjectDao {
             + "where id = ? returning id;"
     )
     @RegisterBeanMapper(Project.class)
-    int removeProject(long id);
+    int deleteProject(long id);
 }
