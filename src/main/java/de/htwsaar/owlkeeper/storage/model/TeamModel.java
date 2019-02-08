@@ -27,7 +27,6 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
 
     /**
      * Queries a Team out of the db
-     *
      * 
      * @param id Id in the db
      */
