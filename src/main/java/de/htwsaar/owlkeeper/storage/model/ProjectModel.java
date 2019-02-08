@@ -45,4 +45,16 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
     public ProjectModel(Project project) {
         super(project, logger, ProjectDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
     }
+
+    /**
+     * Retrieves List with all Project Stages for a Project
+     *
+     * @param project Projekt
+     * @return ps List with all Stages
+     */
+    public List<ProjectStage> getStages(Project project) {
+        long id = project.getId();
+        List<ProjectStage> ps = DBConnection.getJdbi().withExtension(ProjectDAO.class, (dao -> dao.getStagesForProject(id)));
+        return ps;
+    }
 }
