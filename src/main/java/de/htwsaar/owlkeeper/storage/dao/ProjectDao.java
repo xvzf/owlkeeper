@@ -52,7 +52,7 @@ public interface ProjectDao {
     int insertProject(@BindBean Project p);
 
     /**
-     * Updates an existing developer
+     * Updates an existing project
      *
      * @param p
      * @return
