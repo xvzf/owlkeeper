@@ -59,4 +59,30 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
         List<ProjectStage> ps = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getStagesForProject(id)));
         return ps;
     }
+
+    /**
+     * Retrieves all Projects
+     *
+     * @return projectlist List with all Projects
+     */
+    public List<Project> getProjects() {
+        List<Project> projectlist = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getProjects()));
+        return projectlist;
+    }
+
+    /**
+     * Deletes Project in DB
+     */
+    public void deleteProject() {
+        long id = getContainer().getId();
+        DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.deleteProject(id)));
+    }
+
+    /**
+     * Updates Project
+     */
+    public void updateProject() {
+        Project project = getContainer();
+        DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.updateProject(project)));
+    }
 }
