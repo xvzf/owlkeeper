@@ -61,16 +61,6 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
     }
 
     /**
-     * Retrieves Project from DB
-     *
-     * @return project Project
-     */
-    public Project getProject() {
-        long id = getContainer().getId();
-        return  DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getProject(id)));
-    }
-
-    /**
      * Retrieves all Projects
      *
      * @return projectlist List with all Projects
@@ -82,8 +72,6 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
 
     /**
      * Deletes Project in DB
-     *
-     * @return void
      */
     public void deleteProject() {
         long id = getContainer().getId();
