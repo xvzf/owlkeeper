@@ -65,7 +65,7 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
      *
      * @return projectlist List with all Projects
      */
-    public List<Project> getProjects() {
+    public static List<Project> getProjects() {
         List<Project> projectlist = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getProjects()));
         return projectlist;
     }
