@@ -20,6 +20,10 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
             p -> (dao -> (p.getId() != 0 ? dao.updateProject(p) : dao.insertProject(p)));
 
 
+    /**
+     * Constructor for new Projects and ProjectModel. Generates Project and saves it into the container
+     * For parameters check Project class
+     */
     public ProjectModel(String name, String description, String type) {
 
         super(logger, ProjectDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);

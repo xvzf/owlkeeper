@@ -17,6 +17,10 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
             p -> (dao -> (p.getId() != 0 ? dao.updateProjectStage(p) : dao.insertProjectStage(p)));
 
 
+    /**
+     * Constructor for new ProjectStages and ProjectStageModel. Generates ProjectModel and saves it into the container
+     * For parameters check ProjectStage class
+     */
     public ProjectStageModel(String name, long project, long index) {
 
         super(logger, ProjectStageDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
