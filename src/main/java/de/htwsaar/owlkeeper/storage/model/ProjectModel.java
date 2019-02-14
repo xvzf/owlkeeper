@@ -2,9 +2,12 @@ package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
 import de.htwsaar.owlkeeper.storage.entity.Project;
+import de.htwsaar.owlkeeper.storage.DBConnection;
+import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
+import java.util.List;
 
 import java.util.function.Function;
 
@@ -44,5 +47,42 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
      */
     public ProjectModel(Project project) {
         super(project, logger, ProjectDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
+    }
+
+    /**
+     * Retrieves List with all Project Stages for a Project
+     *
+     * @return ps List with all Stages
+     */
+    public List<ProjectStage> getStages() {
+        long id = getContainer().getId();
+        List<ProjectStage> ps = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getStagesForProject(id)));
+        return ps;
+    }
+
+    /**
+     * Retrieves all Projects
+     *
+     * @return projectlist List with all Projects
+     */
+    public List<Project> getProjects() {
+        List<Project> projectlist = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getProjects()));
+        return projectlist;
+    }
+
+    /**
+     * Deletes Project in DB
+     */
+    public void deleteProject() {
+        long id = getContainer().getId();
+        DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.deleteProject(id)));
+    }
+
+    /**
+     * Updates Project
+     */
+    public void updateProject() {
+        Project project = getContainer();
+        DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.updateProject(project)));
     }
 }
