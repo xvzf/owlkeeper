@@ -36,6 +36,8 @@ public class DBConnection {
         try {
             jdbi = Jdbi.create(url, config);
             jdbi.installPlugin(new SqlObjectPlugin());
+            // open and close a connection to check if it's established
+            jdbi.open().close();
             logger.info("Connection to DB at " + url + " established");
         } catch (Exception e) {
             logger.error("Connection to DB at " + url + " could not be established", e);
