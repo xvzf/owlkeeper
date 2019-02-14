@@ -65,9 +65,7 @@ public interface TeamDao {
      * @param t
      * @return Inserted id
      */
-    @SqlQuery("insert into team "
-            + "(name, leader) values "
-            + "(:name, :leader) returning id;"
+    @SqlQuery("insert into team (name, leader) values (:name, :leader) returning id;"
     )
     int insertTeam(@BindBean Team t);
 
@@ -78,10 +76,7 @@ public interface TeamDao {
      * @param t
      * @return
      */
-    @SqlQuery("update team set "
-            + "name = :name"
-            + ", leader = :leader"
-            + "where id = :id returning id;"
+    @SqlQuery("update team set name = :name, leader = :leader where id = :id returning id;"
     )
     int updateTeam(@BindBean Team t);
 
@@ -92,9 +87,7 @@ public interface TeamDao {
      * @param id
      * @return Removed id
      */
-    @SqlQuery("delete from team "
-            + "where id = ?"
-            + "returning id;"
+    @SqlQuery("delete from team where id = ? returning id;"
     )
     @RegisterBeanMapper(Team.class)
     int deleteTeam(long id);

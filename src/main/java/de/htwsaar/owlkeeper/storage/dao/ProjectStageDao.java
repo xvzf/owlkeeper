@@ -51,8 +51,7 @@ public interface ProjectStageDao {
      * @param id
      * @return Removed id
      */
-    @SqlQuery("delete from project_stage "
-            + "where id = ? returning id;"
+    @SqlQuery("delete from project_stage where id = ? returning id;"
     )
     @RegisterBeanMapper(ProjectStage.class)
     int removeProjectStage(long id);
