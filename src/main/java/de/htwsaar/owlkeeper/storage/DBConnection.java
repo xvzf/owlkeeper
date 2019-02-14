@@ -9,13 +9,15 @@ import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import java.util.Properties;
 
 public class DBConnection {
+    private static final String URL_CONFIG_SECTION = "db";
+    private static final String URL_CONFIG_KEY = "url";
     private static final Logger logger = LogManager.getLogger(DBConnection.class);
-    private static Properties config = ConfigurationManager.getConfigManager().getConfig("db");
+    private static Properties config = ConfigurationManager.getConfigManager().getConfig(URL_CONFIG_SECTION);
     private static Jdbi jdbi;
 
     public static Jdbi getJdbi() {
 
-        if( jdbi == null) {
+        if (jdbi == null) {
             // Create connection to the database
             initiateDBConnection();
         }
@@ -23,12 +25,20 @@ public class DBConnection {
     }
 
     public static void initiateDBConnection() {
+        String url;
         try {
-            jdbi = Jdbi.create(config.getProperty("url"), config);
-            jdbi.installPlugin(new SqlObjectPlugin());
-            logger.info("Connection to DB established");
+            url = config.getProperty(URL_CONFIG_KEY);
         } catch (Exception e) {
-            logger.error("Connection to DB could not be established", e);
+            logger.error("Could not find key \"" + URL_CONFIG_KEY +
+                    "\" in section \"" + URL_CONFIG_SECTION + "\" in config file", e);
+            throw e;
+        }
+        try {
+            jdbi = Jdbi.create(url, config);
+            jdbi.installPlugin(new SqlObjectPlugin());
+            logger.info("Connection to DB at " + url + " established");
+        } catch (Exception e) {
+            logger.error("Connection to DB at " + url + " could not be established", e);
         }
     }
 }
