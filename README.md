@@ -15,4 +15,4 @@ Just run `make bootstrap`
 In order to run test against the default database with dummy data, run `make test`
 
 ## Weekly report
-Enter your progress of this week into the weekly report: [Wochenbericht](https://docs.google.com/document/d/1oHlltIXvrkkX9O6LjbsHqA3u_J_YYvjZFaDZgHRHFr4/edit?usp=sharing)
+Enter your progress of this week into the weekly report: [Wochenbericht](https://docs.google.com/document/d/1qGXc_3bbKxmiCtkZZbQJFlLprwdoWGZlPlnf5-h6Jw8/edit?usp=sharing)
