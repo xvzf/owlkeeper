@@ -9,7 +9,13 @@ import java.util.function.Function;
 
 /**
  * AbstractModel class provides basic Model functionalities for Model classes
- * (Model classes generate, save, remove and load Object from/to/for/whatever the database)
+ * Model classes generate, save, remove and load Object from/to/for/whatever the database
+ * Example with an TaskModel:
+ *
+ * Task task = new Task(param1, param2....);
+ * TaskModel tm = new TaskModel(task);
+ * tm.save();
+ * List<Developer> devs = tm.getAssignedDevs();
  *
  * @param <R> The type of the container. Must implement HasID
  * @param <E> The DAO responsible for retrieving the container from db
