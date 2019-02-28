@@ -20,6 +20,10 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
             p -> (dao -> (p.getId() != 0 ? dao.updateProject(p) : dao.insertProject(p)));
 
 
+    /**
+     * Constructor for new Projects and ProjectModel. Generates Project and saves it into the container
+     * For parameters check Project class
+     */
     public ProjectModel(String name, String description, String type) {
 
         super(logger, ProjectDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
@@ -65,24 +69,8 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
      *
      * @return projectlist List with all Projects
      */
-    public List<Project> getProjects() {
+    public static List<Project> getProjects() {
         List<Project> projectlist = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getProjects()));
         return projectlist;
-    }
-
-    /**
-     * Deletes Project in DB
-     */
-    public void deleteProject() {
-        long id = getContainer().getId();
-        DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.deleteProject(id)));
-    }
-
-    /**
-     * Updates Project
-     */
-    public void updateProject() {
-        Project project = getContainer();
-        DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.updateProject(project)));
     }
 }
