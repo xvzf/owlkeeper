@@ -17,6 +17,10 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
             p -> (dao -> (p.getId() != 0 ? dao.updateTeam(p) : dao.insertTeam(p)));
 
 
+    /**
+     * Constructor for new Team and TeamModel. Generates the Team and saves it into the container
+     * For parameters check Team class
+     */
     public TeamModel(String name, long leader) {
 
         super(logger, TeamDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);

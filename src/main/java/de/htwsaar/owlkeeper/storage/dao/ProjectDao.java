@@ -62,7 +62,7 @@ public interface ProjectDao {
             + ", role = :role"
             + ", description = :description"
             + ", type = :type"
-            + "where id = :id returning id;"
+            + " where id = :id returning id;"
     )
     int updateProject(@BindBean Project p);
 
