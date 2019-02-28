@@ -33,7 +33,7 @@ public interface TaskCommentDao {
      * @param p
      * @return Inserted id
      */
-    @SqlQuery("insert into task_comment (name, description, type) values (:name, :description, :type) returning id;"
+    @SqlQuery("insert into task_comment (content, developer, task) values (:content, :developer, :task) returning id;"
     )
     int insertTaskComment(@BindBean TaskComment p);
 
