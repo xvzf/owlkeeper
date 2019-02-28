@@ -30,6 +30,15 @@ public interface DeveloperDao {
     Developer getDeveloper(long id);
 
     /**
+     * Get developer by email
+     *
+     * @return
+     */
+    @SqlQuery("select * from developer where email = ?")
+    @RegisterBeanMapper(Developer.class)
+    Developer getDeveloper(String email);
+
+    /**
      * Inserts a new developer into the database
      *
      * @param d
