@@ -26,8 +26,8 @@ public interface TaskDao {
      * @return
      */
     @SqlQuery("insert into task"
-            + "(deadline, name, description, fulfilled, project_stage, team values ( "
-            + "(:deadline, :name, :description, :fulfilled, :project_stage, :team) "
+            + "(deadline, name, description, fulfilled, project_stage, team) values  "
+            + "(:deadline, :name, :description, :fulfilled, :projectStage, :team) "
             + "returning id;"
     )
     int insertTask(@BindBean Task t);
@@ -43,7 +43,7 @@ public interface TaskDao {
             + ", set name = :name"
             + ", set description = :description"
             + ", set fulfilled = :fulfilled"
-            + ", set project_stage = :project_stage"
+            + ", set project_stage = :projectStage"
             + ", set team = :team "
             + "where id = :id returning id;"
     )
@@ -56,7 +56,7 @@ public interface TaskDao {
      * @param id
      * @return
      */
-    @SqlQuery("delete from task where id = ?")
+    @SqlQuery("delete from task where id = ? returning id;")
     int deleteTask(long id);
 
     /**
