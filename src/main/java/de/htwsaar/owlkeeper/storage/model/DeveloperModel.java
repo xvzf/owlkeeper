@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.DeveloperDao;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import org.apache.logging.log4j.LogManager;
@@ -22,17 +23,15 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * @param name   Name
      * @param role   Role
      * @param email  Email
-     * @param pwhash Passwordhash
      * @param chief  chief
      */
-    public DeveloperModel(String name, String role, String email, String pwhash, boolean chief) {
+    public DeveloperModel(String name, String role, String email, boolean chief) {
         super(logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
         setContainer(new Developer());
         Developer d = getContainer();
         d.setName(name);
         d.setRole(role);
         d.setEmail(email);
-        d.setPwhash(pwhash);
         d.setChief(chief);
     }
 
@@ -44,6 +43,19 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
     public DeveloperModel(long id) {
         super(logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
         getFromDB(id);
+    }
+
+    /**
+     * Queries a developer out of the db
+     *
+     * @param email Developer email
+     */
+    public DeveloperModel(final String email) {
+        super(logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
+
+        setContainer(DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> {
+            return dao.getDeveloper(email);
+        }));
     }
 
     /**

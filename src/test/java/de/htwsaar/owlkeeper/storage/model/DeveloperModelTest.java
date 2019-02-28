@@ -10,23 +10,21 @@ class DeveloperModelTest {
     private final String D_NAME_1 = "Robert'); DROP TABLE Developers;--";
     private final String D_ROLE_1 = "child";
     private final String D_EMAIL_1 = "root@example.org";
-    private final String D_PWHASH_1 = "*insert my code here*";
     private final boolean D_CHIEF_1 = false;
 
     @Test
     void testConstructor() {
-        DeveloperModel dm = new DeveloperModel(D_NAME_1, D_ROLE_1, D_EMAIL_1, D_PWHASH_1, D_CHIEF_1);
+        DeveloperModel dm = new DeveloperModel(D_NAME_1, D_ROLE_1, D_EMAIL_1, D_CHIEF_1);
         Developer d = dm.getContainer();
         assertEquals(D_NAME_1, d.getName());
         assertEquals(D_EMAIL_1, d.getEmail());
         assertEquals(D_ROLE_1, d.getRole());
-        assertEquals(D_PWHASH_1, d.getPwhash());
         assertEquals(D_CHIEF_1, d.isChief());
     }
 
     @Test
     void testSaveLoad() {
-        DeveloperModel dm = new DeveloperModel(D_NAME_1, D_ROLE_1, D_EMAIL_1, D_PWHASH_1, D_CHIEF_1);
+        DeveloperModel dm = new DeveloperModel(D_NAME_1, D_ROLE_1, D_EMAIL_1, D_CHIEF_1);
         dm.save();
         long id = dm.getContainer().getId();
 
@@ -36,7 +34,6 @@ class DeveloperModelTest {
         assertEquals(D_NAME_1, d.getName());
         assertEquals(D_EMAIL_1, d.getEmail());
         assertEquals(D_ROLE_1, d.getRole());
-        assertEquals(D_PWHASH_1, d.getPwhash());
         assertEquals(D_CHIEF_1, d.isChief());
 
         // check against another loaded Project instance with same id
