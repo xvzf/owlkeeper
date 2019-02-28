@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 /**
  * Developer Container
  */
-public class Developer {
+public class Developer implements HasID{
     private long id;
     private Timestamp created;
     private String name;
@@ -78,7 +78,6 @@ public class Developer {
                 ", name='" + name + '\'' +
                 ", role='" + role + '\'' +
                 ", email='" + email + '\'' +
-                ", pwhash='" + pwhash + '\'' +
                 ", chief=" + chief +
                 '}';
     }

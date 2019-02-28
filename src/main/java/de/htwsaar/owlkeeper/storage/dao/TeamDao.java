@@ -3,6 +3,7 @@ package de.htwsaar.owlkeeper.storage.dao;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
+import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface TeamDao {
      * @return
      */
     @SqlQuery(
-            "select d.id, d.created, d.name, d.role, d.email, d.pwhash, d.is_chief "
+            "select d.id, d.created, d.name, d.role, d.email, d.chief "
                     + "from developer_team_relation as tdr "
                     + "left join developer as d on tdr.developer = d.id "
                     + "where tdr.team = ?;"
@@ -57,6 +58,46 @@ public interface TeamDao {
     )
     @RegisterBeanMapper(Team.class)
     List<Team> getTeamForDeveloper(long developerId);
+
+    /**
+     * Inserts a new team into the database
+     *
+     * @param t
+     * @return Inserted id
+     */
+    @SqlQuery("insert into team "
+            + "(name, leader) values "
+            + "(:name, :leader) returning id;"
+    )
+    int insertTeam(@BindBean Team t);
+
+
+    /**
+     * Updates an existing team
+     *
+     * @param t
+     * @return
+     */
+    @SqlQuery("update team set "
+            + "name = :name"
+            + ", leader = :leader"
+            + "where id = :id returning id;"
+    )
+    int updateTeam(@BindBean Team t);
+
+
+    /**
+     * Removes a team from the database
+     *
+     * @param id
+     * @return Removed id
+     */
+    @SqlQuery("delete from team "
+            + "where id = ?"
+            + "returning id;"
+    )
+    @RegisterBeanMapper(Team.class)
+    int deleteTeam(long id);
 
 
 }
