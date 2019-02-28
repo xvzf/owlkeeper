@@ -43,7 +43,7 @@ public interface TaskDao {
             + ", set name = :name"
             + ", set description = :description"
             + ", set fulfilled = :fulfilled"
-            + ", set project_stage = :projectStage"
+            + ", set project_stage = :project_stage"
             + ", set team = :team "
             + "where id = :id returning id;"
     )
