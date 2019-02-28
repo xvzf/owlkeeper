@@ -153,6 +153,10 @@ TextArea:focused .content {
     -fx-spacing: 20;
 }
 
+.task-listing HBox{
+    -fx-spacing: 20;
+}
+
 .task-listing__assigned{
     -fx-spacing: 20;
 }
