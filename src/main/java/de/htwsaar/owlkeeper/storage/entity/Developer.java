@@ -78,7 +78,6 @@ public class Developer implements HasID{
                 ", name='" + name + '\'' +
                 ", role='" + role + '\'' +
                 ", email='" + email + '\'' +
-                ", pwhash='" + pwhash + '\'' +
                 ", chief=" + chief +
                 '}';
     }

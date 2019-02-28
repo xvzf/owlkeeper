@@ -23,17 +23,15 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * @param name   Name
      * @param role   Role
      * @param email  Email
-     * @param pwhash Passwordhash
      * @param chief  chief
      */
-    public DeveloperModel(String name, String role, String email, String pwhash, boolean chief) {
+    public DeveloperModel(String name, String role, String email, boolean chief) {
         super(logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
         setContainer(new Developer());
         Developer d = getContainer();
         d.setName(name);
         d.setRole(role);
         d.setEmail(email);
-        d.setPwhash(pwhash);
         d.setChief(chief);
     }
 
