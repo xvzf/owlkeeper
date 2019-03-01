@@ -25,7 +25,7 @@ public class Ui{
         UiApp.stageScene(new PageTeam());
 
         // Change this to test individual scenes
-        UiApp.STARTING_SCENE = "page";
+        UiApp.STARTING_SCENE = "page-team";
         UiApp.startUi();
     }
 
