@@ -7,14 +7,14 @@
       xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1">
     <SplitPane dividerPositions="0.5" prefHeight="754.0" prefWidth="1241.0" styleClass="split" VBox.vgrow="ALWAYS">
         <VBox maxWidth="250.0" prefHeight="200.0" prefWidth="100.0" styleClass="navbar">
-            <fx:include source="partials/navigation-main.fxml"/>
+            <fx:include fx:id="navigation" source="partials/navigation-main.fxml"/>
             <Rectangle arcHeight="5.0" arcWidth="5.0" height="1.0" stroke="BLACK" strokeType="INSIDE" styleClass="hr" width="200.0"/>
-            <fx:include source="partials/navigation-projects.fxml"/>
+            <fx:include fx:id="projects" source="partials/navigation-projects.fxml"/>
         </VBox>
         <VBox prefHeight="729.0">
-            <fx:include source="partials/topbar.fxml"/>
-            <fx:include source="partials/iterationbar.fxml"/>
-            <fx:include source="partials/tasks-my.fxml"/>
+            <fx:include fx:id="topbar" source="partials/topbar.fxml"/>
+            <fx:include fx:id="iteration" source="partials/iterationbar.fxml"/>
+            <fx:include fx:id="tasks" source="partials/tasks-my.fxml"/>
         </VBox>
     </SplitPane>
 </VBox>

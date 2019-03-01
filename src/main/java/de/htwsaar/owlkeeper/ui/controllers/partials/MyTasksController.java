@@ -1,4 +1,4 @@
-package de.htwsaar.owlkeeper.ui.controllers;
+package de.htwsaar.owlkeeper.ui.controllers.partials;
 
 import de.htwsaar.owlkeeper.ui.helper.TaskView;
 import javafx.fxml.FXML;
@@ -14,17 +14,19 @@ public class MyTasksController extends SidebarController{
 
     private ScrollPane sidebar;
 
-    public void initialize(){
+    public void setContent(){
         this.addSidebar();
-        for (int i = 0; i < 3; i++){
+        this.tasks.getChildren().clear();
+        for (int i = 0; i < 3; i++) {
             this.tasks.getChildren().add(this.getTaskList());
         }
     }
 
     /**
      * Builds the full task-list UI
-     * @todo 28.02.2019 fill with dynamic content
+     *
      * @return the full task-list Node
+     * @todo 28.02.2019 fill with dynamic content
      */
     private VBox getTaskList(){
         VBox taskList = new VBox();
@@ -38,7 +40,7 @@ public class MyTasksController extends SidebarController{
         tasks.getStyleClass().add("task-list__items");
         taskList.getChildren().add(tasks);
 
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             tasks.getChildren().add(this.getTask());
         }
 
@@ -47,8 +49,9 @@ public class MyTasksController extends SidebarController{
 
     /**
      * Builds an individual task for the ui
-     * @ TODO: 28.02.2019 fill with dynamic content
+     *
      * @return the task Node
+     * @ TODO: 28.02.2019 fill with dynamic content
      */
     private HBox getTask(){
         return TaskView.getTaskNode();

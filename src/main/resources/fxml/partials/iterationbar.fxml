@@ -6,27 +6,27 @@
 <?import javafx.scene.text.Text?>
 
 <HBox alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="10.0" maxHeight="75.0"
-      minHeight="75.0" prefHeight="100.0" prefWidth="200.0" styleClass="iteration-bar" fx:controller="de.htwsaar.owlkeeper.ui.controllers.IterationBarController" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
-        <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="0.0"
-              styleClass="iteration-bar__column">
-            <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true"
-                       preserveRatio="true">
-                <Image url="@/images/arrow-right.png"/>
-            </ImageView>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="Entwurf"/>
-        </HBox>
-        <HBox alignment="CENTER" prefHeight="0.0" prefWidth="0.0"
-              styleClass="iteration-bar__column" HBox.hgrow="ALWAYS">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2"
-                  text="Implementierung"/>
-        </HBox>
-        <HBox alignment="CENTER_RIGHT" layoutX="474.0" layoutY="10.0" prefHeight="0.0"
-              prefWidth="0.0" styleClass="iteration-bar__column">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="Wartung"/>
-            <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true"
-                       preserveRatio="true">
-                <Image url="@/images/arrow-right.png"/>
-            </ImageView>
-        </HBox>
+      minHeight="75.0" prefHeight="100.0" prefWidth="200.0" styleClass="iteration-bar" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.IterationBarController" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+    <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="0.0"
+          styleClass="iteration-bar__column">
+        <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <Image url="@/images/arrow-right.png"/>
+        </ImageView>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="Entwurf"/>
     </HBox>
+    <HBox alignment="CENTER" prefHeight="0.0" prefWidth="0.0"
+          styleClass="iteration-bar__column" HBox.hgrow="ALWAYS">
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2"
+              text="Implementierung"/>
+    </HBox>
+    <HBox alignment="CENTER_RIGHT" layoutX="474.0" layoutY="10.0" prefHeight="0.0"
+          prefWidth="0.0" styleClass="iteration-bar__column">
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="Wartung"/>
+        <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <Image url="@/images/arrow-right.png"/>
+        </ImageView>
+    </HBox>
+</HBox>
 

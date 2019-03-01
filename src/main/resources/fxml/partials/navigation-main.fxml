@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:id="root" prefHeight="0.0" prefWidth="200.0" spacing="20.0" styleClass="navigation" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.htwsaar.owlkeeper.ui.controllers.NavigationMainController">
+<VBox fx:id="root" prefHeight="0.0" prefWidth="200.0" spacing="20.0" styleClass="navigation" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.NavigationMainController">
     <!-- Gets filled in NavigationMainController -->
 </VBox>

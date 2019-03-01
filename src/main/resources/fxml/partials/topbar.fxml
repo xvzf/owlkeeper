@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.TextField?>
 
 <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="75.0" minHeight="75.0"
-      prefHeight="100.0" prefWidth="200.0" styleClass="topbar" fx:controller="de.htwsaar.owlkeeper.ui.controllers.TopBarController" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
-    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="My Tasks"/>
+      prefHeight="100.0" prefWidth="200.0" styleClass="topbar" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.TopBarController" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+    <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="default"/>
     <!--<HBox alignment="CENTER_RIGHT" layoutX="117.0" layoutY="28.0" prefHeight="0.0"-->
           <!--prefWidth="20000.0" styleClass="topbar__column">-->
         <!--<HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0"-->

@@ -1,4 +1,4 @@
-package de.htwsaar.owlkeeper.ui.controllers;
+package de.htwsaar.owlkeeper.ui.controllers.partials;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
@@ -9,8 +9,9 @@ public class NavigationProjectsController{
     @FXML
     private VBox root;
 
-    public void initialize() {
-        for (int i = 0; i < 4; i++){
+    public void setContent(){
+        this.root.getChildren().clear();
+        for (int i = 0; i < 4; i++) {
             root.getChildren().add(this.getProject());
         }
     }

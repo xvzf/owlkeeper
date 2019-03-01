@@ -1,4 +1,4 @@
-package de.htwsaar.owlkeeper.ui.controllers;
+package de.htwsaar.owlkeeper.ui.controllers.partials;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
@@ -22,6 +22,7 @@ abstract class SidebarController{
 
     /**
      * Adds the Sidebar to the Task-View
+     *
      * @todo 28.02.2019 make sidebar dynamic
      */
     protected void addSidebar(){

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="root" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" fx:controller="de.htwsaar.owlkeeper.ui.controllers.MyTasksController" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="root" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.MyTasksController" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
     <ScrollPane fitToWidth="true" prefHeight="727.0" prefWidth="1007.0" HBox.hgrow="ALWAYS">
         <VBox fx:id="tasks" prefHeight="0.0" prefWidth="1043.0" styleClass="main">
             <!-- Gets filled by the controller -->

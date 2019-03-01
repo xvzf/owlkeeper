@@ -1,4 +1,4 @@
-package de.htwsaar.owlkeeper.ui.controllers;
+package de.htwsaar.owlkeeper.ui.controllers.partials;
 
 
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
@@ -13,9 +13,10 @@ public class NavigationMainController{
     @FXML
     private VBox root;
 
-    public void initialize() {
-        for (int i = 0; i < 4; i++){
-            this.root.getChildren().add(this.buildItem("Hallo Welt " + i, "/images/home.png", i==0));
+    public void setContent(){
+        this.root.getChildren().clear();
+        for (int i = 0; i < 4; i++) {
+            this.root.getChildren().add(this.buildItem("Hallo Welt " + i, "/images/home.png", i == 0));
         }
     }
 
@@ -26,12 +27,12 @@ public class NavigationMainController{
         box.prefHeight(0);
         box.prefWidth(250);
         box.getStyleClass().add("navigation-item");
-        if (active){
+        if (active) {
             box.getStyleClass().add("navigation-item--active");
         }
 
         // Add Icon;
-        box.getChildren().add(CommonNodes.Image(icon, 30,30));
+        box.getChildren().add(CommonNodes.Image(icon, 30, 30));
 
         // Add Text
         Text t = new Text(text);

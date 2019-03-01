@@ -16,12 +16,14 @@ import javafx.scene.text.Text;
  */
 public final class TaskView{
 
-    private TaskView(){}
+    private TaskView(){
+    }
 
     /**
      * Builds the Task-Sidebar
-     * @todo 28.02.2019 allow fill by dynamic task object
+     *
      * @return the full sidebar Node
+     * @todo 28.02.2019 allow fill by dynamic task object
      */
     public static ScrollPane buildSidebar(){
 
@@ -81,7 +83,7 @@ public final class TaskView{
         team.getStyleClass().add("sidebar__team");
         meta.getChildren().add(team);
 
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             team.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
         }
 
@@ -100,7 +102,7 @@ public final class TaskView{
         comments.getStyleClass().add("comments");
         content.getChildren().add(comments);
 
-        for (int i = 0; i < 2; i++){
+        for (int i = 0; i < 2; i++) {
             HBox comment = new HBox();
             comment.getStyleClass().add("comments__item");
             comments.getChildren().add(comment);
@@ -131,8 +133,9 @@ public final class TaskView{
 
     /**
      * Builds the Task-Listing
-     * @todo 28.02.2019 allow fill by dynamic task object
+     *
      * @return the full listing Node
+     * @todo 28.02.2019 allow fill by dynamic task object
      */
     public static HBox getTaskNode(){
         HBox task = new HBox();
@@ -158,7 +161,7 @@ public final class TaskView{
         team.setPrefWidth(180);
         team.getStyleClass().add("task-listing__assigned");
         meta.getChildren().add(team);
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             team.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
         }
 
@@ -168,7 +171,7 @@ public final class TaskView{
         team.setPrefWidth(280);
         tags.getStyleClass().add("task-listing__tags");
         meta.getChildren().add(tags);
-        for (int i = 0; i < 2; i++){
+        for (int i = 0; i < 2; i++) {
             tags.getChildren().add(CommonNodes.Tag("blocked", "#5A4BE1"));
         }
 
