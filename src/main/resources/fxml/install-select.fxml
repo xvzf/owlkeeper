@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Text?>
 
 <VBox alignment="CENTER" minHeight="550.0" minWidth="450.0" prefHeight="913.0" prefWidth="1181.0"
-      style="-fx-background-color: #EFEFEF;" stylesheets="@/css/ui.css" xmlns="http://javafx.com/javafx/10.0.1"
+      style="-fx-background-color: #EFEFEF;" stylesheets="@/css/ui.css" xmlns="http://javafx.com/javafx/"
       xmlns:fx="http://javafx.com/fxml/1">
     <HBox alignment="CENTER" fillHeight="false" minHeight="450.0" minWidth="550.0" prefHeight="100.0"
           prefWidth="200.0" VBox.vgrow="ALWAYS">

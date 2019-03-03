@@ -13,7 +13,6 @@ public class Ui{
      */
     Ui(){
         // @todo remove absolute positions
-        // @todo minimize inline styles
         // @todo fix issue with resized images
         UiApp.stageScene(new InstallConnect());
         UiApp.stageScene(new InstallDB());
@@ -26,7 +25,7 @@ public class Ui{
         UiApp.stageScene(new PageTeam());
 
         // Change this to test individual scenes
-        UiApp.STARTING_SCENE = "page-iteration";
+        UiApp.STARTING_SCENE = "page-team";
         UiApp.startUi();
     }
 

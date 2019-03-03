@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+
+<HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="75.0" minHeight="75.0"
+      prefHeight="100.0" prefWidth="200.0" styleClass="topbar" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.TopBarController" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+    <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="default"/>
+    <!--<HBox alignment="CENTER_RIGHT" layoutX="117.0" layoutY="28.0" prefHeight="0.0"-->
+          <!--prefWidth="20000.0" styleClass="topbar__column">-->
+        <!--<HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0"-->
+              <!--styleClass="search">-->
+            <!--<ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true"-->
+                       <!--preserveRatio="true">-->
+                <!--<Image url="@/images/search.png"/>-->
+            <!--</ImageView>-->
+            <!--<TextField text="search"/>-->
+        <!--</HBox>-->
+        <!--<ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true"-->
+                   <!--preserveRatio="true">-->
+            <!--<Image url="@/images/users.png"/>-->
+        <!--</ImageView>-->
+    <!--</HBox>-->
+</HBox>

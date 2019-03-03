@@ -153,6 +153,10 @@ TextArea:focused .content {
     -fx-spacing: 20;
 }
 
+.task-listing HBox{
+    -fx-spacing: 20;
+}
+
 .task-listing__assigned{
     -fx-spacing: 20;
 }
@@ -232,6 +236,7 @@ TextArea:focused .content {
     -fx-spacing: 30;
 }
 .team-unit{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
     -fx-background-color: #FFFFFF;
     -fx-padding: 20;
     -fx-spacing: 10;
