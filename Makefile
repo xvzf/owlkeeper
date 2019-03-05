@@ -15,7 +15,9 @@ db-debug:
 
 
 bootstrap:
-	@sh -c ${PSQL} < ${SQL_DIR}/bootstrap.sql
+	@sh -c ${PSQL} < ${SQL_DIR}/bootstrap/destroy.sql
+	@sh -c ${PSQL} < ${SQL_DIR}/bootstrap/tables.sql
+	@sh -c ${PSQL} < ${SQL_DIR}/bootstrap/functions.sql
 
 dummydata:
 	@sh -c ${PSQL} < ${SQL_DIR}/dummydata.sql

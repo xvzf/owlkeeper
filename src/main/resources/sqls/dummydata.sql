@@ -63,6 +63,12 @@ do $fill$ begin
     'waterfall'
   );
 
+  insert into project (name, description, type) values (
+    'Testproject2',
+    'TestProject2 Dummy blubdidupdadalalaland',
+    'spiral'
+  );
+
   insert into project_stage (name, project, index) values (
     'Stage 1'
     , (select id from project where name = 'Testproject1')
@@ -91,10 +97,11 @@ do $fill$ begin
     , (select id from team where name = 'Team 1')
   );
 
-  insert into task (name, description, deadline, project_stage, team) values (
+  insert into task (name, description, deadline, fulfilled, project_stage, team) values (
     'Task 1'
     , 'Task 1 Stage 2 description'
     , (select now() + interval '7 days')
+    , (select now() + interval '3 days')
     , (select id from project_stage where name = 'Stage 2')
     , (select id from team where name = 'Team 2')
   );
