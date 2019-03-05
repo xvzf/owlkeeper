@@ -4,10 +4,11 @@ import de.htwsaar.owlkeeper.ui.controllers.partials.MyTasksController;
 import de.htwsaar.owlkeeper.ui.controllers.partials.NavigationMainController;
 import de.htwsaar.owlkeeper.ui.controllers.partials.NavigationProjectsController;
 import de.htwsaar.owlkeeper.ui.controllers.partials.TopBarController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
-public class PageController{
+public class PageController extends Controller{
 
     @FXML
     public Parent topbar;
@@ -37,8 +38,7 @@ public class PageController{
     public MyTasksController tasksController;
 
 
-    @FXML
-    public void initialize(){
+    public void init(){
 
         // Meta
         this.navigationController.setContent();

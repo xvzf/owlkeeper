@@ -4,7 +4,7 @@ import de.htwsaar.owlkeeper.ui.controllers.partials.*;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
-public class TeamViewController{
+public class TeamViewController extends Controller{
 
     @FXML
     public Parent topbar;
@@ -34,8 +34,7 @@ public class TeamViewController{
     public TeamController teamsController;
 
 
-    @FXML
-    public void initialize(){
+    public void init(){
 
         // Meta
         this.navigationController.setContent();

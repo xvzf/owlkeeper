@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class PageTeam implements UiScene{
+public class PageTeam extends UiScene{
     @Override
     public String getName(){
         return "page-team";
@@ -17,6 +17,7 @@ public class PageTeam implements UiScene{
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/page-team.fxml"));
             Parent root = loader.load();
+            this.prepareFxml(loader);
             return new Scene(root, 1000, 800);
         };
     }

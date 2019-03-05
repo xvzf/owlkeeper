@@ -1,6 +1,7 @@
 package de.htwsaar.owlkeeper.ui.controllers.partials;
 
 
+import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -8,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class NavigationMainController{
+public class NavigationMainController extends Controller{
 
     @FXML
     private VBox root;

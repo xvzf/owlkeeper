@@ -33,6 +33,7 @@ public class UiApp extends ViewApplication{
     void boot(Stage primaryStage) throws Exception{
         UiApp.scenes.forEach(scene -> {
             try {
+                scene.setApp(this);
                 this.addScene(scene.getName(), scene.getBuilder());
             } catch (Exception e) {
                 e.printStackTrace();
