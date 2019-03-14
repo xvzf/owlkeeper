@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" minHeight="550.0" minWidth="450.0" prefHeight="913.0" prefWidth="1181.0"
+      style="-fx-background-color: #EFEFEF;" stylesheets="@/css/ui.css" xmlns="http://javafx.com/javafx/"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <HBox alignment="CENTER" fillHeight="false" minHeight="450.0" minWidth="550.0" prefHeight="100.0"
+          prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <Pane nodeOrientation="LEFT_TO_RIGHT" prefHeight="679.0" prefWidth="442.0">
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="112.0" pickOnBounds="true"
+                       preserveRatio="true">
+                <Image url="@/images/logo.png"/>
+            </ImageView>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="610.0" layoutX="1.0"
+                       layoutY="67.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="440.0">
+                <effect>
+                    <DropShadow color="#00000009" height="16.0" offsetY="3.0" radius="7.5" width="16.0"/>
+                </effect>
+            </Rectangle>
+            <Text fill="#707070" layoutX="38.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                  styleClass="p"
+                  text="Great! OwlKeeper can talk with the database.&#10;Before we run the installation, enter the admins&#10;(your) login data, with wich you can login into&#10;the new system right after installation is&#10;completed.">
+                <font>
+                    <Font name="Ubuntu" size="16.0"/>
+                </font>
+            </Text>
+            <Group layoutX="40.0" layoutY="271.0">
+                <Label text="Work Space Title:" textFill="#707070">
+                    <font>
+                        <Font name="Ubuntu" size="16.0"/>
+                    </font>
+                </Label>
+                <TextField layoutY="30.0" prefHeight="45.0" prefWidth="362.0">
+                    <font>
+                        <Font name="Ubuntu" size="16.0"/>
+                    </font>
+                </TextField>
+            </Group>
+            <Group layoutX="40.0" layoutY="376.0">
+                <Label text="Admin email adress:" textFill="#707070">
+                    <font>
+                        <Font name="Ubuntu" size="16.0"/>
+                    </font>
+                </Label>
+                <TextField layoutY="30.0" prefHeight="45.0" prefWidth="362.0">
+                    <font>
+                        <Font name="Ubuntu" size="16.0"/>
+                    </font>
+                </TextField>
+            </Group>
+            <Group layoutX="40.0" layoutY="480.0">
+                <Label text="Admin password:" textFill="#707070">
+                    <font>
+                        <Font name="Ubuntu" size="16.0"/>
+                    </font>
+                </Label>
+                <TextField layoutY="30.0" prefHeight="45.0" prefWidth="362.0">
+                    <font>
+                        <Font name="Ubuntu" size="16.0"/>
+                    </font>
+                </TextField>
+            </Group>
+            <Button alignment="CENTER" layoutX="221.0" layoutY="589.0" mnemonicParsing="false"
+                    nodeOrientation="LEFT_TO_RIGHT" text="install the system" textAlignment="RIGHT"
+                    textFill="WHITE">
+                <font>
+                    <Font name="Ubuntu" size="16.0"/>
+                </font>
+            </Button>
+        </Pane>
+    </HBox>
+</VBox>
