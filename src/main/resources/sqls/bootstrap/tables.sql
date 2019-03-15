@@ -23,36 +23,66 @@ do $sysconf$ begin
   insert into sysconf (param, value) values ('migration', 'bootstrap');
 end $sysconf$;
 
+--
+-- Users, groups and group permissions
+--
+
+raise notice '[+] Creating users, groups and group permission'
+do $users$ begin
+
+    -- users
+    CREATE TABLE IF NOT EXISTS users (
+        id serial PRIMARY KEY
+        , created timestamp DEFAULT now()
+        , name test NOT NULL
+        , email test NOT NULL UNIQUE CHECK(email LIKE '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
+        , groupId integer NOT NULL REFERENCES groups (id)
+        , pw_hash text NOT NULL -- TODO Salt as well?
+    );
+
+    -- Groups
+    CREATE TABLE IF NOT EXISTS groups (
+        id serial PRIMARY KEY
+        , created timestamp DEFAULT now()
+        , description CHECK (description IN ('Developers', 'Team Leader', 'Project Owner')
+    );
+
+    -- Group permissions
+    CREATE TABLE IF NOT EXISTS group_rights (
+        id serial PRIMARY KEY
+        , created timestamp DEFAULT now()
+        , groupId integer NOT NULL REFERENCES groups (id)
+        , rightId integer NOT NULL REFERENCES rights (id)
+    );
+
+    -- Table of permissions
+    CREATE TABLE IF NOT EXISTS rights (
+        id serial PRIMARY KEY
+        , created timestamp DEFAULT now()
+        , permission text UNIQUE NOT NULL
+    );
+
+end $users$;
 
 --
--- User and team related schemas
+-- Team related schemas
 --
-raise notice '[+] Creating developer and team related schemas';
+raise notice '[+] Creating team related schemas';
 do $developers$ begin
-
-  -- Users
-  create table if not exists developer (
-    id serial primary key
-    , created timestamp default now()
-    , name text not null
-    , role text default ''
-    , email text not null unique check(email like '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
-    , chief boolean default FALSE
-  );
 
   -- Team
   create table if not exists team (
     id serial primary key
     , created timestamp default now()
     , name text not null unique
-    , leader integer references developer (id)
+    , leader integer references users (id)
   );
 
   -- Relation; Developers can be part of multiple teams
   create table if not exists developer_team_relation (
     id serial primary key
     , created timestamp default now()
-    , developer integer not null references developer (id)
+    , developer integer not null references users (id)
     , team integer not null references team (id)
     -- Constraints
     , constraint map_unique unique (developer, team)
@@ -145,7 +175,7 @@ do $tasks$ begin
     id serial primary key
     , created timestamp default now()
     , content text not null
-    , developer integer not null references developer (id)
+    , developer integer not null references users (id)
     , task integer not null references task (id)
   );
 
