@@ -63,7 +63,25 @@ abstract public class ViewApplication extends Application{
      * @param key name of the new scene
      */
     public void switchScene(String key){
-        this.getStage().setScene(this.scenes.get(key));
+        boolean resize = false;
+        Stage stage = this.getStage();
+
+        double x, y, width, height;
+        x = y = width = height = 0;
+        if (stage.getScene() != null) {
+            x = stage.getX();
+            y = stage.getY();
+            width = stage.getWidth();
+            height = stage.getHeight();
+            resize = true;
+        }
+        stage.setScene(this.scenes.get(key));
+        if (resize) {
+            stage.setX(x);
+            stage.setY(y);
+            stage.setWidth(width);
+            stage.setHeight(height);
+        }
         this.currentScene = key;
     }
 

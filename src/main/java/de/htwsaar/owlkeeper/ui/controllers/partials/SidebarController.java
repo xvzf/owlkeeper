@@ -1,10 +1,11 @@
 package de.htwsaar.owlkeeper.ui.controllers.partials;
 
+import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 
-abstract class SidebarController{
+abstract class SidebarController extends Controller{
 
     @FXML
     public HBox root;

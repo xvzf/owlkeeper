@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class InstallSuccess implements UiScene{
+public class InstallSuccess extends UiScene{
     @Override
     public String getName(){
         return "install-success";
@@ -17,6 +17,7 @@ public class InstallSuccess implements UiScene{
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/install-success.fxml"));
             Parent root = loader.load();
+            this.prepareFxml(loader);
             return new Scene(root, 1000, 800);
         };
     }

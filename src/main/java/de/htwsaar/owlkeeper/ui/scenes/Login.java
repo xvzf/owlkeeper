@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class Login implements UiScene{
+public class Login extends UiScene{
     @Override
     public String getName(){
         return "login";
@@ -17,6 +17,7 @@ public class Login implements UiScene{
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = loader.load();
+            this.prepareFxml(loader);
             return new Scene(root, 1000, 800);
         };
     }

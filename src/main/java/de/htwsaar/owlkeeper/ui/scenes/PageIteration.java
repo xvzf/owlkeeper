@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class PageIteration implements UiScene{
+public class PageIteration extends UiScene{
     @Override
     public String getName(){
         return "page-iteration";
@@ -17,6 +17,7 @@ public class PageIteration implements UiScene{
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/page-iteration.fxml"));
             Parent root = loader.load();
+            this.prepareFxml(loader);
             return new Scene(root, 1000, 800);
         };
     }

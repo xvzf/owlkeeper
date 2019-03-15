@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class Page implements UiScene{
+public class Page extends UiScene{
     @Override
     public String getName(){
         return "page";
@@ -17,6 +17,7 @@ public class Page implements UiScene{
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/page.fxml"));
             Parent root = loader.load();
+            this.prepareFxml(loader);
             return new Scene(root, 1000, 800);
         };
     }
