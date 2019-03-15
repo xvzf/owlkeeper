@@ -30,12 +30,12 @@ end $sysconf$;
 raise notice '[+] Creating users, groups and group permission'
 do $users$ begin
 
-    -- users
+    -- Users
     CREATE TABLE IF NOT EXISTS users (
         id serial PRIMARY KEY
         , created timestamp DEFAULT now()
-        , name test NOT NULL
-        , email test NOT NULL UNIQUE CHECK(email LIKE '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
+        , name text NOT NULL
+        , email text NOT NULL UNIQUE CHECK(email LIKE '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
         , groupId integer NOT NULL REFERENCES groups (id)
         , pw_hash text NOT NULL -- TODO Salt as well?
     );
@@ -44,7 +44,7 @@ do $users$ begin
     CREATE TABLE IF NOT EXISTS groups (
         id serial PRIMARY KEY
         , created timestamp DEFAULT now()
-        , description CHECK (description IN ('Developers', 'Team Leader', 'Project Owner')
+        , description text CHECK (description IN ('Developers', 'Team Leader', 'Project Owner')
     );
 
     -- Group permissions
