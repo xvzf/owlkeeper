@@ -2,7 +2,7 @@
 -- Dumps Database content to the shell
 --------------------------------------
 
-\echo '[Developers]'
+\echo '[Users]'
 select
   d.name as dev_name
   , d.email as dev_email
@@ -12,6 +12,20 @@ from developer as d
   join developer_team_relation as r on (r.developer = d.id)
   join team as t on (r.team = t.id)
 order by t.name;
+
+\echo '[Groups]'
+SELECT
+    u.name AS Username
+    , u.email AS Email
+    , g.description AS Group
+FROM developer u NATURAL JOIN groups g
+ORDER BY g.description;
+
+\echo '[Group permissions]'
+SELECT
+    g.description AS Group
+    , r.permission AS Permission
+FROM groups g NATURAL JOIN group_rights gr NATURAL JOIN rights r;
 
 \echo '[Projects, Project stages and tasks -> team]'
 select

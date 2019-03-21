@@ -31,7 +31,7 @@ raise notice '[+] Creating users, groups and group permission'
 do $users$ begin
 
     -- Users
-    CREATE TABLE IF NOT EXISTS users (
+    CREATE TABLE IF NOT EXISTS developer (
         id serial PRIMARY KEY
         , created timestamp DEFAULT now()
         , name text NOT NULL
@@ -75,14 +75,14 @@ do $developers$ begin
     id serial primary key
     , created timestamp default now()
     , name text not null unique
-    , leader integer references users (id)
+    , leader integer references developer (id)
   );
 
   -- Relation; Developers can be part of multiple teams
   create table if not exists developer_team_relation (
     id serial primary key
     , created timestamp default now()
-    , developer integer not null references users (id)
+    , developer integer not null references developer (id)
     , team integer not null references team (id)
     -- Constraints
     , constraint map_unique unique (developer, team)
@@ -175,7 +175,7 @@ do $tasks$ begin
     id serial primary key
     , created timestamp default now()
     , content text not null
-    , developer integer not null references users (id)
+    , developer integer not null references developer (id)
     , task integer not null references task (id)
   );
 
