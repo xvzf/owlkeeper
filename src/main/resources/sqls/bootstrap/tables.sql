@@ -60,6 +60,7 @@ do $users$ begin
         id serial PRIMARY KEY
         , created timestamp DEFAULT now()
         , permission text UNIQUE NOT NULL
+        , value integer UNIQUE NOT NULL
     );
 
 end $users$;
