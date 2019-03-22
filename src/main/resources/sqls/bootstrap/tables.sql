@@ -36,27 +36,27 @@ do $users$ begin
         , created timestamp DEFAULT now()
         , name text NOT NULL
         , email text NOT NULL UNIQUE CHECK(email LIKE '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
-        , groupId integer NOT NULL REFERENCES groups (id)
+        , groupId integer NOT NULL REFERENCES group (id)
         , pw_hash text NOT NULL -- TODO Salt as well?
     );
 
     -- Groups
-    CREATE TABLE IF NOT EXISTS groups (
+    CREATE TABLE IF NOT EXISTS group (
         id serial PRIMARY KEY
         , created timestamp DEFAULT now()
         , description text CHECK (description IN ('Developers', 'Team Leader', 'Project Owner')
     );
 
     -- Group permissions
-    CREATE TABLE IF NOT EXISTS group_rights (
+    CREATE TABLE IF NOT EXISTS group_right (
         id serial PRIMARY KEY
         , created timestamp DEFAULT now()
-        , groupId integer NOT NULL REFERENCES groups (id)
-        , rightId integer NOT NULL REFERENCES rights (id)
+        , groupId integer NOT NULL REFERENCES group (id)
+        , rightId integer NOT NULL REFERENCES right (id)
     );
 
     -- Table of permissions
-    CREATE TABLE IF NOT EXISTS rights (
+    CREATE TABLE IF NOT EXISTS right (
         id serial PRIMARY KEY
         , created timestamp DEFAULT now()
         , permission text UNIQUE NOT NULL

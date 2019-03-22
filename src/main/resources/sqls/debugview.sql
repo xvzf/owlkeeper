@@ -18,14 +18,14 @@ SELECT
     u.name AS Username
     , u.email AS Email
     , g.description AS Group
-FROM developer u NATURAL JOIN groups g
+FROM developer u NATURAL JOIN group g
 ORDER BY g.description;
 
 \echo '[Group permissions]'
 SELECT
     g.description AS Group
     , r.permission AS Permission
-FROM groups g NATURAL JOIN group_rights gr NATURAL JOIN rights r;
+FROM group g NATURAL JOIN group_right gr NATURAL JOIN right r;
 
 \echo '[Projects, Project stages and tasks -> team]'
 select
