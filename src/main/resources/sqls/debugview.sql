@@ -44,4 +44,3 @@ from task_dependency as td
   join task  on td.task = task.id
   join task as depends on td.depends = depends.id
 order by task.name;
-
