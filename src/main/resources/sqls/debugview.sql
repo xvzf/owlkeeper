@@ -13,19 +13,13 @@ from developer as d
   join team as t on (r.team = t.id)
 order by t.name;
 
-\echo '[Groups]'
-SELECT
-    u.name AS Username
-    , u.email AS Email
-    , g.description AS Group
-FROM developer u NATURAL JOIN group g
-ORDER BY g.description;
-
-\echo '[Group permissions]'
-SELECT
-    g.description AS Group
-    , r.permission AS Permission
-FROM group g NATURAL JOIN group_right gr NATURAL JOIN right r;
+\echo '[Developer Groups]'
+select
+  d.email as email, g.name as "group"
+from developer d
+  left join developer_group_relation dg on d.id = dg.developer
+  left join "group" g on dg.group = g.id
+order by email;
 
 \echo '[Projects, Project stages and tasks -> team]'
 select

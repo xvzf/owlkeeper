@@ -15,31 +15,9 @@ raise notice '[+] Creating dummy developers and teams';
 do $fill$ begin
 
   -- (Dummy?) groups
-  INSERT INTO group (description) values ('Developers');
-  INSERT INTO group (description) values ('Team Leader');
-  INSERT INTO group (description) values ('Project owner');
-
-  --(Dummy?) Rights
-  INSERT INTO right (permission, value) VALUES ('CREATE_PROJECT',1);
-  INSERT INTO right (permission, value) VALUES ('DELETE_PROJECT',2);
-  INSERT INTO right (permission, value) VALUES ('CREATE_TASK',4);
-  INSERT INTO right (permission, value) VALUES ('VIEW_TASK',8);
-  INSERT INTO right (permission, value) VALUES ('FULLFIL_TASK',16);
-  INSERT INTO right (permission, value) VALUES ('RATE_TASK',32);
-  INSERT INTO right (permission, value) VALUES ('ASSIGN_TEAM_TO_TASK',64);
-  INSERT INTO right (permission, value) VALUES ('CREATE_USER',128);
-  INSERT INTO right (permission, value) VALUES ('CREATE_TEAM',256);
-  INSERT INTO right (permission, value) VALUES ('ADD_DEVELOPER_TO_TEAM',512); 
-
-  -- Assigning rights to groups
-  INSERT INTO group_right (groupId, rightId) VALUES (
-    (SELECT id FROM group WHERE description = 'Project Owner'),
-    (SELECT id FROM right WHERE permission LIKE '%PROJECT')
-  );
-  INSERT INTO group_right (groupId, rightId) VALUES (
-    (SELECT id FROM group WHERE description = 'Team Leader'),
-    (SELECT id FROM right WHERE permission IN ('CREATE_TASK',''))
-  );
+  insert into "group" (name, description) values ('admin', 'Administrator - manages user groups and system parameters');
+  insert into "group" (name, description) values ('project', 'Project owner - assign team to tasks, not allowed to create tasks');
+  insert into "group" (name, description) values ('task', 'Create tasks in projects the user is belonging to');
 
   -- Dummy developers
   insert into developer (name, email) values ('Developer 1', 'devel1@owlkeeper.de');
@@ -47,6 +25,32 @@ do $fill$ begin
   insert into developer (name, email) values ('Developer 3', 'devel3@owlkeeper.de');
   insert into developer (name, email) values ('Developer 4', 'devel4@owlkeeper.de');
   insert into developer (name, email) values ('Developer 5', 'devel5@owlkeeper.de');
+
+  -- Dummy groups
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel1@owlkeeper.de')
+    , (select id from "group" where name = 'admin')
+  ); -- devel1@owlkeeper.de -> admin
+
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel2@owlkeeper.de')
+    , (select id from "group" where name = 'project')
+  ); -- devel2@owlkeeper.de -> project
+
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel3@owlkeeper.de')
+    , (select id from "group" where name = 'task')
+  ); -- devel3@owlkeeper.de -> task
+
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel4@owlkeeper.de')
+    , (select id from "group" where name = 'project')
+  );
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel4@owlkeeper.de')
+    , (select id from "group" where name = 'task')
+  ); -- devel4@owlkeeper.de -> project, task
+
 
   -- Dummy teams
   insert into team (name, leader) values (
@@ -57,6 +61,7 @@ do $fill$ begin
     'Team 2',
     (select id from developer where email = 'devel4@owlkeeper.de')
   );
+
 
   -- Team relationships :-)
   insert into developer_team_relation (team, developer) values (
@@ -80,6 +85,7 @@ do $fill$ begin
     (select id from developer where email = 'devel4@owlkeeper.de')
   );
 end $fill$;
+
 
 raise notice '[+] Creating dummy project, project stages and tasks';
 do $fill$ begin

@@ -26,41 +26,34 @@ end $sysconf$;
 --
 -- Users, groups and group permissions
 --
-
-raise notice '[+] Creating users, groups and group permission'
+raise notice '[+] Creating developer and group tables';
 do $users$ begin
 
-    -- Users
-    CREATE TABLE IF NOT EXISTS developer (
-        id serial PRIMARY KEY
-        , created timestamp DEFAULT now()
-        , name text NOT NULL
-        , email text NOT NULL UNIQUE CHECK(email LIKE '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
-        , groupId integer NOT NULL REFERENCES group (id)
-        , pw_hash text NOT NULL -- TODO Salt as well?
+    -- Developer
+    create table if not exists "developer" (
+        id serial primary key
+        , created timestamp default now()
+        , name text not null
+        , email text not null UNIQUE CHECK(email LIKE '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
+        , pw_hash text -- not null @TODO nullable until pw authentication is implemented --SALT encoded in pw hash e.g. ${salt}:${pwhash}
     );
 
-    -- Groups
-    CREATE TABLE IF NOT EXISTS group (
-        id serial PRIMARY KEY
-        , created timestamp DEFAULT now()
-        , description text CHECK (description IN ('Developers', 'Team Leader', 'Project Owner')
+    -- Group
+    create table if not exists "group" (
+        id serial primary key
+        , created timestamp default now()
+        , name text not null
+        , description text -- @TODO needed?
     );
 
-    -- Group permissions
-    CREATE TABLE IF NOT EXISTS group_right (
-        id serial PRIMARY KEY
-        , created timestamp DEFAULT now()
-        , groupId integer NOT NULL REFERENCES group (id)
-        , rightId integer NOT NULL REFERENCES right (id)
-    );
-
-    -- Table of permissions
-    CREATE TABLE IF NOT EXISTS right (
-        id serial PRIMARY KEY
-        , created timestamp DEFAULT now()
-        , permission text UNIQUE NOT NULL
-        , value integer UNIQUE NOT NULL
+    -- developer <-> group relationship
+    create table if not exists developer_group_relation (
+      id serial primary key
+      , created timestamp default now()
+      , developer integer not null references developer
+      , "group" integer not null references "group"
+      -- constraints
+      , constraint developer_group_map_unique unique (developer, "group")
     );
 
 end $users$;
@@ -86,7 +79,7 @@ do $developers$ begin
     , developer integer not null references developer (id)
     , team integer not null references team (id)
     -- Constraints
-    , constraint map_unique unique (developer, team)
+    , constraint developer_team_map_unique unique (developer, team)
   );
 
 end $developers$;
