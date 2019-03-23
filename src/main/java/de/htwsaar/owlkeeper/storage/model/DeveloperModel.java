@@ -21,18 +21,14 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * Developer Model, creates a new developer
      *
      * @param name   Name
-     * @param role   Role
      * @param email  Email
-     * @param chief  chief
      */
-    public DeveloperModel(String name, String role, String email, boolean chief) {
+    public DeveloperModel(String name, String email) {
         super(logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
         setContainer(new Developer());
         Developer d = getContainer();
         d.setName(name);
-        d.setRole(role);
         d.setEmail(email);
-        d.setChief(chief);
     }
 
     /**
