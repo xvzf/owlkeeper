@@ -1,6 +1,8 @@
 package de.htwsaar.owlkeeper.helper;
 
 import de.htwsaar.owlkeeper.storage.local.config.ConfigurationManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +11,8 @@ import java.util.Scanner;
 
 
 public class MakeHelper {
+
+    private static Logger logger = LogManager.getLogger(MakeHelper.class);
 
     private String[] recipes;
 
@@ -21,26 +25,24 @@ public class MakeHelper {
     }
 
     public void run() throws IOException {
-        for (String recipe :
-                recipes) {
-
-
         ConfigurationManager cm = ConfigurationManager.getConfigManager();
         String executable = cm.getConfig("db").getProperty("clientcommand");
-        String sqlfile = cm.getConfig("sqlfiles").getProperty(recipe);
-        sqlfile = Resource.getSQLResourcePath(sqlfile);
-        System.out.println(sqlfile);
-        System.out.println(executable);
-        Process p;
+        logger.info("SQL client: " + executable);
+        logger.info("Executing SQL files: [" + String.join(", ", recipes) +"]");
+        for (String recipe : recipes) {
+            String sqlfile = cm.getConfig("sqlfiles").getProperty(recipe);
+            sqlfile = Resource.getSQLResourcePath(sqlfile);
+            logger.info("SQL file: " + sqlfile);
 
-        p = new ProcessBuilder(executable.split(" ")).redirectInput(new File(sqlfile)).start();
+            Process p = new ProcessBuilder(executable.split(" ")).redirectInput(new File(sqlfile)).start();
 
-        Scanner s = new Scanner(p.getInputStream()).useDelimiter("\\Z");
-        try {
-            System.out.println(s.next());
-        }catch (NoSuchElementException e){
-            System.out.println("No Output ¯\\_(ツ)_/¯");
+            Scanner s = new Scanner(p.getInputStream()).useDelimiter("\\Z");
+            try {
+                logger.info("Output: " + s.next());
+            } catch (NoSuchElementException e) {
+                logger.info("Output: Empty ¯\\_(ツ)_/¯");
+            }
         }
-    }}
+    }
 }
 
