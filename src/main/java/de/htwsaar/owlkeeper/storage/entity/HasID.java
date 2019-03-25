@@ -1,10 +1,12 @@
 package de.htwsaar.owlkeeper.storage.entity;
 
+import de.htwsaar.owlkeeper.helper.permissions.PermissionObservable;
+
 /**
  * Interface for classes able to be saved in the database, thus requiring an id
  */
-public interface HasID{
-    long getId();
+public abstract class HasID extends PermissionObservable {
+    public abstract long getId();
 
-    void setId(long newId);
+    public abstract void setId(long newId);
 }

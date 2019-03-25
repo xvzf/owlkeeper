@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 /**
  * Developer Container
  */
-public class Developer implements HasID{
+public class Developer extends HasID {
     private long id;
     private Timestamp created;
     private String name;

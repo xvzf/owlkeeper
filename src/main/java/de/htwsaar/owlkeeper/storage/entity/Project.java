@@ -2,7 +2,7 @@ package de.htwsaar.owlkeeper.storage.entity;
 
 import java.sql.Timestamp;
 
-public class Project implements HasID{
+public class Project extends HasID {
     long id;
     Timestamp created;
     String name;

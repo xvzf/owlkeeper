@@ -27,6 +27,10 @@ public abstract class PermissionObservable {
         observers.add(observer);
     }
 
+    public void detach(PermissionObserver observer) {
+        observers.remove(observer);
+    }
+
     public void notifyObservers(int action) throws InsufficientPermissionsException {
         for (PermissionObserver o : observers) {
             o.update(action);

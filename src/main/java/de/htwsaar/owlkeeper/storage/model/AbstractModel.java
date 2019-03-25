@@ -84,7 +84,7 @@ public abstract class AbstractModel<R extends HasID, E> extends PermissionObserv
      */
     public void getFromDB(long id) {
         ExtensionCallback<R, E, RuntimeException> loadCallback = loadCallbackFactory.apply(id);
-        container = DBConnection.getJdbi().withExtension(DAOClass, loadCallback);
+        setContainer(DBConnection.getJdbi().withExtension(DAOClass, loadCallback));
         logger.info("Loaded " + toString() + " from index " + id);
     }
 
@@ -93,7 +93,7 @@ public abstract class AbstractModel<R extends HasID, E> extends PermissionObserv
      *
      * @return the container
      */
-    protected R getContainer() {
+    public R getContainer() {
         return container;
     }
 
@@ -103,7 +103,12 @@ public abstract class AbstractModel<R extends HasID, E> extends PermissionObserv
      */
     public void setContainer(R container) {
         //TODO Container has been changed. checkPermission(something) call?
+        if (this.container != null) {
+            container.detach(PermissionHandler.getPermissionHandler());
+        }
         this.container = container;
+        container.attach(PermissionHandler.getPermissionHandler());
+
     }
 
     /**
