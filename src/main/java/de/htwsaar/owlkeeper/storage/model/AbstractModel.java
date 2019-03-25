@@ -1,8 +1,9 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.permissions.PermissionObservable;
+import de.htwsaar.owlkeeper.service.PermissionHandler;
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.HasID;
-import javafx.scene.chart.PieChart;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
@@ -21,7 +22,7 @@ import java.util.function.Function;
  * @param <R> The type of the container. Must implement HasID
  * @param <E> The DAO responsible for retrieving the container from db
  */
-public abstract class AbstractModel<R extends HasID, E> {
+public abstract class AbstractModel<R extends HasID, E> extends PermissionObservable {
     private Logger logger;
     private Class<E> DAOClass;  // Save E in DAOClass because java generics are awful
     private Function<Long, ExtensionCallback<R, E, RuntimeException>> loadCallbackFactory;
@@ -58,6 +59,7 @@ public abstract class AbstractModel<R extends HasID, E> {
         this.loadCallbackFactory = loadCallbackFactory;
         this.removeCallbackFactory = removeCallbackFactory;
         this.saveCallbackFactory = saveCallbackFactory;
+        attach(PermissionHandler.getPermissionHandler()); //TODO Correct call?
     }
 
     /**
@@ -91,7 +93,7 @@ public abstract class AbstractModel<R extends HasID, E> {
      *
      * @return the container
      */
-    public R getContainer() {
+    protected R getContainer() {
         return container;
     }
 
@@ -100,6 +102,7 @@ public abstract class AbstractModel<R extends HasID, E> {
      * @param container the new container
      */
     public void setContainer(R container) {
+        //TODO Container has been changed. checkPermission(something) call?
         this.container = container;
     }
 
@@ -133,4 +136,5 @@ public abstract class AbstractModel<R extends HasID, E> {
     public String toString() {
         return getContainer().toString();
     }
+
 }

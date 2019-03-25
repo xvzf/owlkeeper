@@ -67,5 +67,4 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
         return DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> dao.getGroup(getContainer().getId()));
     }
 
-
 }
