@@ -2,9 +2,11 @@ package de.htwsaar.owlkeeper.storage.dao;
 
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
+import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 
+import javax.xml.bind.annotation.XmlInlineBinaryData;
 import java.util.List;
 
 public interface DeveloperDao {
@@ -75,4 +77,18 @@ public interface DeveloperDao {
     )
     @RegisterBeanMapper(Developer.class)
     int deleteDeveloper(long id);
+
+    /**
+     * Get the group of a developer
+     *
+     * @param id
+     * @return String group name
+     */
+    @SqlQuery("select g.name from "
+            + "developer d join developer_group_relation dg on d.id = dg.developer "
+            + "join \"group\" g on dg.group = g.id "
+            + "where d.id = ?"
+    )
+    @RegisterBeanMapper(Developer.class)
+    String getGroup(long id);
 }

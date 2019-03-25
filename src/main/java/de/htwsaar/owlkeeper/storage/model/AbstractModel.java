@@ -2,6 +2,7 @@ package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.HasID;
+import javafx.scene.chart.PieChart;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 

@@ -62,4 +62,10 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
     public DeveloperModel(Developer dev) {
         super(dev, logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
     }
+
+    public String getGroup() {
+        return DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> dao.getGroup(getContainer().getId()));
+    }
+
+
 }
