@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.ui.controllers.partials;
 
+import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.helper.TaskView;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
@@ -14,11 +15,16 @@ public class MyTasksController extends SidebarController{
 
     private ScrollPane sidebar;
 
-    public void setContent(){
-        this.addSidebar();
+    public void setContent(UiApp app, boolean sidebar){
+        if (sidebar){
+            this.addSidebar();
+        }
+        else{
+            this.removeSidebar();
+        }
         this.tasks.getChildren().clear();
         for (int i = 0; i < 3; i++) {
-            this.tasks.getChildren().add(this.getTaskList());
+            this.tasks.getChildren().add(this.getTaskList(app));
         }
     }
 
@@ -28,7 +34,7 @@ public class MyTasksController extends SidebarController{
      * @return the full task-list Node
      * @todo 28.02.2019 fill with dynamic content
      */
-    private VBox getTaskList(){
+    private VBox getTaskList(UiApp app){
         VBox taskList = new VBox();
         taskList.getStyleClass().add("task-list");
 

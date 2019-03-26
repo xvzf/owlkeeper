@@ -3,6 +3,7 @@ package de.htwsaar.owlkeeper.ui;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Main Application instance for the applications gui
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  */
 public class UiApp extends ViewApplication{
 
-    private static ArrayList<UiScene> scenes = new ArrayList<>();
+    private static HashMap<String, UiScene> scenes = new HashMap<>();
 
     /**
      * Adds a new Scene to the application
@@ -19,7 +20,20 @@ public class UiApp extends ViewApplication{
      * @param scene new Scene instance to register in the applications GUI
      */
     public static void stageScene(UiScene scene){
-        scenes.add(scene);
+        scenes.put(scene.getName(), scene);
+    }
+
+    /**
+     * Routes the application to the given scene using the given data object as route-information
+     *
+     * @param key  name of the new scene
+     * @param data data object passed to the scenes state
+     */
+    public void route(String key, Object data){
+        UiScene scene = scenes.get(key);
+        scene.getState().handleQuery(data);
+        scene.getController().init();
+        this.switchScene(key);
     }
 
     /**
@@ -31,16 +45,16 @@ public class UiApp extends ViewApplication{
      */
     @Override
     void boot(Stage primaryStage) throws Exception{
-        UiApp.scenes.forEach(scene -> {
+        UiApp.scenes.forEach((name, scene) -> {
             try {
                 scene.setApp(this);
-                this.addScene(scene.getName(), scene.getBuilder());
+                this.addScene(name, scene.getBuilder());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
         if (!this.hasScene(this.getCurrentSceneName())) {
-            throw new Exception("Scene with the name '"+this.getCurrentSceneName()+"' must be defined");
+            throw new Exception("Scene with the name '" + this.getCurrentSceneName() + "' must be defined");
         }
         this.switchScene(this.getCurrentSceneName());
         primaryStage.show();
