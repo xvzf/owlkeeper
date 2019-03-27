@@ -1,6 +1,7 @@
 package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.dao.TeamDao;
+import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,5 +48,23 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      */
     public TeamModel(Team Team) {
         super(Team, logger, TeamDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
+    }
+
+    /**
+     * Adds Developer to Team
+     *
+     * @param Developer
+     */
+    public addDeveloper (Developer Dev) {
+
+    }
+
+    /**
+     * Deletes Developer from Team
+     *
+     * @param Developer
+     */
+    public removeDeveloper (Developer Dev) {
+
     }
 }
