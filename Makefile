@@ -1,14 +1,15 @@
 PSQL="PGPASSWORD=owlkeeper psql -h 127.0.0.1 owlkeeper owlkeeper"
 SQL_DIR=./src/main/resources/sqls
+DOCKER_FILE=./src/main/resources/docker-compose.yml
 
 db-sh:
 	@sh -c ${PSQL}
 
 db-start:
-	docker-compose up -d
+	docker-compose -f ${DOCKER_FILE} up -d
 
 db-stop:
-	docker-compose down
+	docker-compose -f ${DOCKER_FILE} down
 
 db-debug:
 	@sh -c ${PSQL} < ${SQL_DIR}/debugview.sql
