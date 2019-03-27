@@ -1,7 +1,9 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.TaskDao;
 import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.entity.TaskComment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
@@ -52,5 +54,11 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
      */
     public TaskModel(Task Task) {
         super(Task, logger, TaskDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
+    }
+
+    public addComment(TaskComment com) {
+        //DBConnection.getJdbi().withExtension(TaskComment.class, (dao -> dao.(id)));
+
+
     }
 }

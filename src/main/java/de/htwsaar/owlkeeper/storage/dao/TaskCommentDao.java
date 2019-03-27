@@ -20,6 +20,15 @@ public interface TaskCommentDao {
     /**
      * Queries comments for task
      *
+     * @return
+     */
+    @SqlQuery("select * from task_comment")
+    @RegisterBeanMapper(TaskComment.class)
+    List<TaskComment> getComments();
+
+    /**
+     * Queries comments for task
+     *
      * @param id
      * @return
      */

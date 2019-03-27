@@ -1,11 +1,14 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.TaskCommentDao;
+import de.htwsaar.owlkeeper.storage.dao.TaskDao;
 import de.htwsaar.owlkeeper.storage.entity.TaskComment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class TaskCommentModel extends AbstractModel<TaskComment, TaskCommentDao> {
@@ -56,5 +59,13 @@ public class TaskCommentModel extends AbstractModel<TaskComment, TaskCommentDao>
      */
     public TaskCommentModel(TaskComment TaskComment) {
         super(TaskComment, logger, TaskCommentDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
+    }
+
+    public List<TaskComment> getTaskcomments() {
+        List<TaskComment> TCList = DBConnection.getJdbi().withExtension(TaskCommentDao.class, (dao -> dao.getComments()));
+
+        //insert sorting of TCList here
+
+        return TCList;
     }
 }
