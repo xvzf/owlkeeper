@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 
-abstract class SidebarController extends Controller{
+abstract class SidebarController<T> extends Controller{
 
     @FXML
     public HBox root;
@@ -15,7 +15,7 @@ abstract class SidebarController extends Controller{
     /**
      * Removes the Sidebar from this Task-View
      */
-    protected void removeSidebar(){
+    void removeSidebar(){
         if (this.sidebar != null) {
             this.root.getChildren().removeAll(this.sidebar);
         }
@@ -23,15 +23,13 @@ abstract class SidebarController extends Controller{
 
     /**
      * Adds the Sidebar to the Task-View
-     *
-     * @todo 28.02.2019 make sidebar dynamic
      */
-    protected void addSidebar(){
+    void addSidebar(T item){
         this.removeSidebar();
-        ScrollPane sidebar = this.buildSidebar();
+        ScrollPane sidebar = this.buildSidebar(item);
         this.root.getChildren().add(sidebar);
         this.sidebar = sidebar;
     }
 
-    abstract ScrollPane buildSidebar();
+    abstract ScrollPane buildSidebar(T item);
 }

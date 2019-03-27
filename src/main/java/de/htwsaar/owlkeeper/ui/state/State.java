@@ -1,5 +1,7 @@
 package de.htwsaar.owlkeeper.ui.state;
 
+import java.util.HashMap;
+
 /**
  * Scene state management
  */
@@ -8,14 +10,20 @@ public interface State{
     /**
      * Handles an incoming state change request
      *
-     * @param o the request object
+     * @param query the request object
      */
-    public void handleQuery(Object o);
+    void handleQuery(HashMap<String, Object> query);
 
     /**
      * Compiles the output state into one object
      *
      * @return the combined output state
      */
-    public Object collectState();
+    HashMap<String, Object> collectState();
+
+    /**
+     * Returns a the default query for this state object
+     * @return default state object
+     */
+    HashMap<String, Object> getDefaultQuery();
 }

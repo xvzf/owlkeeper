@@ -3,6 +3,8 @@ package de.htwsaar.owlkeeper.ui.controllers;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.UiScene;
 
+import java.util.HashMap;
+
 public abstract class Controller{
 
     private UiApp uiApp;
@@ -47,5 +49,15 @@ public abstract class Controller{
     /**
      * Main entry point for the Controller
      */
-    public void init(){};
+    public void init(){
+        HashMap<String, Object> state = this.getUiScene().getState().collectState();
+        if (state != null) {
+            this.boot(state);
+        }
+    }
+
+    /**
+     * Main entry point for the controller via routing
+     */
+    public void boot(HashMap<String, Object> state){}
 }

@@ -29,10 +29,10 @@ public class UiApp extends ViewApplication{
      * @param key  name of the new scene
      * @param data data object passed to the scenes state
      */
-    public void route(String key, Object data){
+    public void route(String key, HashMap<String, Object> data){
         UiScene scene = scenes.get(key);
         scene.getState().handleQuery(data);
-        scene.getController().init();
+        scene.getController().boot(scene.getState().collectState());
         this.switchScene(key);
     }
 

@@ -1,15 +1,15 @@
 package de.htwsaar.owlkeeper.ui.helper;
 
+import de.htwsaar.owlkeeper.storage.entity.Task;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+
+import java.text.SimpleDateFormat;
 
 /**
  * Collection of helpers for the Task-View
@@ -23,9 +23,8 @@ public final class TaskView{
      * Builds the Task-Sidebar
      *
      * @return the full sidebar Node
-     * @todo 28.02.2019 allow fill by dynamic task object
      */
-    public static ScrollPane buildSidebar(){
+    public static ScrollPane buildSidebar(Task taskEntity){
 
         // Sidebar Pane
         ScrollPane sidebar = new ScrollPane();
@@ -55,7 +54,7 @@ public final class TaskView{
 
 
         // Title
-        Text title = new Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy");
+        Text title = new Text(taskEntity.getName());
         title.getStyleClass().add("sidebar__title");
         title.setWrappingWidth(400);
         content.getChildren().add(title);
@@ -73,7 +72,7 @@ public final class TaskView{
         meta.getChildren().add(CommonNodes.Image("/images/calendar.png", 30, 150));
 
         // Date-Text
-        meta.getChildren().add(CommonNodes.Date("23.07.2019"));
+        meta.getChildren().add(CommonNodes.Date(new SimpleDateFormat("dd.MM.yyyy").format(taskEntity.getDeadline())));
 
         // Team
         HBox team = new HBox();
@@ -88,7 +87,7 @@ public final class TaskView{
         }
 
         // Description
-        Text description = new Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+        Text description = new Text(taskEntity.getDescription());
         description.setWrappingWidth(400);
         content.getChildren().add(description);
 
@@ -101,6 +100,8 @@ public final class TaskView{
         comments.setPrefHeight(275);
         comments.getStyleClass().add("comments");
         content.getChildren().add(comments);
+
+        //@todo taskEntity.getComments() needs to be implemented
 
         for (int i = 0; i < 2; i++) {
             HBox comment = new HBox();
@@ -135,9 +136,9 @@ public final class TaskView{
      * Builds the Task-Listing
      *
      * @return the full listing Node
-     * @todo 28.02.2019 allow fill by dynamic task object
+     * @todo 27.03.2019 finish dynamic content
      */
-    public static HBox getTaskNode(){
+    public static HBox getTaskNode(Task taskEntity){
         HBox task = new HBox();
         task.setAlignment(Pos.CENTER_LEFT);
         task.getStyleClass().add("task-listing");
@@ -146,7 +147,7 @@ public final class TaskView{
         task.getChildren().add(CommonNodes.Image("/images/check-square.png", 30, 150));
 
         // Title
-        task.getChildren().add(new Text("HTW-0021"));
+        task.getChildren().add(new Text(taskEntity.getName()));
 
         // Meta
         HBox meta = new HBox();

@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class TeamController extends SidebarController{
+public class TeamController extends SidebarController<Object>{
 
     @FXML
     public VBox team;
@@ -72,7 +72,7 @@ public class TeamController extends SidebarController{
     }
 
     @Override
-    ScrollPane buildSidebar(){
-        return TaskView.buildSidebar();
+    ScrollPane buildSidebar(Object o){
+        return new ScrollPane();
     }
 }

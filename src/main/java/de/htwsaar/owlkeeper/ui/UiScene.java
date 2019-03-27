@@ -4,6 +4,8 @@ import de.htwsaar.owlkeeper.ui.state.State;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import javafx.fxml.FXMLLoader;
 
+import java.util.HashMap;
+
 /**
  * Interface to define a new Scene in the main application GUI
  */
@@ -17,13 +19,25 @@ public abstract class UiScene{
      */
     public UiScene(){
         this.state = this.initState();
-        this.state.handleQuery(null);
+        this.state.handleQuery(this.state.getDefaultQuery());
     }
 
+    /**
+     * Returns the scenes name
+     * @return the scene name
+     */
     public abstract String getName();
 
+    /**
+     * The builder lambda expression
+     * @return function to build the scene
+     */
     public abstract ViewApplication.SceneBuilder getBuilder();
 
+    /**
+     * Loads and initalizes the scenes fxml
+     * @param loader the fxml loader
+     */
     public void prepareFxml(FXMLLoader loader){
         Controller c = loader.getController();
         this.controller = c;
@@ -64,6 +78,7 @@ public abstract class UiScene{
     /**
      * Returns the fxml attached controller for this
      * UiScene
+     *
      * @return the controller created by the fxml syntax
      */
     public Controller getController(){
@@ -79,11 +94,16 @@ public abstract class UiScene{
     public State initState(){
         return new State(){
             @Override
-            public void handleQuery(Object o){
+            public void handleQuery(HashMap<String, Object> o){
             }
 
             @Override
-            public Object collectState(){
+            public HashMap<String, Object> collectState(){
+                return null;
+            }
+
+            @Override
+            public HashMap<String, Object> getDefaultQuery(){
                 return null;
             }
         };

@@ -17,10 +17,10 @@ public class NavigationMainController extends Controller{
     @FXML
     private VBox root;
 
-    public void setContent(UiApp app){
+    public void setContent(UiApp app, String[] pages){
         this.root.getChildren().clear();
-        for (int i = 0; i < 4; i++) {
-            this.root.getChildren().add(this.buildItem(app, "Hallo Welt " + i, "/images/home.png", i == 0));
+        for (String s : pages) {
+            this.root.getChildren().add(this.buildItem(app, s, "/images/home.png", false));
         }
     }
 
@@ -45,7 +45,7 @@ public class NavigationMainController extends Controller{
         box.getChildren().add(t);
 
         box.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            app.route("page", "test");
+            app.route("page", null);
         });
 
         return box;

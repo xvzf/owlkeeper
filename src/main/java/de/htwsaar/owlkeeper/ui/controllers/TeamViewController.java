@@ -1,9 +1,12 @@
 package de.htwsaar.owlkeeper.ui.controllers;
 
+import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.partials.*;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+
+import java.util.HashMap;
 
 public class TeamViewController extends Controller{
 
@@ -35,13 +38,13 @@ public class TeamViewController extends Controller{
     public TeamController teamsController;
 
 
-    public void init(){
+    public void boot(HashMap<String, Object> state){
 
         UiApp app = this.getApp();
 
         // Meta
-        this.navigationController.setContent(app);
-        this.projectsController.setContent(app);
+        this.navigationController.setContent(app, (String[]) state.get("pages"));
+//        this.projectsController.setContent(app, (Project[]) state.get("projects"));
 
         // Main
         this.topbarController.setTitle("Hallo Welt");
