@@ -31,3 +31,6 @@ compile:
 
 test: bootstrap dummydata
 	mvn test
+
+start: db-start
+	mvn exec:java
