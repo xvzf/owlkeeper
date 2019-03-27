@@ -1,11 +1,16 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.storage.DBConnection;
+import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
 import de.htwsaar.owlkeeper.storage.dao.ProjectStageDao;
+import de.htwsaar.owlkeeper.storage.dao.TaskDao;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
+import de.htwsaar.owlkeeper.storage.entity.Task;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageDao> {
@@ -48,5 +53,17 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
      */
     public ProjectStageModel(ProjectStage projectstage) {
         super(projectstage, logger, ProjectStageDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
+    }
+
+
+    /**
+     * Retrieves all Tasks from a ProjectStage
+     *
+     * @return Tasklist List<Task>
+     */
+    public List<Task> getTasks () {
+        long id = getContainer().getId();
+        List<Task>  TaskList= DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.getTasksForProjectStage(id)));
+        return TaskList;
     }
 }
