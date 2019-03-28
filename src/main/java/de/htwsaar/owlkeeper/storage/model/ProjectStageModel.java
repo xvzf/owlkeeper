@@ -4,10 +4,12 @@ import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.ProjectStageDao;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageDao> {
@@ -61,5 +63,15 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
         long id = getContainer().getId();
         return DBConnection.getJdbi().withExtension(ProjectStageDao.class, (dao -> dao.getTasks(id)));
     }
+
+    /**
+     * Adds a Team to the ProjectStage
+     *
+     * @param team
+     */
+    public void addTeam(Team team) {
+        //TODO: implement once issue #41 is resolved
     }
+
+
 }
