@@ -1,4 +1,7 @@
-# OWLKEEPER
+
+![Owlkeeper Logo](src/main/resources/images/logo.png)
+
+
 [![CircleCI](https://circleci.com/gh/xvzf/owlkeeper/tree/master.svg?style=svg&circle-token=d1cc8d28c19045189e8c4b6fcc112315501d66b0)](https://circleci.com/gh/xvzf/owlkeeper/tree/master)
 
 ## Database bootstrap
