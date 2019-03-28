@@ -2,6 +2,7 @@ package de.htwsaar.owlkeeper.storage.dao;
 
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
+import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
@@ -77,4 +78,14 @@ public interface ProjectDao {
     )
     @RegisterBeanMapper(Project.class)
     int deleteProject(long id);
+
+    /**
+     * Gets all Teams working on a project
+     * TODO: write sql query once team_project_relation is added to db
+     * @param id id of the project
+     * @return a list with all Teams working on the project
+     */
+    @SqlQuery()
+    @RegisterBeanMapper(Team.class)
+    List<Team> getTeams(long id);
 }

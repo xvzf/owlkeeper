@@ -4,6 +4,7 @@ import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
+import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
@@ -72,5 +73,14 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
     public static List<Project> getProjects() {
         List<Project> projectlist = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getProjects()));
         return projectlist;
+    }
+
+    /**
+     * Retrieves all Teams working on the Project
+     * @return List of Teams
+     */
+    public List<Team> getTeams(){
+        long id = getContainer().getId();
+        return DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getTeams(id)));
     }
 }
