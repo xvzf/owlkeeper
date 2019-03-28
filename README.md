@@ -18,7 +18,7 @@ On Ubuntu 18.04:
 Reboot to start the docker daemon and set user permissions.
 
 
-### Starting owlkeeper
+## Starting owlkeeper
 Just `make start`.
 Owlkeeper will compile, start a local database server and then start itself.
 
