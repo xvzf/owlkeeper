@@ -8,6 +8,9 @@ In order to use it, make sure your system has the latest version of [Docker](htt
 ### Creating the database
 You can start the database by running `make db-start` and stop it by `make db-stop`
 
+### Starting owlkeeper
+Just `make start`
+
 ### Bootstrapping tables, functions and triggers
 Just run `make bootstrap`
 
