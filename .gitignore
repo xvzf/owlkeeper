@@ -2,8 +2,8 @@
 .idea/
 *.iml
 
-
-# Compiled class file
+# Compiled files
+bin/
 *.class
 
 # Log file
@@ -38,7 +38,6 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
-
 
 # Workspace related
 .settings/
