@@ -1,0 +1,36 @@
+Alle Nutzer haben die gleichen Berechtigungen, wie die über ihnen und die neu aufgeführten!
+
+
+Nutzer				Bedingung/Grund					Recht										
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Mitarbeiter
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Developer			Ansprechpartner feststellen			Einsicht der Namen, der Developer im selben Team	
+				Weiteres Vorgehen (kurzfristig) bestimmen	Einsicht der Tasks im selben Team
+				Weiteres Vorgehen (kurzfristig) bestimmen	Einsicht der Task-Stage im selben Team
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Teamleiter			Reagieren auf Änderungen			Einsicht, Hinzufügen, Bearbeiten und Löschen von Tasks, damit auch Task-Stage
+				Reagieren auf Änderungen			Einsicht, Hinzufügen, Bearbeiten und Löschen von Task-Stages
+				Team zusammenstellen, bei Beginn		Einsicht, Hinzufügen, Bearbeiten und Löschen von Developern
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Projektleiter			Für Projekte verantwortlich			Einsicht und Bearbeiten von eigenem Projekt 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Support				Beheben von Problemen bei Nutzern		Einsicht, Hinzufügen, Bearbeiten und Löschen von Developern
+				Beheben von Problemen bei Nutzern		Einsicht, Hinzufügen, Bearbeiten und Löschen von Team-Leitern
+				Beheben von Problemen bei Nutzern		Einsicht, Hinzufügen, Bearbeiten und Löschen von Projektleitern
+				Beheben von Problemen bei Nutzern		Einsicht, Hinzufügen, Bearbeiten und Löschen von Tasks
+				Beheben von Problemen bei Nutzern		Einsicht, Hinzufügen, Bearbeiten und Löschen von Task-Stages
+				Beheben von Problemen bei Nutzern		Einsicht, Hinzufügen, Bearbeiten und Löschen von Teams
+				Beheben von Problemen bei Nutzern		Einsicht, Hinzufügen, Bearbeiten und Löschen von Projekten
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Admin				Beheben gravierender Probleme			kompletter Zugriff
+
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Nuter haben nur die bei ihnen aufgeführten Berechtigungen!
+
+
+Nutzer				Bedingung/Grund					Recht										
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Leitung der Organisation	Feststellen des Fortschritts eines Projektes	Einsicht in Projekte, Tasks, Task-Stages
+				
