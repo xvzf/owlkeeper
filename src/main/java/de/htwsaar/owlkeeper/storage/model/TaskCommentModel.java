@@ -27,7 +27,6 @@ public class TaskCommentModel extends AbstractModel<TaskComment, TaskCommentDao>
     private static Function<TaskComment, ExtensionCallback<Integer, TaskCommentDao, RuntimeException>> saveCallbackFactory1 =
             p -> (dao -> (p.getId() != 0 ? dao.updateTaskComment(p) : dao.insertTaskComment(p)));
 
-
     /**
      * Constructor for new TaskComment and TaskCommentModel. Generates the TaskComment and saves it into the container
      * For parameters check TaskComment class
@@ -62,10 +61,9 @@ public class TaskCommentModel extends AbstractModel<TaskComment, TaskCommentDao>
     }
 
     public List<TaskComment> getTaskcomments() {
-        List<TaskComment> TCList = DBConnection.getJdbi().withExtension(TaskCommentDao.class, (dao -> dao.getComments()));
-
-        //insert sorting of TCList here
-
+        List<TaskComment> TCList = DBConnection.getJdbi().withExtension(TaskCommentDao.class, (dao -> dao.getCommentsSorted()));
         return TCList;
     }
+
+
 }
