@@ -97,7 +97,7 @@ do $projects$ begin
     , team integer not null references team (id)
     , project integer not null references project (id)
     -- Constraints
-    , constraint map_unique unique (team,project)
+    , constraint team_project_map_unique unique (team, project)
   );
 
 end $projects$;
