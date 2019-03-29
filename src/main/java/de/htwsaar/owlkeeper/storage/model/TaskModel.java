@@ -56,9 +56,8 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
         super(Task, logger, TaskDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
     }
 
-    public addComment(TaskComment com) {
+    public void addComment(TaskComment com) {
         //DBConnection.getJdbi().withExtension(TaskComment.class, (dao -> dao.(id)));
-
 
     }
 }
