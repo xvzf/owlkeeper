@@ -113,6 +113,16 @@ do $projects$ begin
     -- Ensure that project stages do not collide
     , constraint index_project_unique unique (project, index)
   );
+  
+  -- Relation; Teams can be part of multiple projects
+  create table if not exists team_project_relation (
+    id serial primary key
+    , created timestamp default now()
+    , team integer not null references team (id)
+    , project integer not null references project (id)
+    -- Constraints
+    , constraint team_project_map_unique unique (team, project)
+  );
 
 end $projects$;
 
