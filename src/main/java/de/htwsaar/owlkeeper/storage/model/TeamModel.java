@@ -55,10 +55,7 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      *
      * @param Developer
      */
-    public void addDeveloper (Developer Dev) {
-
-
-
+    public addDeveloper (Developer Dev) {
     }
 
     /**
@@ -66,7 +63,7 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      *
      * @param Developer
      */
-    public void removeDeveloper (Developer Dev) {
+    public removeDeveloper (Developer Dev) {
 
     }
 }
