@@ -2,6 +2,7 @@ package de.htwsaar.owlkeeper.storage.dao;
 
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
+import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.junit.jupiter.api.Test;
 
@@ -66,6 +67,13 @@ class TeamDaoTest {
         });
 
         assertEquals(1, teams.size());
+    }
+
+    @Test
+    void testGetTasks() {
+        List<Task> tasks = DBConnection.getJdbi().withExtension(TeamDao.class, dao -> (dao.getTasks(2)));
+        assertEquals(1, tasks.size());
+        assertEquals("Task 1 Stage 2 description", tasks.get(0).getDescription());
     }
 
 }

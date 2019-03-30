@@ -1,11 +1,16 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.ProjectStageDao;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
+import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageDao> {
@@ -49,4 +54,36 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
     public ProjectStageModel(ProjectStage projectstage) {
         super(projectstage, logger, ProjectStageDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
     }
+
+    /**
+     * Retrieves all Tasks of the ProjectStage
+     *
+     * @return all Tasks
+     */
+    public List<Task> getTasks() {
+        long id = getContainer().getId();
+        return DBConnection.getJdbi().withExtension(ProjectStageDao.class, (dao -> dao.getTasks(id)));
+    }
+
+    /**
+     * Retrieves all Teams involved in Tasks of the ProjectStage
+     *
+     * @return all Teams
+     */
+    public List<Team> getTeams() {
+        List<Task> tasks = getTasks();
+        ArrayList<Team> teams = new ArrayList<>();
+        for (Task task : tasks) {
+            long team_id = task.getTeam();
+            if (team_id == 0) {
+                continue;
+            }
+            Team team = new TeamModel(team_id).getContainer();
+            teams.add(team);
+
+        }
+        return teams;
+    }
+
+
 }
