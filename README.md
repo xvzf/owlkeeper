@@ -5,7 +5,7 @@
 [![CircleCI](https://circleci.com/gh/xvzf/owlkeeper/tree/master.svg?style=svg&circle-token=d1cc8d28c19045189e8c4b6fcc112315501d66b0)](https://circleci.com/gh/xvzf/owlkeeper/tree/master)
 
 ## Installing dependencies
-Make sure you have make, maven, docker and docker-compose installed and all permissions to use them.
+Make sure you have make, maven, java 8+, docker and docker-compose installed and all permissions to use them.
 
 On Ubuntu 18.04:
 
@@ -23,6 +23,8 @@ Just `make start`.
 Owlkeeper will compile, start a local database server and then start itself.
 
 If you don't want to use the default db and want to start owlkeeper without it, run `make start-no-db`.
+Be aware, that in this case you have to change the db section in the file 
+src/main/resources/owlkeeper.properties to your needs.
 
 ## Database bootstrap
 We are using docker based database for development and testing.
