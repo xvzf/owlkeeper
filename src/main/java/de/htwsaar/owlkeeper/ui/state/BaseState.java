@@ -53,7 +53,7 @@ public class BaseState implements State{
      */
     private List<Page> getNavigationList(){
         List<Page> list = new ArrayList<>();
-        list.add(new MyTasks(0));
+        list.add(new MyTasks());
         list.add(new Team());
         return list;
     }
