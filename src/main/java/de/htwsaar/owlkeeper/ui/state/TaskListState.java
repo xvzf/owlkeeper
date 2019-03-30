@@ -9,7 +9,7 @@ import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
 import java.util.HashMap;
 import java.util.List;
 
-public class TaskListState extends BaseState implements State{
+public class TaskListState extends BaseState{
 
     private Project project;
     private List<ProjectStage> stages;

@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.ui;
 
+import de.htwsaar.owlkeeper.ui.state.BaseState;
 import de.htwsaar.owlkeeper.ui.state.State;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import javafx.fxml.FXMLLoader;
@@ -92,20 +93,6 @@ public abstract class UiScene{
      * @return State instance
      */
     public State initState(){
-        return new State(){
-            @Override
-            public void handleQuery(HashMap<String, Object> o){
-            }
-
-            @Override
-            public HashMap<String, Object> collectState(){
-                return null;
-            }
-
-            @Override
-            public HashMap<String, Object> getDefaultQuery(){
-                return null;
-            }
-        };
+       return new BaseState();
     }
 }

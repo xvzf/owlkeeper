@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
@@ -65,5 +66,15 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      */
     public DeveloperModel(Developer dev) {
         super(dev, logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
+    }
+
+
+    /**
+     * Retrieves all Developers
+     * @return developerList List with all Projects
+     */
+    public static List<Developer> getDevelopers() {
+        List<Developer> developerList = DBConnection.getJdbi().withExtension(DeveloperDao.class, (dao -> dao.getDevelopers()));
+        return developerList;
     }
 }
