@@ -5,11 +5,12 @@
 [![CircleCI](https://circleci.com/gh/xvzf/owlkeeper/tree/master.svg?style=svg&circle-token=d1cc8d28c19045189e8c4b6fcc112315501d66b0)](https://circleci.com/gh/xvzf/owlkeeper/tree/master)
 
 ## Installing dependencies
-Make sure you have make, maven, java 8+, docker and docker-compose installed and all permissions to use them.
+Make sure you have make, maven, java 8+, docker, postgresql-client and docker-compose installed and all permissions to use them.
 
 On Ubuntu 18.04:
 
-`sudo apt update && sudo apt install make maven docker docker-compose`  
+`sudo apt update && sudo apt install make maven docker 
+docker-compose postgresql-client-common postgresql-client-10`  
 
 `sudo groupadd docker`  
 
