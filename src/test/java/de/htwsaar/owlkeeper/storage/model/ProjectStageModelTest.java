@@ -1,7 +1,11 @@
 package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
+import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,6 +15,9 @@ class ProjectStageModelTest {
     private final String PS_NAME_1 = "testProjectStage";
     private final long PS_INDEX_1 = 1;
     private final long PS_PROJECT_1 = 2;
+
+    private final long PS_ID_2 = 1;
+    private final long PS_ACTUAL_NO_OF_TASKS = 2;
 
     @Test
     void testConstructor() {
@@ -42,5 +49,20 @@ class ProjectStageModelTest {
         assertEquals(p.getIndex(), ploaded.getIndex());
         assertEquals(p.getName(), p.getName());
         pmloaded.removeFromDB();
+    }
+
+    @Test
+    void testGetTasks() {
+        ProjectStageModel pm = new ProjectStageModel(PS_ID_2);
+        List<Task> tasks = pm.getTasks();
+        assertEquals(tasks.size(), PS_ACTUAL_NO_OF_TASKS);
+    }
+
+    @Test
+    void testGetTeams() {
+        ProjectStageModel pm = new ProjectStageModel(PS_ID_2);
+        List<Team> teams = pm.getTeams();
+        assertEquals(1, teams.size());
+        assertEquals("Team 1", teams.get(0).getName());
     }
 }

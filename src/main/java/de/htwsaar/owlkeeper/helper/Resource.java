@@ -106,6 +106,10 @@ public class Resource {
         return parsedSQL.get();
     }
 
+    public static String getSQLResourcePath(String name) throws ResourceNotFoundException {
+        return Resource.resourceToAbsolutePath("/sqls/" + name);
+    }
+
     /**
      * Read properties
      *

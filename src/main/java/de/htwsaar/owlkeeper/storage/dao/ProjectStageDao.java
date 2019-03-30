@@ -1,9 +1,12 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
+import de.htwsaar.owlkeeper.storage.entity.Task;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
+
+import java.util.List;
 
 
 public interface ProjectStageDao {
@@ -55,4 +58,14 @@ public interface ProjectStageDao {
     )
     @RegisterBeanMapper(ProjectStage.class)
     int removeProjectStage(long id);
+
+    /**
+     * Retrieves all Tasks of the given ProjectStage
+     *
+     * @param id id of the ProjectStage
+     * @return all Tasks
+     */
+    @SqlQuery("select * from task as t where t.project_stage = ?")
+    @RegisterBeanMapper(Task.class)
+    List<Task> getTasks(long id);
 }
