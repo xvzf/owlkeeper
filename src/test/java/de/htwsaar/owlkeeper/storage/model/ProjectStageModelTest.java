@@ -2,6 +2,7 @@ package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -51,9 +52,17 @@ class ProjectStageModelTest {
     }
 
     @Test
-    void testGetTasks(){
+    void testGetTasks() {
         ProjectStageModel pm = new ProjectStageModel(PS_ID_2);
         List<Task> tasks = pm.getTasks();
         assertEquals(tasks.size(), PS_ACTUAL_NO_OF_TASKS);
+    }
+
+    @Test
+    void testGetTeams() {
+        ProjectStageModel pm = new ProjectStageModel(PS_ID_2);
+        List<Team> teams = pm.getTeams();
+        assertEquals(1, teams.size());
+        assertEquals("Team 1", teams.get(0).getName());
     }
 }

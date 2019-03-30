@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -64,7 +65,25 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
         return DBConnection.getJdbi().withExtension(ProjectStageDao.class, (dao -> dao.getTasks(id)));
     }
 
-    
+    /**
+     * Retrieves all Teams involved in Tasks of the ProjectStage
+     *
+     * @return all Teams
+     */
+    List<Team> getTeams() {
+        List<Task> tasks = getTasks();
+        ArrayList<Team> teams = new ArrayList<>();
+        for (Task task : tasks) {
+            long team_id = task.getTeam();
+            if (team_id == 0) {
+                continue;
+            }
+            Team team = new TeamModel(team_id).getContainer();
+            teams.add(team);
+
+        }
+        return teams;
+    }
 
 
 }
