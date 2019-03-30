@@ -81,11 +81,15 @@ public interface ProjectDao {
 
     /**
      * Gets all Teams working on a project
-     * TODO: write sql query once team_project_relation is added to db
+     *
      * @param id id of the project
      * @return a list with all Teams working on the project
      */
-    @SqlQuery()
+
+    @SqlQuery("select t.id, t.created, t.name, t.leader " +
+            "from team as t " +
+            "left join team_project_relation as tpr on t.id = tpr.team " +
+            "where tpr.project = ?;")
     @RegisterBeanMapper(Team.class)
     List<Team> getTeams(long id);
 }
