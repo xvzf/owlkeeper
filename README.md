@@ -24,7 +24,7 @@ Just `make start`.
 Owlkeeper will compile, start a local database server and then start itself.
 
 If you don't want to use the default db and want to start owlkeeper without it, run `make start-no-db`.
-Be aware, that in this case you have to change the db section in the file 
+Be aware, that in this case you might have to change the db section in the file 
 src/main/resources/owlkeeper.properties to your needs.
 
 ## Database bootstrap
