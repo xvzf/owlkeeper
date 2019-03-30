@@ -70,7 +70,7 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
      *
      * @return all Teams
      */
-    List<Team> getTeams() {
+    public List<Team> getTeams() {
         List<Task> tasks = getTasks();
         ArrayList<Team> teams = new ArrayList<>();
         for (Task task : tasks) {
