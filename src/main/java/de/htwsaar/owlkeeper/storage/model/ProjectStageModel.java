@@ -64,14 +64,7 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
         return DBConnection.getJdbi().withExtension(ProjectStageDao.class, (dao -> dao.getTasks(id)));
     }
 
-    /**
-     * Adds a Team to the ProjectStage
-     *
-     * @param team
-     */
-    public void addTeam(Team team) {
-        //TODO: implement once issue #41 is resolved
-    }
+    
 
 
 }
