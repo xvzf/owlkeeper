@@ -48,7 +48,7 @@ public class PageIterationController extends Controller{
     public Parent tasks;
 
     @FXML
-    public MyTasksController tasksController;
+    public ProjectTasksController tasksController;
 
 
     public void boot(HashMap<String, Object> state){
@@ -83,6 +83,6 @@ public class PageIterationController extends Controller{
         // Main
         this.topbarController.setTitle(project.getName());
         this.iterationController.initialize(app, project, stage, stages);
-        this.tasksController.setContent(app, tasks, focus);
+        this.tasksController.setContent(app, tasks, project, stage, focus, (boolean) state.get("newtask"));
     }
 }

@@ -47,7 +47,7 @@ public class IterationBarController extends Controller{
             leftText.getStyleClass().add("h2");
             left.getChildren().add(leftText);
             this.iterationBar.getChildren().add(left);
-            left.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration", TaskListState.getQueryMap(project.getId(), leftStage.getId(), null)));
+            left.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration", TaskListState.getQueryMap(project.getId(), leftStage.getId(), null, false)));
 
             currentPos = Pos.CENTER;
         }
@@ -59,7 +59,7 @@ public class IterationBarController extends Controller{
         centerText.getStyleClass().add("h2");
         center.getChildren().add(centerText);
         this.iterationBar.getChildren().add(center);
-        center.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration", TaskListState.getQueryMap(project.getId(), stage.getId(), null)));
+        center.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration", TaskListState.getQueryMap(project.getId(), stage.getId(), null, false)));
 
         if (stageList.size() >= index + 2) {
             ProjectStage rightStage = stageList.get(index + 1);
@@ -71,7 +71,7 @@ public class IterationBarController extends Controller{
             right.getChildren().add(rightText);
             right.getChildren().add(CommonNodes.Image("/images/arrow-right.png", 30, 150));
             this.iterationBar.getChildren().add(right);
-            right.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration", TaskListState.getQueryMap(project.getId(), rightStage.getId(), null)));
+            right.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration", TaskListState.getQueryMap(project.getId(), rightStage.getId(), null, false)));
         }
 
         this.iterationBar.setHgrow(center, Priority.ALWAYS);

@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.ui.controllers.partials;
 
+import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
@@ -24,12 +25,12 @@ abstract class SidebarController<T> extends Controller{
     /**
      * Adds the Sidebar to the Task-View
      */
-    void addSidebar(T item){
+    void addSidebar(T item, UiApp app){
         this.removeSidebar();
-        ScrollPane sidebar = this.buildSidebar(item);
+        ScrollPane sidebar = this.buildSidebar(item, app);
         this.root.getChildren().add(sidebar);
         this.sidebar = sidebar;
     }
 
-    abstract ScrollPane buildSidebar(T item);
+    abstract ScrollPane buildSidebar(T item, UiApp app);
 }

@@ -4,6 +4,7 @@ import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 import de.htwsaar.owlkeeper.storage.model.TeamModel;
+import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
 
 import javafx.fxml.FXML;
@@ -82,7 +83,7 @@ public class TeamController extends SidebarController<Object>{
     }
 
     @Override
-    ScrollPane buildSidebar(Object o){
+    ScrollPane buildSidebar(Object o, UiApp app){
         return new ScrollPane();
     }
 }

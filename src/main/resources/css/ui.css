@@ -117,6 +117,7 @@ TextArea:focused .content {
     -fx-border-width: 2;
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 16;
+    -fx-cursor: hand;
 }
 
 .button--small {

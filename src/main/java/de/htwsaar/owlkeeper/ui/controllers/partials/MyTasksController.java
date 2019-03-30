@@ -22,7 +22,7 @@ public class MyTasksController extends SidebarController<Task>{
     public void setContent(UiApp app, List<Task> tasks, Task sidebar){
         this.removeSidebar();
         if (sidebar != null) {
-            this.addSidebar(sidebar);
+            this.addSidebar(sidebar, app);
         }
         this.tasks.getChildren().clear();
         if (tasks != null) {
@@ -62,13 +62,13 @@ public class MyTasksController extends SidebarController<Task>{
         task.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             long stage = taskEntity.getProjectStage();
             long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity));
+            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
         });
         return task;
     }
 
     @Override
-    ScrollPane buildSidebar(Task task){
-        return TaskView.buildSidebar(task);
+    ScrollPane buildSidebar(Task task, UiApp app){
+        return TaskView.buildSidebar(task, app);
     }
 }
