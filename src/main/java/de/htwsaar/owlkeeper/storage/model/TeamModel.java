@@ -59,7 +59,7 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      *
      * @return all tasks
      */
-    List<Task> getTasks() {
+    public List<Task> getTasks() {
         long id = getContainer().getId();
         return DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getTasks(id)));
     }
@@ -69,7 +69,7 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      *
      * @return all projects
      */
-    List<Project> getProjects() {
+    public List<Project> getProjects() {
         List<Task> tasks = getTasks();
         ArrayList<Project> projects = new ArrayList<>();
         for (Task task : tasks) {
