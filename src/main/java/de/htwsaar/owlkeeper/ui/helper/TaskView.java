@@ -37,7 +37,6 @@ public final class TaskView{
         ScrollPane sidebar = new ScrollPane();
         sidebar.setFitToHeight(true);
         sidebar.setPrefWidth(450);
-        sidebar.setPrefWidth(750);
 
 
         // Sidebar Box
@@ -58,7 +57,6 @@ public final class TaskView{
     public static ScrollPane buildNewTaskSidebar(Task taskEntity, UiApp app){
         ScrollPane sidebar = buildSidebarWrapper();
         VBox content = (VBox) sidebar.getContent();
-        content.setPrefWidth(400);
 
         Text headline = new Text("Neuer Task anlegen");
         headline.getStyleClass().add("h2");
