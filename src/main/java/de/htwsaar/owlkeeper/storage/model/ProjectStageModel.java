@@ -2,6 +2,7 @@ package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.ProjectStageDao;
+import de.htwsaar.owlkeeper.storage.dao.TaskDao;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
@@ -84,6 +85,5 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
         }
         return teams;
     }
-
 
 }

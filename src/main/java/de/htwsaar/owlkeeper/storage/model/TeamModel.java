@@ -1,6 +1,9 @@
 package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.DBConnection;
+import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
+import de.htwsaar.owlkeeper.storage.dao.TeamDao;
+import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.dao.TeamDao;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.Task;
@@ -27,7 +30,6 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      * For parameters check Team class
      */
     public TeamModel(String name, long leader) {
-
         super(logger, TeamDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
         super.setContainer(new Team());
         this.getContainer().setName(name);
@@ -52,6 +54,15 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      */
     public TeamModel(Team Team) {
         super(Team, logger, TeamDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
+    }
+
+    /**
+     * Retrieves all Teams
+     * @return teamList List with all Projects
+     */
+    public static List<Team> getTeams(){
+        List<Team> teamList = DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getTeams()));
+        return teamList;
     }
 
     /**

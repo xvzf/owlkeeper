@@ -1,15 +1,23 @@
 package de.htwsaar.owlkeeper.ui.helper;
 
+import de.htwsaar.owlkeeper.storage.entity.Project;
+import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
+import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
+import de.htwsaar.owlkeeper.storage.model.TaskModel;
+import de.htwsaar.owlkeeper.ui.UiApp;
+import de.htwsaar.owlkeeper.ui.state.TaskListState;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  * Collection of helpers for the Task-View
@@ -20,18 +28,15 @@ public final class TaskView{
     }
 
     /**
-     * Builds the Task-Sidebar
+     * Builds the wrapper pane for the sidebar
      *
-     * @return the full sidebar Node
-     * @todo 28.02.2019 allow fill by dynamic task object
+     * @return scrollpane sidebar
      */
-    public static ScrollPane buildSidebar(){
-
+    private static ScrollPane buildSidebarWrapper(){
         // Sidebar Pane
         ScrollPane sidebar = new ScrollPane();
         sidebar.setFitToHeight(true);
         sidebar.setPrefWidth(450);
-        sidebar.setPrefWidth(750);
 
 
         // Sidebar Box
@@ -40,7 +45,61 @@ public final class TaskView{
         content.setPrefWidth(450);
         content.getStyleClass().add("sidebar");
         sidebar.setContent(content);
+        return sidebar;
+    }
 
+    /**
+     * Builds the new-task sidebar
+     *
+     * @param taskEntity new task entity
+     * @return scrollpane sidebar
+     */
+    public static ScrollPane buildNewTaskSidebar(Task taskEntity, UiApp app){
+        ScrollPane sidebar = buildSidebarWrapper();
+        VBox content = (VBox) sidebar.getContent();
+
+        Text headline = new Text("Neuer Task anlegen");
+        headline.getStyleClass().add("h2");
+        content.getChildren().add(headline);
+
+        TextField name = new TextField();
+        name.setPromptText("Projekt Name");
+        content.getChildren().add(name);
+
+        TextArea description = new TextArea();
+        description.setPromptText("Projekt Beschreibung");
+        content.getChildren().add(description);
+
+        DatePicker deadline = new DatePicker();
+        content.getChildren().add(deadline);
+
+        Button submit = new Button("Task anlegen");
+        content.getChildren().add(submit);
+
+        //@todo add team value
+        submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            taskEntity.setName(name.getText());
+            taskEntity.setDescription(description.getText());
+            taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
+            taskEntity.setTeam(1);
+            new TaskModel(taskEntity).save();
+            long stage = taskEntity.getProjectStage();
+            long project = new ProjectStageModel(stage).getContainer().getProject();
+            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false));
+        });
+
+
+        return sidebar;
+    }
+
+    /**
+     * Builds the Task-Sidebar
+     *
+     * @return the full sidebar Node
+     */
+    public static ScrollPane buildSidebar(Task taskEntity, UiApp app){
+        ScrollPane sidebar = buildSidebarWrapper();
+        VBox content = (VBox) sidebar.getContent();
 
         // Tags
         HBox tags = new HBox();
@@ -55,7 +114,7 @@ public final class TaskView{
 
 
         // Title
-        Text title = new Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy");
+        Text title = new Text(taskEntity.getName());
         title.getStyleClass().add("sidebar__title");
         title.setWrappingWidth(400);
         content.getChildren().add(title);
@@ -73,7 +132,7 @@ public final class TaskView{
         meta.getChildren().add(CommonNodes.Image("/images/calendar.png", 30, 150));
 
         // Date-Text
-        meta.getChildren().add(CommonNodes.Date("23.07.2019"));
+        meta.getChildren().add(CommonNodes.Date(new SimpleDateFormat("dd.MM.yyyy").format(taskEntity.getDeadline())));
 
         // Team
         HBox team = new HBox();
@@ -88,7 +147,7 @@ public final class TaskView{
         }
 
         // Description
-        Text description = new Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+        Text description = new Text(taskEntity.getDescription());
         description.setWrappingWidth(400);
         content.getChildren().add(description);
 
@@ -101,6 +160,8 @@ public final class TaskView{
         comments.setPrefHeight(275);
         comments.getStyleClass().add("comments");
         content.getChildren().add(comments);
+
+        //@todo taskEntity.getComments() needs to be implemented
 
         for (int i = 0; i < 2; i++) {
             HBox comment = new HBox();
@@ -135,9 +196,9 @@ public final class TaskView{
      * Builds the Task-Listing
      *
      * @return the full listing Node
-     * @todo 28.02.2019 allow fill by dynamic task object
+     * @todo 27.03.2019 finish dynamic content
      */
-    public static HBox getTaskNode(){
+    public static HBox getTaskNode(Task taskEntity){
         HBox task = new HBox();
         task.setAlignment(Pos.CENTER_LEFT);
         task.getStyleClass().add("task-listing");
@@ -146,7 +207,7 @@ public final class TaskView{
         task.getChildren().add(CommonNodes.Image("/images/check-square.png", 30, 150));
 
         // Title
-        task.getChildren().add(new Text("HTW-0021"));
+        task.getChildren().add(new Text(taskEntity.getName()));
 
         // Meta
         HBox meta = new HBox();

@@ -14,7 +14,7 @@
         <VBox prefHeight="729.0">
             <fx:include fx:id="topbar" source="partials/topbar.fxml"/>
             <fx:include fx:id="iteration" source="partials/iterationbar.fxml"/>
-            <fx:include fx:id="tasks" source="partials/tasks-my.fxml"/>
+            <fx:include fx:id="tasks" source="partials/projects-tasks.fxml"/>
         </VBox>
     </SplitPane>
 </VBox>
