@@ -32,24 +32,25 @@ public class TaskListState extends BaseState{
         state.put("stages", this.stages);
         state.put("project", this.project);
         state.put("tasks", this.tasks);
-        state.put("stage", this.query.get("stage"));
+        state.put("stage", ((long) this.query.get("stage") >= 0) ? this.query.get("stage") : null);
         state.put("focus", this.query.get("focus"));
         return state;
     }
 
     @Override
     public HashMap<String, Object> getDefaultQuery(){
-        return getQueryMap(1, null, null);
+        return getQueryMap(1, -1, null);
     }
 
     /**
      * Helper to build the TaskListState query object
+     *
      * @param project project id
-     * @param stage stage id
-     * @param focus task id to open in the sidebar
+     * @param stage   stage id
+     * @param focus   task id to open in the sidebar
      * @return TaskListState query object
      */
-    public static HashMap<String, Object> getQueryMap(long project, Object stage, Task focus){
+    public static HashMap<String, Object> getQueryMap(long project, long stage, Task focus){
         HashMap<String, Object> query = new HashMap<>();
         query.put("project", project);
         query.put("stage", stage);

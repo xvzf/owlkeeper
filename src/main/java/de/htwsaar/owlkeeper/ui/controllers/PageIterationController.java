@@ -62,15 +62,18 @@ public class PageIterationController extends Controller{
         Task focus = (Task) state.get("focus");
 
         if (!stages.isEmpty()) {
-            stage = stages.get(0);
+            if (state.get("stage") == null) {
+                stage = stages.get(0);
+            } else {
+                for (ProjectStage checkStage : stages) {
+                    if (checkStage.getId() == (long) state.get("stage")) {
+                        stage = checkStage;
+                        break;
+                    }
+                }
+            }
             tasks = tasksMap.get(stage);
         }
-
-//        state.forEach((key, Object) -> {
-//            System.out.println(key);
-//            System.out.println(Object + "\n\n");
-//        });
-
 
         // Meta
         this.navigationController.setContent(app, (String[]) state.get("pages"));
@@ -78,7 +81,7 @@ public class PageIterationController extends Controller{
 
         // Main
         this.topbarController.setTitle(project.getName());
-//         this.iterationController.initialize();
+        this.iterationController.initialize(app, project, stage, stages);
         this.tasksController.setContent(app, tasks, focus);
     }
 }

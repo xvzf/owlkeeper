@@ -27,7 +27,7 @@ public class NavigationProjectsController extends Controller{
         Text t = new Text(p.getName());
         t.getStyleClass().add("navigation-item__text");
         t.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            app.route("page-iteration", TaskListState.getQueryMap(p.getId(), null, null));
+            app.route("page-iteration", TaskListState.getQueryMap(p.getId(), -1, null));
         });
         return t;
     }
