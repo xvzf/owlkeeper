@@ -20,6 +20,7 @@ public class TeamController extends SidebarController<Object>{
     public VBox team;
 
     public void setContent(List<Team> teams){
+        this.team.getChildren().clear();
         // this.addSidebar();
         for (Team team: teams){
             this.team.getChildren().add(this.buildTeam(team));
@@ -73,7 +74,6 @@ public class TeamController extends SidebarController<Object>{
             HBox member = new HBox();
             member.getStyleClass().add("team-unit__member");
             unit.getChildren().add(member);
-
             member.getChildren().add(CommonNodes.Image("/images/users.png", 30, 30));
             member.getChildren().add(new Text(dev.getName()));
         }

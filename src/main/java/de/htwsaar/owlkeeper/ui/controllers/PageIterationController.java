@@ -7,6 +7,7 @@ import de.htwsaar.owlkeeper.storage.model.ProjectModel;
 import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.partials.*;
+import de.htwsaar.owlkeeper.ui.pages.Page;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
@@ -76,7 +77,7 @@ public class PageIterationController extends Controller{
         }
 
         // Meta
-        this.navigationController.setContent(app, (String[]) state.get("pages"));
+        this.navigationController.setContent(app, (List<Page>) state.get("pages"));
         this.projectsController.setContent(app, (HashMap<Long, Project>) state.get("projects"));
 
         // Main

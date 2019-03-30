@@ -4,6 +4,7 @@ import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.partials.*;
+import de.htwsaar.owlkeeper.ui.pages.Page;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
@@ -45,7 +46,7 @@ public class TeamViewController extends Controller{
         UiApp app = this.getApp();
 
         // Meta
-        this.navigationController.setContent(app, (String[]) state.get("pages"));
+        this.navigationController.setContent(app, (List<Page>) state.get("pages"));
         this.projectsController.setContent(app,  (HashMap<Long, Project>) state.get("projects"));
 
         // Main

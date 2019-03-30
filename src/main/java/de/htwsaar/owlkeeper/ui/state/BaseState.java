@@ -2,13 +2,17 @@ package de.htwsaar.owlkeeper.ui.state;
 
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.model.ProjectModel;
+import de.htwsaar.owlkeeper.ui.pages.MyTasks;
+import de.htwsaar.owlkeeper.ui.pages.Page;
+import de.htwsaar.owlkeeper.ui.pages.Team;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class BaseState implements State{
 
-    private String[] pages;
+    private List<Page> pages;
     private HashMap<Long, Project> projects;
     HashMap<String, Object> query;
 
@@ -36,12 +40,22 @@ public class BaseState implements State{
     }
 
     @Override
-    public void handleQuery(HashMap<String, Object> query){
+    public void handleQuery(HashMap <String, Object> query){
         this.query = mergeQueries(this.getDefaultQuery(), query);
-        this.pages = new String[]{"Seite xyz", "ABC hallo ", "Lorem Ipsum"};
+        this.pages = this.getNavigationList();
         this.projects = new HashMap<>();
         List<Project> projects = ProjectModel.getProjects();
         projects.forEach(project -> this.projects.put(project.getId(), project));
+    }
+
+    /**
+     * Builds a List of navigation items
+     */
+    private List<Page> getNavigationList(){
+        List<Page> list = new ArrayList<>();
+        list.add(new MyTasks(0));
+        list.add(new Team());
+        return list;
     }
 
     @Override
