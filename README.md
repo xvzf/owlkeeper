@@ -22,6 +22,8 @@ Reboot to start the docker daemon and set user permissions.
 Just `make start`.
 Owlkeeper will compile, start a local database server and then start itself.
 
+If you don't want to use the default db and want to start owlkeeper without it, run `make start-no-db`.
+
 ## Database bootstrap
 We are using docker based database for development and testing.
 In order to use it, make sure your system has the latest version of [Docker](https://github.com/docker/docker-install#usage) installed.
