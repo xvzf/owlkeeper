@@ -1,6 +1,7 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
 import de.htwsaar.owlkeeper.storage.entity.Developer;
+import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
@@ -19,6 +20,15 @@ public interface TeamDao {
     @SqlQuery("select * from team where id = ?;")
     @RegisterBeanMapper(Team.class)
     Team getTeam(long id);
+
+    /**
+     * Query all tasks of the team
+     * @param id
+     * @return
+     */
+    @SqlQuery("select * from task where team = ?;")
+    @RegisterBeanMapper(Task.class)
+    List<Task> getTasks(long id);
 
     /**
      * Query all teams
