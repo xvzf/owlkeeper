@@ -186,16 +186,25 @@ do $tasks$ begin
   -- Function for team_project_relation trigger
   create or replace function match_team_project_relation() returns trigger as $trigger$
   begin
-    raise notice 'Value: %', NEW.team;
-    raise notice 'Query: %', (SELECT ps.project FROM project_stage ps JOIN task as t ON t.project_stage = ps.id WHERE t = NEW);
-    if (NEW.team != null) then
-        insert into team_project_relation(team,project) values (NEW.team, (SELECT ps.project FROM project_stage ps JOIN task as t ON t.project_stage = ps.id WHERE t = NEW limit 1));
+    if (NEW.team is not null) then -- Don't enter null values into the tables
+        if (TG_OP = 'INSERT') then
+            insert into team_project_relation(team,project) values (NEW.team, (SELECT ps.project
+                    FROM project_stage as ps JOIN task as t ON t.project_stage = ps.id
+                    WHERE t = NEW)) on conflict do nothing;
+        elsif (TG_OP = 'DELETE') then
+            delete from team_project_relation where team = OLD.team and project = (SELECT ps.project
+                    FROM project_stage as ps JOIN task as t ON t.project_stage = ps.id
+                    WHERE t = OLD);
+        elsif (TG_OP = 'UPDATE') then
+            update team_project_relation
+                set team = NEW.team;
+        end if;
     end if;
     return null;
   end;
   $trigger$ language 'plpgsql';
 
-  -- Team_project_relation is only changed using triggers.
+  -- Team_project_relation is kept synced with the other tables using triggers.
   create trigger update_team_project_relation
     after insert or update or delete on task
     for each row
