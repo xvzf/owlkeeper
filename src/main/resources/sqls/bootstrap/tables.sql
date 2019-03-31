@@ -184,16 +184,16 @@ do $tasks$ begin
   );
 
   -- Function for team_project_relation trigger
-  create or replace function match_team_project_relation() returns trigger as $BODY$
+  create or replace function match_team_project_relation() returns trigger as $trigger$
   begin
     raise notice 'Value: %', NEW.team;
     raise notice 'Query: %', (SELECT ps.project FROM project_stage ps JOIN task as t ON t.project_stage = ps.id WHERE t = NEW);
     if (NEW.team != null) then
-        insert into team_project_relation(team,project) values (NEW.team, (SELECT ps.project FROM project_stage ps JOIN task as t ON t.project_stage = ps.id WHERE t = NEW));
+        insert into team_project_relation(team,project) values (NEW.team, (SELECT ps.project FROM project_stage ps JOIN task as t ON t.project_stage = ps.id WHERE t = NEW limit 1));
     end if;
     return null;
   end;
-  $BODY$ language 'plpgsql';
+  $trigger$ language 'plpgsql';
 
   -- Team_project_relation is only changed using triggers.
   create trigger update_team_project_relation
