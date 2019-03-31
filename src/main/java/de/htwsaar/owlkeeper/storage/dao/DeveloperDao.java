@@ -45,8 +45,8 @@ public interface DeveloperDao {
      * @return Inserted id
      */
     @SqlQuery("insert into developer "
-            + "(name, role, email, chief) values "
-            + "(:name, :role, :email, :chief) returning id;"
+            + "(name, email) values "
+            + "(:name,  :email) returning id;"
     )
     int insertDeveloper(@BindBean Developer d);
 
@@ -59,9 +59,7 @@ public interface DeveloperDao {
      */
     @SqlQuery("update developer set "
             + "name = :name"
-            + ", role = :role"
             + ", email = :email"
-            + ", is_chief = :chief "
             + "where id = :id returning id;"
     )
     int updateDeveloper(@BindBean Developer d);
