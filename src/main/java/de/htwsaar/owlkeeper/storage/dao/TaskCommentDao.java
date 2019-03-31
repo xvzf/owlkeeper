@@ -69,4 +69,5 @@ public interface TaskCommentDao {
     @SqlQuery("delete from task_comment where id = ? returning id;")
     @RegisterBeanMapper(TaskComment.class)
     int deleteTaskComment(long id);
+
 }
