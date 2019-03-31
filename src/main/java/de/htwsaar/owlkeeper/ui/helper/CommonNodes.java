@@ -7,6 +7,7 @@ import javafx.scene.text.Text;
 
 
 public final class CommonNodes{
+
     private CommonNodes(){
     }
 
