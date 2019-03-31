@@ -1,9 +1,7 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
 import de.htwsaar.owlkeeper.storage.DBConnection;
-import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
-import de.htwsaar.owlkeeper.storage.dao.TeamDao;
-import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.dao.TeamDao;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.Task;
@@ -20,8 +18,8 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
 
     private static Logger logger = LogManager.getLogger(TeamModel.class);
     private static Function<Long, ExtensionCallback<Team, TeamDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getTeam(id));
-    private static Function<Long, ExtensionCallback<Integer, TeamDao, RuntimeException>> deleteCallbackFactory = id -> (dao -> dao.deleteTeam(id));
-    private static Function<Team, ExtensionCallback<Integer, TeamDao, RuntimeException>> saveCallbackFactory1 =
+    private static Function<Long, ExtensionCallback<Integer, TeamDao, InsufficientPermissionsException>> deleteCallbackFactory = id -> (dao -> dao.deleteTeam(id));
+    private static Function<Team, ExtensionCallback<Integer, TeamDao, InsufficientPermissionsException>> saveCallbackFactory1 =
             p -> (dao -> (p.getId() != 0 ? dao.updateTeam(p) : dao.insertTeam(p)));
 
 

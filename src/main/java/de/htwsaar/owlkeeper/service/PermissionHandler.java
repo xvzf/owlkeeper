@@ -1,39 +1,61 @@
 package de.htwsaar.owlkeeper.service;
 
-import de.htwsaar.owlkeeper.helper.permissions.PermissionObserver;
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
+import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
+import de.htwsaar.owlkeeper.helper.exceptions.UserInitializationException;
+import de.htwsaar.owlkeeper.storage.entity.HasID;
+import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 
-public class PermissionHandler implements PermissionObserver {
+import java.util.function.Predicate;
+
+public class PermissionHandler {
     private static PermissionHandler handler;
-    private String userGroup;
-
-    private PermissionHandler(final String userGroup) {
-        this.userGroup = userGroup;
-
-    }
+    private static DeveloperModel user;
+    private static String userGroup;
 
     public static PermissionHandler getPermissionHandler() {
         return handler;
     }
 
-    public static PermissionHandler initialize(final String userGroup) {
-        handler = new PermissionHandler(userGroup);
+    public static PermissionHandler initialize() {
+        handler = new PermissionHandler();
+        user = DeveloperManager.getCurrentDeveloper();
+        if (user == null)
+            throw new UserInitializationException("No current user has been set. Call DeveloperManager.login() first!");
+        userGroup = user.getGroup();
         return handler;
     }
 
-    public void changePermissionGroup(final String userGroup) {
-        this.userGroup = userGroup;
-    }
-
-
-    @Override
-    public void update(int action) throws InsufficientPermissionsException {
-
-        if (!checkAction(action)) {
-            throw new InsufficientPermissionsException("User of group " + userGroup + " does not have sufficient privileges to execute action " + action);
+    public static boolean checkPermission(final int action) throws InsufficientPermissionsException {
+        if (checkAction(userGroup, action)) {
+            return true;
+        } else {
+            throw new InsufficientPermissionsException("User" + user.getContainer().getEmail() + " of group " + userGroup +
+                    " does not have sufficient privileges to execute action " + action);
         }
     }
 
-    private boolean checkAction(final int action) {
-        return false; //TODO
+    /**
+     * Check a dynamic permission described by a SQL Query in {@link de.htwsaar.owlkeeper.storage.dao.AccessControlDao}
+     * or any other conditional.
+     *
+     * @param predicate The conditional to check as a Predicate. The parameter of this predicate can be any {@link de.htwsaar.owlkeeper.storage.entity}
+     *                  (Most commonly the current user, which the PermissionHandler knows)
+     * @throws InsufficientPermissionsException If the user/group does not have the requested permission.
+     */
+
+    public static boolean checkPermission(final Predicate<? super HasID> predicate) throws InsufficientPermissionsException {
+        if (predicate.test(user.getContainer())) {
+            return true;
+        } else {
+            throw new InsufficientPermissionsException("User" + user.getContainer().getEmail() + " of group " + userGroup +
+                    " does not have sufficient privileges to execute action.");
+        }
     }
+
+    private static boolean checkAction(final String group, final int action) {
+        //TODO
+        return false;
+    }
+
 }

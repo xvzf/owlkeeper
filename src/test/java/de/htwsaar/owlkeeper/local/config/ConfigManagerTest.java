@@ -2,7 +2,7 @@ package de.htwsaar.owlkeeper.local.config;
 
 
 import de.htwsaar.owlkeeper.helper.Resource;
-import de.htwsaar.owlkeeper.storage.local.config.ConfigurationException;
+import de.htwsaar.owlkeeper.helper.exceptions.ConfigurationException;
 import de.htwsaar.owlkeeper.storage.local.config.ConfigurationManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;

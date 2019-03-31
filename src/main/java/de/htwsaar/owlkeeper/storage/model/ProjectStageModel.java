@@ -1,8 +1,8 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.ProjectStageDao;
-import de.htwsaar.owlkeeper.storage.dao.TaskDao;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
@@ -18,8 +18,8 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
 
     private static Logger logger = LogManager.getLogger(ProjectStageModel.class);
     private static Function<Long, ExtensionCallback<ProjectStage, ProjectStageDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getProjectStage(id));
-    private static Function<Long, ExtensionCallback<Integer, ProjectStageDao, RuntimeException>> removeCallbackFactory = id -> (dao -> dao.removeProjectStage(id));
-    private static Function<ProjectStage, ExtensionCallback<Integer, ProjectStageDao, RuntimeException>> saveCallbackFactory1 =
+    private static Function<Long, ExtensionCallback<Integer, ProjectStageDao, InsufficientPermissionsException>> removeCallbackFactory = id -> (dao -> dao.removeProjectStage(id));
+    private static Function<ProjectStage, ExtensionCallback<Integer, ProjectStageDao, InsufficientPermissionsException>> saveCallbackFactory1 =
             p -> (dao -> (p.getId() != 0 ? dao.updateProjectStage(p) : dao.insertProjectStage(p)));
 
 

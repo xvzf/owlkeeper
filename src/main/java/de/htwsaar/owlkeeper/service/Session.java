@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.service;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 
 /**
@@ -7,10 +8,10 @@ import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
  */
 public class Session {
     // Field that will always contain the user of this session
-    private final DeveloperModel sessionUser = new DeveloperModel(1); //TODO
+    private final DeveloperModel sessionUser = DeveloperManager.getCurrentDeveloper();
 
     public Session() {
-        PermissionHandler.initialize(sessionUser.getGroup());
+        PermissionHandler.initialize();
     }
 
     public static void main(String[] args) {

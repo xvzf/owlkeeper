@@ -1,4 +1,4 @@
-package de.htwsaar.owlkeeper.service;
+package de.htwsaar.owlkeeper.helper.exceptions;
 
 public class InsufficientPermissionsException extends Exception {
     public InsufficientPermissionsException() {

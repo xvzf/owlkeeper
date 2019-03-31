@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
 import de.htwsaar.owlkeeper.storage.dao.TaskDao;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import org.apache.logging.log4j.LogManager;
@@ -13,8 +14,8 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
 
     private static Logger logger = LogManager.getLogger(TaskModel.class);
     private static Function<Long, ExtensionCallback<Task, TaskDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getTask(id));
-    private static Function<Long, ExtensionCallback<Integer, TaskDao, RuntimeException>> removeCallbackFactory = id -> (dao -> dao.deleteTask(id));
-    private static Function<Task, ExtensionCallback<Integer, TaskDao, RuntimeException>> saveCallbackFactory1 =
+    private static Function<Long, ExtensionCallback<Integer, TaskDao, InsufficientPermissionsException>> removeCallbackFactory = id -> (dao -> dao.deleteTask(id));
+    private static Function<Task, ExtensionCallback<Integer, TaskDao, InsufficientPermissionsException>> saveCallbackFactory1 =
             p -> (dao -> (p.getId() != 0 ? dao.updateTask(p) : dao.insertTask(p)));
 
 

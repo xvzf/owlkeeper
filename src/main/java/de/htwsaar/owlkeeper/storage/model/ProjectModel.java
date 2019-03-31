@@ -1,23 +1,24 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
+import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
 import de.htwsaar.owlkeeper.storage.entity.Project;
-import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
-import java.util.List;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class ProjectModel extends AbstractModel<Project, ProjectDao> {
 
     private static Logger logger = LogManager.getLogger(ProjectModel.class);
     private static Function<Long, ExtensionCallback<Project, ProjectDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getProject(id));
-    private static Function<Long, ExtensionCallback<Integer, ProjectDao, RuntimeException>> deleteCallbackFactory = id -> (dao -> dao.deleteProject(id));
-    private static Function<Project, ExtensionCallback<Integer, ProjectDao, RuntimeException>> saveCallbackFactory1 =
+    private static Function<Long, ExtensionCallback<Integer, ProjectDao, InsufficientPermissionsException>> deleteCallbackFactory = id -> (dao -> dao.deleteProject(id));
+    private static Function<Project, ExtensionCallback<Integer, ProjectDao, InsufficientPermissionsException>> saveCallbackFactory1 =
             p -> (dao -> (p.getId() != 0 ? dao.updateProject(p) : dao.insertProject(p)));
 
 
