@@ -1,6 +1,7 @@
 package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.storage.DBConnection;
+import de.htwsaar.owlkeeper.storage.dao.TaskCommentDao;
 import de.htwsaar.owlkeeper.storage.dao.TaskDao;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.TaskComment;
@@ -56,19 +57,19 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
         super(Task, logger, TaskDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
     }
 
-    public void addComment(TaskComment com) {
-        long taskCommentId = com.getId();
-        long TaskId = this.getContainer().getId();
-
-        //DBConnection.getJdbi().withExtension(TaskComment.class, (dao -> dao.(id)));
-
-    }
-
+    /**
+     * returns TaskId the original Task is depeding on.
+     *
+     * @return dependingTask
+     */
     public int getDependency () {
         long taskId = this.getContainer().getId();
         return DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.getDependency(taskId)));
     }
 
+    /**
+     * set new Task the original Task depends on
+     */
     public void setDependency(Task dependsTask) {
         long taskId = this.getContainer().getId();
         long dependsId = dependsTask.getId();
