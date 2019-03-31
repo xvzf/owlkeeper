@@ -152,6 +152,10 @@ do $fill$ begin
     , (select id from task where description = 'Task 1 Stage 2 description')
   );
 
+  insert into team_project_relation (team, project)
+  values ((select id from team where name = 'Team 2'),
+          (select id from project where name = 'Testproject2'));
+
 end $fill$;
 
 end$$
