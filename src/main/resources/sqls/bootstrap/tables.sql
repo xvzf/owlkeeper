@@ -194,7 +194,7 @@ do $tasks$ begin
         elsif (TG_OP = 'DELETE') then
             delete from team_project_relation where team = OLD.team and project = (SELECT ps.project
                     FROM project_stage as ps JOIN task as t ON t.project_stage = ps.id
-                    WHERE t = OLD));
+                    WHERE t = OLD);
         elsif (TG_OP = 'UPDATE') then
             update team_project_relation
                 set team = NEW.team;
