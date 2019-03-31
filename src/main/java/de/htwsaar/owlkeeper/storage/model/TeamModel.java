@@ -3,11 +3,9 @@ package de.htwsaar.owlkeeper.storage.model;
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
 import de.htwsaar.owlkeeper.storage.dao.TeamDao;
-import de.htwsaar.owlkeeper.storage.entity.Project;
+import de.htwsaar.owlkeeper.storage.entity.*;
 import de.htwsaar.owlkeeper.storage.dao.TeamDao;
 import de.htwsaar.owlkeeper.storage.entity.Project;
-import de.htwsaar.owlkeeper.storage.entity.Task;
-import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
@@ -30,6 +28,7 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      * For parameters check Team class
      */
     public TeamModel(String name, long leader) {
+
         super(logger, TeamDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
         super.setContainer(new Team());
         this.getContainer().setName(name);
@@ -55,6 +54,7 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
     public TeamModel(Team Team) {
         super(Team, logger, TeamDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
     }
+
 
     /**
      * Retrieves all Teams
@@ -93,5 +93,30 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
             }
         }
         return projects;
+    }
+
+    /**
+     * Adds Developer to Team
+     *
+     * @param Dev Developer
+     */
+    public void addDeveloper (Developer Dev) {
+        long developerId = Dev.getId();
+        long teamId = this.getContainer().getId();
+
+        DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.addDeveloper(developerId, teamId)));
+    }
+
+    /**
+     * Deletes Developer from Team
+     *
+     * @param Dev Developer
+     */
+    public void removeDeveloper (Developer Dev) {
+        long developerId = Dev.getId();
+        long teamId = this.getContainer().getId();
+
+        DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.removeDeveloper(developerId, teamId)));
+
     }
 }
