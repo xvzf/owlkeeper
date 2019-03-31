@@ -1,3 +1,4 @@
+
 \echo
 \echo '--------------------------'
 \echo 'Owlkeeper Table Bootstrap '
@@ -113,7 +114,7 @@ do $projects$ begin
     -- Ensure that project stages do not collide
     , constraint index_project_unique unique (project, index)
   );
-  
+
   -- Relation; Teams can be part of multiple projects
   create table if not exists team_project_relation (
     id serial primary key
@@ -123,7 +124,6 @@ do $projects$ begin
     -- Constraints
     , constraint team_project_map_unique unique (team, project)
   );
-
 end $projects$;
 
 --
@@ -182,6 +182,24 @@ do $tasks$ begin
     , developer integer not null references developer (id)
     , task integer not null references task (id)
   );
+
+  -- Function for team_project_relation trigger
+  create or replace function match_team_project_relation() returns trigger as $BODY$
+  begin
+    raise notice 'Value: %', NEW.team;
+    raise notice 'Query: %', (SELECT ps.project FROM project_stage ps JOIN task as t ON t.project_stage = ps.id WHERE t = NEW);
+    if (NEW.team != null) then
+        insert into team_project_relation(team,project) values (NEW.team, (SELECT ps.project FROM project_stage ps JOIN task as t ON t.project_stage = ps.id WHERE t = NEW));
+    end if;
+    return null;
+  end;
+  $BODY$ language 'plpgsql';
+
+  -- Team_project_relation is only changed using triggers.
+  create trigger update_team_project_relation
+    after insert or update or delete on task
+    for each row
+        execute function match_team_project_relation();
 
 end $tasks$;
 
