@@ -156,4 +156,15 @@ public interface TaskDao {
             + "where t.fulfilled is null and t.project_stage = ? and d.id = ?;")
     @RegisterBeanMapper(Task.class)
     List<Task> getPendingTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
+
+    @SqlQuery("select depends from task_dependecy where task = taskId;")
+    @RegisterBeanMapper(Task.class)
+    int getDependency (long taskId);
+
+    @SqlQuery(
+
+
+    )
+    @RegisterBeanMapper(Task.class)
+    void setDependency (int taskId);
 }

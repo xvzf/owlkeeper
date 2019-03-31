@@ -57,7 +57,15 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
     }
 
     public void addComment(TaskComment com) {
+        long taskCommentId = com.getId();
+        long TaskId = this.getContainer().getId();
+
         //DBConnection.getJdbi().withExtension(TaskComment.class, (dao -> dao.(id)));
 
+    }
+
+    public int getDependency () {
+        long taskId = this.getContainer().getId();
+        return DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.getDependency(taskId)));
     }
 }
