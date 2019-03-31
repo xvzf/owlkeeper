@@ -93,4 +93,18 @@ public interface TeamDao {
     int deleteTeam(long id);
 
 
+    @SqlQuery(
+            "insert into developer_team_relation (developer, team) values(developerId, teamId) returning developer;"
+
+    )
+    @RegisterBeanMapper(Developer.class)
+    long addDeveloper(long developerId, long teamId);
+
+
+    @SqlQuery(
+            "delete from developer_team_relation where developer = developerId and team = teamId returning developer;"
+
+    )
+    @RegisterBeanMapper(Developer.class)
+    long removeDeveloper(long developerId, long teamId);
 }

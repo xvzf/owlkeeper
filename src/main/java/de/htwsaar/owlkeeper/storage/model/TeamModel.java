@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.TeamDao;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
@@ -50,12 +51,17 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
         super(Team, logger, TeamDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
     }
 
+
     /**
      * Adds Developer to Team
      *
      * @param Developer
      */
     public void addDeveloper (Developer Dev) {
+        long developerId = Dev.getId();
+        long teamId = this.getContainer().getId();
+
+        DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.addDeveloper(developerId, teamId)));
     }
 
     /**
@@ -64,6 +70,10 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      * @param Developer
      */
     public void removeDeveloper (Developer Dev) {
+        long developerId = Dev.getId();
+        long teamId = this.getContainer().getId();
+
+        DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.removeDeveloper(developerId, teamId)));
 
     }
 }
