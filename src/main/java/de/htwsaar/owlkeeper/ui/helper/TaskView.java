@@ -1,245 +1,230 @@
 package de.htwsaar.owlkeeper.ui.helper;
 
-import de.htwsaar.owlkeeper.storage.entity.Project;
-import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
 import de.htwsaar.owlkeeper.storage.model.TaskModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 /**
  * Collection of helpers for the Task-View
  */
-public final class TaskView{
+public final class TaskView {
 
-    private TaskView(){
-    }
+	private TaskView() {
+	}
 
-    /**
-     * Builds the wrapper pane for the sidebar
-     *
-     * @return scrollpane sidebar
-     */
-    private static ScrollPane buildSidebarWrapper(){
-        // Sidebar Pane
-        ScrollPane sidebar = new ScrollPane();
-        sidebar.setFitToHeight(true);
-        sidebar.setPrefWidth(450);
+	/**
+	 * Builds the wrapper pane for the sidebar
+	 *
+	 * @return scrollpane sidebar
+	 */
+	private static ScrollPane buildSidebarWrapper() {
+		// Sidebar Pane
+		ScrollPane sidebar = new ScrollPane();
+		sidebar.setFitToWidth(true);
+		sidebar.setMinWidth(450);
+		sidebar.setHbarPolicy(ScrollBarPolicy.NEVER);
 
+		// Sidebar Box
+		VBox content = new VBox();
+		content.getStyleClass().add("sidebar");
+		sidebar.setContent(content);
+		return sidebar;
+	}
 
-        // Sidebar Box
-        VBox content = new VBox();
-        content.setPrefHeight(0);
-        content.setPrefWidth(450);
-        content.getStyleClass().add("sidebar");
-        sidebar.setContent(content);
-        return sidebar;
-    }
+	/**
+	 * Builds the new-task sidebar
+	 *
+	 * @param taskEntity new task entity
+	 * @return scrollpane sidebar
+	 */
+	public static ScrollPane buildNewTaskSidebar(Task taskEntity, UiApp app) {
+		ScrollPane sidebar = buildSidebarWrapper();
+		VBox content = (VBox) sidebar.getContent();
 
-    /**
-     * Builds the new-task sidebar
-     *
-     * @param taskEntity new task entity
-     * @return scrollpane sidebar
-     */
-    public static ScrollPane buildNewTaskSidebar(Task taskEntity, UiApp app){
-        ScrollPane sidebar = buildSidebarWrapper();
-        VBox content = (VBox) sidebar.getContent();
+		Text headline = new Text("Neuer Task anlegen");
+		headline.getStyleClass().add("h2");
+		content.getChildren().add(headline);
 
-        Text headline = new Text("Neuer Task anlegen");
-        headline.getStyleClass().add("h2");
-        content.getChildren().add(headline);
+		TextField name = new TextField();
+		name.setPromptText("Projekt Name");
+		content.getChildren().add(name);
 
-        TextField name = new TextField();
-        name.setPromptText("Projekt Name");
-        content.getChildren().add(name);
+		TextArea description = new TextArea();
+		description.setPromptText("Projekt Beschreibung");
+		content.getChildren().add(description);
 
-        TextArea description = new TextArea();
-        description.setPromptText("Projekt Beschreibung");
-        content.getChildren().add(description);
+		DatePicker deadline = new DatePicker();
+		content.getChildren().add(deadline);
 
-        DatePicker deadline = new DatePicker();
-        content.getChildren().add(deadline);
+		Button submit = new Button("Task anlegen");
+		content.getChildren().add(submit);
 
-        Button submit = new Button("Task anlegen");
-        content.getChildren().add(submit);
+		// @todo add team value
+		submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+			taskEntity.setName(name.getText());
+			taskEntity.setDescription(description.getText());
+			taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
+			taskEntity.setTeam(1);
+			new TaskModel(taskEntity).save();
+			long stage = taskEntity.getProjectStage();
+			long project = new ProjectStageModel(stage).getContainer().getProject();
+			app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false));
+		});
 
-        //@todo add team value
-        submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            taskEntity.setName(name.getText());
-            taskEntity.setDescription(description.getText());
-            taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
-            taskEntity.setTeam(1);
-            new TaskModel(taskEntity).save();
-            long stage = taskEntity.getProjectStage();
-            long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false));
-        });
+		return sidebar;
+	}
 
+	/**
+	 * Builds the Task-Sidebar
+	 *
+	 * @return the full sidebar Node
+	 */
+	public static ScrollPane buildSidebar(Task taskEntity, UiApp app) {
+		ScrollPane sidebar = buildSidebarWrapper();
+		VBox content = (VBox) sidebar.getContent();
 
-        return sidebar;
-    }
+		// Tags
+		HBox tags = new HBox();
+		tags.getStyleClass().add("sidebar__tags");
+		content.getChildren().add(tags);
 
-    /**
-     * Builds the Task-Sidebar
-     *
-     * @return the full sidebar Node
-     */
-    public static ScrollPane buildSidebar(Task taskEntity, UiApp app){
-        ScrollPane sidebar = buildSidebarWrapper();
-        VBox content = (VBox) sidebar.getContent();
+		// Individual Tags
+		tags.getChildren().add(CommonNodes.Tag("blocked", "#E14B4B"));
 
-        // Tags
-        HBox tags = new HBox();
-        tags.setPrefHeight(0);
-        tags.setPrefWidth(0);
-        tags.getStyleClass().add("sidebar__tags");
-        content.getChildren().add(tags);
+		// Title
+		Text title = new Text(taskEntity.getName());
+		title.getStyleClass().add("sidebar__title");
+		title.setWrappingWidth(400);
+		content.getChildren().add(title);
 
+		// Date & Team -- Wrapper
+		HBox meta = new HBox();
+		meta.getStyleClass().add("sidebar__meta");
+		meta.setAlignment(Pos.CENTER_LEFT);
+		content.getChildren().add(meta);
 
-        // Individual Tags
-        tags.getChildren().add(CommonNodes.Tag("blocked", "#E14B4B"));
+		// Date-icon
+		meta.getChildren().add(CommonNodes.Image("/images/calendar.png", 30, 150));
 
+		// Date-Text
+		meta.getChildren().add(CommonNodes.Date(new SimpleDateFormat("dd.MM.yyyy").format(taskEntity.getDeadline())));
 
-        // Title
-        Text title = new Text(taskEntity.getName());
-        title.getStyleClass().add("sidebar__title");
-        title.setWrappingWidth(400);
-        content.getChildren().add(title);
+		// Team
+		HBox team = new HBox();
+		team.setAlignment(Pos.CENTER_RIGHT);
+		team.getStyleClass().add("sidebar__team");
+		meta.getChildren().add(team);
 
+		for (int i = 0; i < 3; i++) {
+			team.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
+		}
 
-        // Date & Team -- Wrapper
-        HBox meta = new HBox();
-        meta.setPrefHeight(0);
-        meta.setPrefWidth(200);
-        meta.getStyleClass().add("sidebar__meta");
-        meta.setAlignment(Pos.CENTER_LEFT);
-        content.getChildren().add(meta);
+		// Description
+		Text description = new Text(taskEntity.getDescription());
+		description.setWrappingWidth(400);
+		content.getChildren().add(description);
 
-        // Date-icon
-        meta.getChildren().add(CommonNodes.Image("/images/calendar.png", 30, 150));
+		// HairLine (hr)
+		content.getChildren().add(CommonNodes.Hr(375, true));
 
-        // Date-Text
-        meta.getChildren().add(CommonNodes.Date(new SimpleDateFormat("dd.MM.yyyy").format(taskEntity.getDeadline())));
+		// Comments
+		VBox comments = new VBox();
+		comments.getStyleClass().add("comments");
+		content.getChildren().add(comments);
 
-        // Team
-        HBox team = new HBox();
-        team.setPrefWidth(20000);
-        team.setPrefHeight(100);
-        team.setAlignment(Pos.CENTER_RIGHT);
-        team.getStyleClass().add("sidebar__team");
-        meta.getChildren().add(team);
+		// @todo taskEntity.getComments() needs to be implemented
 
-        for (int i = 0; i < 3; i++) {
-            team.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
-        }
+		for (int i = 0; i < 2; i++) {
+			HBox comment = new HBox();
+			comment.getStyleClass().add("comments__item");
+			comment.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
+			Text commentText = new Text(
+					"Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+			commentText.setWrappingWidth(350);
+			comment.getChildren().add(commentText);
+			comments.getChildren().add(comment);
+		}
 
-        // Description
-        Text description = new Text(taskEntity.getDescription());
-        description.setWrappingWidth(400);
-        content.getChildren().add(description);
+		// TextArea
+		TextArea input = new TextArea();
+		input.setMaxWidth(375);
+		input.setWrapText(true);
+		input.getStyleClass().add("comments__input");
+		input.setPromptText("write a comment...");
+		comments.getChildren().add(input);
 
-        // HairLine (hr)
-        content.getChildren().add(CommonNodes.Hr(400, true));
+		// Button
+		Button button = new Button();
+		button.setText("send");
+		button.getStyleClass().add("button");
+		button.getStyleClass().add("button--small");
+		comments.getChildren().add(button);
 
-        // Comments
-        VBox comments = new VBox();
-        comments.setPrefWidth(400);
-        comments.setPrefHeight(275);
-        comments.getStyleClass().add("comments");
-        content.getChildren().add(comments);
+		return sidebar;
+	}
 
-        //@todo taskEntity.getComments() needs to be implemented
+	/**
+	 * Builds the Task-Listing
+	 *
+	 * @return the full listing Node
+	 * @todo 27.03.2019 finish dynamic content
+	 */
+	public static HBox getTaskNode(Task taskEntity) {
+		HBox task = new HBox();
+		task.setAlignment(Pos.CENTER_LEFT);
+		task.getStyleClass().add("task-listing");
 
-        for (int i = 0; i < 2; i++) {
-            HBox comment = new HBox();
-            comment.getStyleClass().add("comments__item");
-            comments.getChildren().add(comment);
+		// Status icon
+		task.getChildren().add(CommonNodes.Image("/images/check-square.png", 30, 150));
 
-            comment.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
+		// Title
+		task.getChildren().add(new Text(taskEntity.getName()));
 
-            Text commentText = new Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
-            commentText.setWrappingWidth(350);
-            comment.getChildren().add(commentText);
-        }
+		// Meta
+		HBox meta = new HBox();
+		meta.setAlignment(Pos.CENTER_RIGHT);
+		meta.setPrefWidth(20000);
+		task.getChildren().add(meta);
 
-        // TextArea
-        TextArea input = new TextArea();
-        input.getStyleClass().add("comments__input");
-        input.setPromptText("write a comment...");
-        comments.getChildren().add(input);
+		// Team
+		HBox team = new HBox();
+		team.setAlignment(Pos.CENTER);
+		team.setPrefWidth(180);
+		team.getStyleClass().add("task-listing__assigned");
+		meta.getChildren().add(team);
+		for (int i = 0; i < 3; i++) {
+			team.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
+		}
 
-        // Button
-        Button button = new Button();
-        button.setText("send");
-        button.getStyleClass().add("button");
-        button.getStyleClass().add("button--small");
-        comments.getChildren().add(button);
+		// Tags
+		HBox tags = new HBox();
+		tags.setAlignment(Pos.CENTER);
+		team.setPrefWidth(280);
+		tags.getStyleClass().add("task-listing__tags");
+		meta.getChildren().add(tags);
+		for (int i = 0; i < 2; i++) {
+			tags.getChildren().add(CommonNodes.Tag("blocked", "#5A4BE1"));
+		}
 
+		// Date
+		meta.getChildren().add(CommonNodes.Date("23.07.2019"));
 
-        return sidebar;
-    }
-
-    /**
-     * Builds the Task-Listing
-     *
-     * @return the full listing Node
-     * @todo 27.03.2019 finish dynamic content
-     */
-    public static HBox getTaskNode(Task taskEntity){
-        HBox task = new HBox();
-        task.setAlignment(Pos.CENTER_LEFT);
-        task.getStyleClass().add("task-listing");
-
-        // Status icon
-        task.getChildren().add(CommonNodes.Image("/images/check-square.png", 30, 150));
-
-        // Title
-        task.getChildren().add(new Text(taskEntity.getName()));
-
-        // Meta
-        HBox meta = new HBox();
-        meta.setAlignment(Pos.CENTER_RIGHT);
-        meta.setPrefWidth(20000);
-        task.getChildren().add(meta);
-
-
-        // Team
-        HBox team = new HBox();
-        team.setAlignment(Pos.CENTER);
-        team.setPrefWidth(180);
-        team.getStyleClass().add("task-listing__assigned");
-        meta.getChildren().add(team);
-        for (int i = 0; i < 3; i++) {
-            team.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
-        }
-
-        // Tags
-        HBox tags = new HBox();
-        tags.setAlignment(Pos.CENTER);
-        team.setPrefWidth(280);
-        tags.getStyleClass().add("task-listing__tags");
-        meta.getChildren().add(tags);
-        for (int i = 0; i < 2; i++) {
-            tags.getChildren().add(CommonNodes.Tag("blocked", "#5A4BE1"));
-        }
-
-
-        // Date
-        meta.getChildren().add(CommonNodes.Date("23.07.2019"));
-
-        return task;
-    }
+		return task;
+	}
 }
