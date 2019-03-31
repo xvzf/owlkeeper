@@ -199,7 +199,7 @@ do $tasks$ begin
   create trigger update_team_project_relation
     after insert or update or delete on task
     for each row
-        execute function match_team_project_relation();
+        execute procedure match_team_project_relation();
 
 end $tasks$;
 
