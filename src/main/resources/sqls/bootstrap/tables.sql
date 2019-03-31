@@ -1,3 +1,4 @@
+
 \echo
 \echo '--------------------------'
 \echo 'Owlkeeper Table Bootstrap '
@@ -23,22 +24,46 @@ do $sysconf$ begin
   insert into sysconf (param, value) values ('migration', 'bootstrap');
 end $sysconf$;
 
+--
+-- Users, groups and group permissions
+--
+raise notice '[+] Creating developer and group tables';
+do $users$ begin
+
+    -- Developer
+    create table if not exists "developer" (
+        id serial primary key
+        , created timestamp default now()
+        , name text not null
+        , email text not null UNIQUE CHECK(email LIKE '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
+        , pw_hash text -- not null @TODO nullable until pw authentication is implemented --SALT encoded in pw hash e.g. ${salt}:${pwhash}
+    );
+
+    -- Group
+    create table if not exists "group" (
+        id serial primary key
+        , created timestamp default now()
+        , name text not null
+        , description text -- @TODO needed?
+    );
+
+    -- developer <-> group relationship
+    create table if not exists developer_group_relation (
+      id serial primary key
+      , created timestamp default now()
+      , developer integer not null references developer
+      , "group" integer not null references "group"
+      -- constraints
+      , constraint developer_group_map_unique unique (developer, "group")
+    );
+
+end $users$;
 
 --
--- User and team related schemas
+-- Team related schemas
 --
-raise notice '[+] Creating developer and team related schemas';
+raise notice '[+] Creating team related schemas';
 do $developers$ begin
-
-  -- Users
-  create table if not exists developer (
-    id serial primary key
-    , created timestamp default now()
-    , name text not null
-    , role text default ''
-    , email text not null unique check(email like '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
-    , chief boolean default FALSE
-  );
 
   -- Team
   create table if not exists team (
@@ -55,7 +80,7 @@ do $developers$ begin
     , developer integer not null references developer (id)
     , team integer not null references team (id)
     -- Constraints
-    , constraint map_unique unique (developer, team)
+    , constraint developer_team_map_unique unique (developer, team)
   );
 
 end $developers$;
@@ -89,7 +114,7 @@ do $projects$ begin
     -- Ensure that project stages do not collide
     , constraint index_project_unique unique (project, index)
   );
-  
+
   -- Relation; Teams can be part of multiple projects
   create table if not exists team_project_relation (
     id serial primary key
@@ -99,7 +124,6 @@ do $projects$ begin
     -- Constraints
     , constraint team_project_map_unique unique (team, project)
   );
-
 end $projects$;
 
 --
@@ -158,6 +182,24 @@ do $tasks$ begin
     , developer integer not null references developer (id)
     , task integer not null references task (id)
   );
+
+  -- Function for team_project_relation trigger
+  create or replace function match_team_project_relation() returns trigger as $BODY$
+  begin
+    raise notice 'Value: %', NEW.team;
+    raise notice 'Query: %', (SELECT ps.project FROM project_stage ps JOIN task as t ON t.project_stage = ps.id WHERE t = NEW);
+    if (NEW.team != null) then
+        insert into team_project_relation(team,project) values (NEW.team, (SELECT ps.project FROM project_stage ps JOIN task as t ON t.project_stage = ps.id WHERE t = NEW));
+    end if;
+    return null;
+  end;
+  $BODY$ language 'plpgsql';
+
+  -- Team_project_relation is only changed using triggers.
+  create trigger update_team_project_relation
+    after insert or update or delete on task
+    for each row
+        execute function match_team_project_relation();
 
 end $tasks$;
 
