@@ -18,6 +18,15 @@ public interface TaskCommentDao {
     TaskComment getComment(long id);
 
     /**
+     * Queries comments sorted by task and created
+     *
+     * @return
+     */
+    @SqlQuery("select * from task_comment order by task, created ASC;")
+    @RegisterBeanMapper(TaskComment.class)
+    List<TaskComment> getCommentsSorted();
+
+    /**
      * Queries comments for task
      *
      * @param id
