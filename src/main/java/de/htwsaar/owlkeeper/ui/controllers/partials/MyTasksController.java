@@ -22,9 +22,13 @@ public class MyTasksController extends SidebarController<Task>{
 
     public void setContent(UiApp app, List<Task> tasks, Task sidebar){
         this.removeSidebar();
-        if (sidebar != null && sidebar.getId() != focusID) {
-            this.addSidebar(sidebar, app);
-            focusID = sidebar.getId();
+        if (sidebar != null) {
+            if (sidebar.getId() != focusID) {
+                this.addSidebar(sidebar, app);
+                focusID = sidebar.getId();
+            } else {
+                focusID = -1;
+            }
         }
         this.tasks.getChildren().clear();
         if (tasks != null) {
