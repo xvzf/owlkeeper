@@ -190,7 +190,7 @@ do $tasks$ begin
         if (TG_OP = 'INSERT') then
             insert into team_project_relation(team,project) values (NEW.team, (SELECT ps.project
                     FROM project_stage as ps JOIN task as t ON t.project_stage = ps.id
-                    WHERE t = NEW)) on conflict do nothing;
+                    WHERE t = NEW limit 1)) on conflict do nothing;
         elsif (TG_OP = 'DELETE') then
             delete from team_project_relation where team = OLD.team and project = (SELECT ps.project
                     FROM project_stage as ps JOIN task as t ON t.project_stage = ps.id
