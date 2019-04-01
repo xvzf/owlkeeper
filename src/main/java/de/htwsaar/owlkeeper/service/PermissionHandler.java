@@ -5,7 +5,6 @@ import de.htwsaar.owlkeeper.helper.Permissions;
 import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
 import de.htwsaar.owlkeeper.helper.exceptions.UserInitializationException;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
-import de.htwsaar.owlkeeper.storage.entity.HasID;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 
 import java.util.function.Predicate;
@@ -30,7 +29,7 @@ public class PermissionHandler {
 
     /**
      * Check a static permission described in enum {@link de.htwsaar.owlkeeper.helper.Permissions}, each group is given
-     * a set of statically defined permissions.
+     * a set of statically defined permissions. Static permissions are implemented using bitwise permissions.
      *
      * @param action the permission to check
      * @throws InsufficientPermissionsException If the user does not have the requested permission.
@@ -63,10 +62,17 @@ public class PermissionHandler {
         }
     }
 
+    /**
+     * Checks, if the given group has the permission.
+     *
+     * @param group  the group to check
+     * @param action the action to check
+     * @return true if the group has the permissions, false if not.
+     */
     private static boolean checkAction(final String group, final int action) {
         int permissions = Permissions.permissionOf(group);
         permissions >>>= (int) (Math.log(action) / Math.log(2));
-        return permissions % 2 == 0;
+        return permissions % 2 == 1;
     }
 
 }

@@ -48,11 +48,14 @@ public class Developer extends HasID {
 
     public String getPwhash() throws InsufficientPermissionsException {
         //PermissionHandler.checkPermission(this::equals);
+        // TODO Can't be here currently as it breaks logging in a new user.
+        //  Possible solution: Pass the email from the DeveloperManager to the permissionHandler, then rewrite all checks
+        //  to check only on email instead of id.
         return pwhash;
     }
 
     public void setPwhash(String pwhash) throws InsufficientPermissionsException {
-        // PermissionHandler.checkPermission(this::equals);
+        // PermissionHandler.checkPermission(this::equals); TODO
         this.pwhash = pwhash;
     }
 

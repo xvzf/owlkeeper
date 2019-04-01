@@ -49,7 +49,7 @@ class TeamModelTest {
     @Test
     void testGetProjects() {
         TeamModel tm = new TeamModel(T_ID_2);
-        List<Project> projects = tm.getProjects();
+        List<Project> projects = tm.getProjects(tm.getContainer().getId());
         assertEquals(1, projects.size());
         assertEquals("Testproject1", projects.get(0).getName());
     }
