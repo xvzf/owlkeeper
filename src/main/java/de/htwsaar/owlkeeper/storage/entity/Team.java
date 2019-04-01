@@ -49,4 +49,15 @@ public class Team extends HasID {
                 ", leader=" + leader +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Team)) return false;
+
+        Team other = (Team) o;
+
+        return other.getId() == this.getId();
+    }
 }

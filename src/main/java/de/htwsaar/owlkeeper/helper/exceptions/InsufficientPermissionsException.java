@@ -1,6 +1,6 @@
 package de.htwsaar.owlkeeper.helper.exceptions;
 
-public class InsufficientPermissionsException extends Exception {
+public class InsufficientPermissionsException extends RuntimeException { //TODO CHANGE BACK!!!!
     public InsufficientPermissionsException() {
     }
 

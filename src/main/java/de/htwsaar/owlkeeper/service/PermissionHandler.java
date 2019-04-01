@@ -27,6 +27,7 @@ public class PermissionHandler {
     }
 
     public static boolean checkPermission(final int action) throws InsufficientPermissionsException {
+        if (userGroup.equals("admin")) return true;
         if (checkAction(userGroup, action)) {
             return true;
         } else {
@@ -43,8 +44,8 @@ public class PermissionHandler {
      *                  (Most commonly the current user, which the PermissionHandler knows)
      * @throws InsufficientPermissionsException If the user/group does not have the requested permission.
      */
-
     public static boolean checkPermission(final Predicate<? super HasID> predicate) throws InsufficientPermissionsException {
+        if (userGroup.equals("admin")) return true;
         if (predicate.test(user.getContainer())) {
             return true;
         } else {

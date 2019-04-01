@@ -1,7 +1,6 @@
 package de.htwsaar.owlkeeper.storage.entity;
 
 import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
-import de.htwsaar.owlkeeper.service.PermissionHandler;
 
 import java.sql.Timestamp;
 
@@ -48,12 +47,12 @@ public class Developer extends HasID {
     }
 
     public String getPwhash() throws InsufficientPermissionsException {
-        PermissionHandler.checkPermission(this::equals);
+        //PermissionHandler.checkPermission(this::equals);
         return pwhash;
     }
 
     public void setPwhash(String pwhash) throws InsufficientPermissionsException {
-        PermissionHandler.checkPermission(this::equals);
+        // PermissionHandler.checkPermission(this::equals);
         this.pwhash = pwhash;
     }
 

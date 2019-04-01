@@ -59,4 +59,15 @@ public class TaskComment extends HasID {
                 ", task=" + task +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof TaskComment)) return false;
+
+        TaskComment other = (TaskComment) o;
+
+        return other.getId() == this.getId();
+    }
 }

@@ -89,4 +89,15 @@ public class Task extends HasID {
                 ", team=" + team +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Task)) return false;
+
+        Task other = (Task) o;
+
+        return other.getId() == this.getId();
+    }
 }

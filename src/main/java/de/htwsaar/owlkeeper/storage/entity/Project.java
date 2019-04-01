@@ -59,4 +59,15 @@ public class Project extends HasID {
                 ", type='" + type + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Project)) return false;
+
+        Project other = (Project) o;
+
+        return other.getId() == this.getId();
+    }
 }

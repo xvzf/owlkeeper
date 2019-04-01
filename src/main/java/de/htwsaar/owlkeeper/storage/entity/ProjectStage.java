@@ -59,4 +59,15 @@ public class ProjectStage extends HasID {
                 ", index=" + index +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof ProjectStage)) return false;
+
+        ProjectStage other = (ProjectStage) o;
+
+        return other.getId() == this.getId();
+    }
 }
