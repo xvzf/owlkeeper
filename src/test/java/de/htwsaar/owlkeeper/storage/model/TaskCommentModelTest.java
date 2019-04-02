@@ -1,6 +1,8 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.TaskComment;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,6 +13,11 @@ class TaskCommentModelTest {
     private final String TC_CONTENT_1 = "testTaskComment";
     private final long TC_DEVELOPER_1 = 1;
     private final long TC_TASK_1 = 2;
+
+    @BeforeAll
+    static void setUp() {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
+    }
 
     @Test
     void testConstructor() {

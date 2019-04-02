@@ -10,7 +10,7 @@ class AccessControlDaoTest {
     @Test
     void testAllowedToComment() {
         final Boolean allowed = DBConnection.getJdbi().withExtension(AccessControlDao.class, dao -> {
-            return dao.allowedToCommentTask(1, 2);
+            return dao.isAssignedToTask(1, 2);
         });
         assertTrue(allowed);
     }
@@ -18,7 +18,7 @@ class AccessControlDaoTest {
     @Test
     void testNotAllowedToComment() {
         final Boolean allowed = DBConnection.getJdbi().withExtension(AccessControlDao.class, dao -> {
-            return dao.allowedToCommentTask(4, 1);
+            return dao.isAssignedToTask(4, 1);
         });
         assertFalse(allowed);
     }

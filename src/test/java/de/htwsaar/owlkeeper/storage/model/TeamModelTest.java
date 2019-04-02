@@ -1,8 +1,10 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -16,6 +18,11 @@ class TeamModelTest {
     private final long T_LEADER_1 = 2;
 
     private final long T_ID_2 = 1;
+
+    @BeforeAll
+    static void setUp() {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
+    }
 
     @Test
     void testConstructor() {
