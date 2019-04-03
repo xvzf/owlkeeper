@@ -1,8 +1,14 @@
 package de.htwsaar.owlkeeper.storage.entity;
 
+import de.htwsaar.owlkeeper.helper.Permissions;
+import de.htwsaar.owlkeeper.storage.DBConnection;
+import de.htwsaar.owlkeeper.storage.dao.AccessControlDao;
+
 import java.sql.Timestamp;
 
-public class Task implements HasID{
+import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
+
+public class Task extends HasID {
     long id;
     Timestamp created;
     Timestamp deadline;
@@ -57,6 +63,7 @@ public class Task implements HasID{
     }
 
     public void setFulfilled(Timestamp fulfilled) {
+        checkPermission(user -> DBConnection.getJdbi().withExtension(AccessControlDao.class, dao -> dao.isAssignedToTask(user.getId(), this.id)));
         this.fulfilled = fulfilled;
     }
 
@@ -73,6 +80,7 @@ public class Task implements HasID{
     }
 
     public void setTeam(long team) {
+        checkPermission(Permissions.ASSIGN_TEAM_TO_TASK.get());
         this.team = team;
     }
 
@@ -88,5 +96,16 @@ public class Task implements HasID{
                 ", projectStage=" + projectStage +
                 ", team=" + team +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Task)) return false;
+
+        Task other = (Task) o;
+
+        return other.getId() == this.getId();
     }
 }

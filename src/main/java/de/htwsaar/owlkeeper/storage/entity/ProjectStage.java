@@ -2,7 +2,7 @@ package de.htwsaar.owlkeeper.storage.entity;
 
 import java.sql.Timestamp;
 
-public class ProjectStage implements HasID{
+public class ProjectStage extends HasID {
     long id;
     Timestamp created;
     String name;
@@ -58,5 +58,16 @@ public class ProjectStage implements HasID{
                 ", project=" + project +
                 ", index=" + index +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof ProjectStage)) return false;
+
+        ProjectStage other = (ProjectStage) o;
+
+        return other.getId() == this.getId();
     }
 }

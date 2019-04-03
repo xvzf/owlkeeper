@@ -1,7 +1,9 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.Task;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,6 +11,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskDaoTest {
+
+    @BeforeAll
+    static void setUp() {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
+    }
+
 
     @Test
     void testGetTask() {

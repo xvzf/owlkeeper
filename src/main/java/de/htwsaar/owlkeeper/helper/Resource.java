@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.helper;
 
+import de.htwsaar.owlkeeper.helper.exceptions.ResourceNotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

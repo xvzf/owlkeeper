@@ -2,7 +2,7 @@
 -- Dumps Database content to the shell
 --------------------------------------
 
-\echo '[Developers]'
+\echo '[Users]'
 select
   d.name as dev_name
   , d.email as dev_email
@@ -12,6 +12,14 @@ from developer as d
   join developer_team_relation as r on (r.developer = d.id)
   join team as t on (r.team = t.id)
 order by t.name;
+
+\echo '[Developer Groups]'
+select
+  d.email as email, g.name as "group"
+from developer d
+  left join developer_group_relation dg on d.id = dg.developer
+  left join "group" g on dg.group = g.id
+order by email;
 
 \echo '[Projects, Project stages and tasks -> team]'
 select
@@ -36,4 +44,3 @@ from task_dependency as td
   join task  on td.task = task.id
   join task as depends on td.depends = depends.id
 order by task.name;
-

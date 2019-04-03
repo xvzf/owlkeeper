@@ -1,8 +1,9 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.Permissions;
+import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
 import de.htwsaar.owlkeeper.storage.DBConnection;
-import de.htwsaar.owlkeeper.storage.dao.TaskCommentDao;
-import de.htwsaar.owlkeeper.storage.dao.TaskDao;
+import de.htwsaar.owlkeeper.storage.dao.*;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.TaskComment;
 import org.apache.logging.log4j.LogManager;
@@ -13,13 +14,20 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.function.Function;
 
+import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
+
 public class TaskModel extends AbstractModel<Task, TaskDao> {
 
     private static Logger logger = LogManager.getLogger(TaskModel.class);
     private static Function<Long, ExtensionCallback<Task, TaskDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getTask(id));
-    private static Function<Long, ExtensionCallback<Integer, TaskDao, RuntimeException>> removeCallbackFactory = id -> (dao -> dao.deleteTask(id));
-    private static Function<Task, ExtensionCallback<Integer, TaskDao, RuntimeException>> saveCallbackFactory1 =
-            p -> (dao -> (p.getId() != 0 ? dao.updateTask(p) : dao.insertTask(p)));
+    private static Function<Long, ExtensionCallback<Integer, TaskDao, InsufficientPermissionsException>> removeCallbackFactory = id -> (dao -> {
+        checkPermission(Permissions.DELETE_TASK.get());
+        return dao.deleteTask(id);
+    });
+    private static Function<Task, ExtensionCallback<Integer, TaskDao, InsufficientPermissionsException>> saveCallbackFactory1 =
+            p -> (dao -> {
+                return (p.getId() != 0 ? dao.updateTask(p) : dao.insertTask(p));
+            });
 
 
     /**
@@ -27,9 +35,14 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
      * For parameters check Task class
      */
     public TaskModel(String name, Timestamp deadline, String description, Timestamp fullfilled, long projectstage, long team) {
-
         super(logger, TaskDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
         super.setContainer(new Task());
+
+        // To create a Task, the creating user should already be in a team assigned to the project.
+        // This can be accomplished by manually adding the team to the project_team_relation
+        checkPermission(user -> DBConnection.getJdbi().withExtension(ProjectDao.class, projectDao -> projectDao.getProjectsOfUser(user.getId())
+                .contains(DBConnection.getJdbi().withExtension(ProjectStageDao.class, stageDao -> stageDao.getProject(getContainer().getProjectStage())))));
+
         this.getContainer().setName(name);
         this.getContainer().setDeadline(deadline);
         this.getContainer().setDescription(description);
@@ -56,6 +69,10 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
      */
     public TaskModel(Task Task) {
         super(Task, logger, TaskDao.class, loadCallbackFactory1, removeCallbackFactory, saveCallbackFactory1);
+        // To create a Task, the creating user should already be in a team assigned to the project.
+        // This can be accomplished by manually adding the team to the project_team_relation
+        checkPermission(user -> DBConnection.getJdbi().withExtension(ProjectDao.class, projectDao -> projectDao.getProjectsOfUser(user.getId())
+                .contains(DBConnection.getJdbi().withExtension(ProjectStageDao.class, stageDao -> stageDao.getProject(getContainer().getProjectStage())))));
     }
 
     /**
@@ -63,6 +80,7 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
      *
      * @return dependingTask
      */
+
     public List<Integer> getDependencies () {
         long taskId = this.getContainer().getId();
         return DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.getDependencies(taskId)));
@@ -72,6 +90,9 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
      * set new Task the original Task depends on
      */
     public void setDependency(Task dependsTask) {
+        checkPermission(user -> DBConnection.getJdbi().withExtension(AccessControlDao.class,
+                dao -> dao.isAssignedToTask(user.getId(), getContainer().getId())));
+
         long taskId = this.getContainer().getId();
         long dependsId = dependsTask.getId();
 
