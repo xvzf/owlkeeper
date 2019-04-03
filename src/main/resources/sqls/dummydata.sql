@@ -31,7 +31,7 @@ do language plpgsql $$
                 values ('Team 2',
                         (select id from developer where email = 'devel4@owlkeeper.de'));
 
-                -- Team relationships :-)
+                -- Team relationships
                 insert into developer_team_relation (team, developer)
                 values ((select id from team where name = 'Team 1'),
                         (select id from developer where email = 'devel1@owlkeeper.de'));
@@ -109,6 +109,38 @@ do language plpgsql $$
                 insert into team_project_relation (team, project)
                 values ((select id from team where name = 'Team 2'),
                         (select id from project where name = 'Testproject2'));
+
+            end $fill$;
+
+        raise notice '[+] Creating task_comments';
+        do $fill$
+            begin
+
+                insert into task_comment (content, developer, task)
+                values( 'this is a taskComment in stage 1 task 1 by dev 1'
+                        , (select id from developer where email = 'devel1@owlkeeper.de')
+                        , (select id from task where id = 1));
+
+                insert into task_comment (content, developer, task)
+                values( 'this is a taskComment in stage 1 task 2 by dev 4'
+                        , (select id from developer where email = 'devel4@owlkeeper.de')
+                        , (select id from task where id = 2));
+
+                insert into task_comment (content, developer, task)
+                values( 'this is a taskComment in stage 1 task 2 by dev 3'
+                        , (select id from developer where email = 'devel3@owlkeeper.de')
+                        , (select id from task where id = 2));
+
+                insert into task_comment (content, developer, task)
+                values( 'this is a taskComment in stage 2 task 1 by dev 3'
+                        , (select id from developer where email = 'devel3@owlkeeper.de')
+                        , (select id from task where id = 3));
+
+                insert into task_comment (content, developer, task)
+                values( 'this is a taskComment in stage 2 task 2 by dev 5'
+                        , (select id from developer where email = 'devel5@owlkeeper.de')
+                        , (select id from task where id = 4));
+
             end $fill$;
 
     end $$

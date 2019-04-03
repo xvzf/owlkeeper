@@ -39,12 +39,12 @@ public interface TaskDao {
      * @return
      */
     @SqlQuery("update task set"
-            + "deadline = :deadline"
-            + ", set name = :name"
-            + ", set description = :description"
-            + ", set fulfilled = :fulfilled"
-            + ", set project_stage = :project_stage"
-            + ", set team = :team "
+            + " deadline = :deadline"
+            + ", name = :name"
+            + ", description = :description"
+            + ", fulfilled = :fulfilled"
+            + ", project_stage = :projectStage"
+            + ", team = :team "
             + "where id = :id returning id;"
     )
     int updateTask(@BindBean Task t);
@@ -156,4 +156,27 @@ public interface TaskDao {
             + "where t.fulfilled is null and t.project_stage = ? and d.id = ?;")
     @RegisterBeanMapper(Task.class)
     List<Task> getPendingTasksForDeveloperAndProjectStage(long projectStageId, long developerId);
+
+    /**
+     * Retrieves the TaskId the Task depends on
+     *
+     * @param taskId
+     * @return
+     */
+    @SqlQuery("select depends from task_dependency where task = taskId;"
+    )
+    @RegisterBeanMapper(Task.class)
+    List<Integer> getDependencies (long taskId);
+
+    /**
+     * inserts a task which the original task depends on
+     *
+     * @param taskId
+     * @param dependsId
+     * @return dependsId
+     */
+    @SqlQuery("insert into task_dependency (task, depends) values(taskId, dependsId) returning dependsId;"
+    )
+    @RegisterBeanMapper(Task.class)
+    int setDependency (long taskId, long dependsId);
 }

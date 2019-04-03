@@ -77,9 +77,9 @@ public class PageIterationController extends Controller {
 		this.navigationController.setContent(app, (List<Page>) state.get("pages"));
 		this.projectsController.setContent(app, (HashMap<Long, Project>) state.get("projects"));
 
-		// Main
-		this.topbarController.setTitle(project.getName());
-		this.iterationController.initialize(app, project, stage, stages);
-		this.tasksController.setContent(app, tasks, project, stage, focus, (boolean) state.get("newtask"));
-	}
+        // Main
+        this.topbarController.setTitle(project.getName());
+        this.iterationController.initialize(app, project, stage, stages);
+        this.tasksController.setContent(app, tasks, project, stage, focus, (boolean) state.get("newtask"), (Task) state.get("edittask"));
+    }
 }

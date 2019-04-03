@@ -5,6 +5,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 
 public final class CommonNodes{
 
@@ -31,25 +34,34 @@ public final class CommonNodes{
     /**
      * Builds an Date Label Node with the correct color
      *
-     * @param value datetime-string
+     * @param date timestamp to render
      * @return Date represented as a Label Node Object
      * @todo 28.02.2019 make date-color dynamic maybe switch string to timestamp
      */
-    public static Text Date(String value){
-        Text date = new Text(value);
-        date.getStyleClass().add("date");
+    public static Text Date(Timestamp date){
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        Text dateString = new Text(new SimpleDateFormat("dd.MM.yyyy").format(date));
+        dateString.getStyleClass().add("date");
         switch (0) {
             case 2:
-                date.getStyleClass().add("date--error");
+                dateString.getStyleClass().add("date--error");
                 break;
             case 1:
-                date.getStyleClass().add("date--warning");
+                dateString.getStyleClass().add("date--warning");
                 break;
             default:
-                date.getStyleClass().add("date--success");
+                dateString.getStyleClass().add("date--success");
                 break;
         }
-        return date;
+
+        if (date.getTime() > (now.getTime() - 1000 * 60 * 60 * 24) && date.getTime() < now.getTime()){
+            dateString.getStyleClass().add("date--warning");
+        }
+        else if (date.getTime() < now.getTime()){
+            dateString.getStyleClass().add("date--error");
+        }
+
+        return dateString;
     }
 
     /**
