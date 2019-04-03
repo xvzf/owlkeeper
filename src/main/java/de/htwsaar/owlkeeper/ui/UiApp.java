@@ -36,8 +36,6 @@ public class UiApp extends ViewApplication {
         UiScene scene = scenes.get(key);
         State state = scene.getState();
         // only handle the new query if the target scene does not have this query prepared already
-        System.out.println(force);
-        System.out.println(BaseState.compareQueries(state.getQuery(), data));
         if (force || !BaseState.compareQueries(state.getQuery(), data)){
             scene.getState().handleQuery(data);
             scene.getController().boot(scene.getState().collectState());

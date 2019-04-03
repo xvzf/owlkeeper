@@ -18,13 +18,11 @@ public class MyTasksController extends SidebarController<Task> {
 
     @FXML
     public VBox tasks;
-    private long focusID = -1;
 
     public void setContent(UiApp app, List<Task> tasks, Task sidebar) {
         this.removeSidebar();
         if (sidebar != null) {
             this.addSidebar(sidebar, app);
-            focusID = sidebar.getId();
         }
         this.tasks.getChildren().clear();
         if (tasks != null) {
