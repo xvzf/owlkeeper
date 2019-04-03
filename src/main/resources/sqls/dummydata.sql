@@ -87,6 +87,20 @@ do language plpgsql $$
                 values ( 'Task 1'
                        , 'Task 1 description'
                        , (select now() + interval '7 days')
+                       , (select id from project_stage where name = 'Stage 1' and project = 2)
+                       , null);
+
+                insert into task (name, description, deadline, project_stage, team)
+                values ( 'Task 1'
+                       , 'Task 1 description'
+                       , (select now() + interval '7 days')
+                       , (select id from project_stage where name = 'Stage 2' and project = 2)
+                       , null);
+
+                insert into task (name, description, deadline, project_stage, team)
+                values ( 'Task 1'
+                       , 'Task 1 description'
+                       , (select now() + interval '7 days')
                        , (select id from project_stage where name = 'Stage 1' and project = 1)
                        , null);
 
@@ -113,7 +127,9 @@ do language plpgsql $$
                        , null);
 
                 insert into task_dependency (task, depends)
-                values ( (select id from task where description = 'Task 1 description')
+                values ( (select id from task
+                where description = 'Task 1 description'
+                and project_stage = (select id from project_stage where name = 'Stage 1'and project = 1))
                        , (select id from task where description = 'Task 1 Stage 2 description'));
 
                 insert into team_project_relation (team, project)
