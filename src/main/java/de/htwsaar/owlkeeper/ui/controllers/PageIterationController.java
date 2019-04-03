@@ -83,6 +83,6 @@ public class PageIterationController extends Controller{
         // Main
         this.topbarController.setTitle(project.getName());
         this.iterationController.initialize(app, project, stage, stages);
-        this.tasksController.setContent(app, tasks, project, stage, focus, (boolean) state.get("newtask"));
+        this.tasksController.setContent(app, tasks, project, stage, focus, (boolean) state.get("newtask"), (Task) state.get("edittask"));
     }
 }

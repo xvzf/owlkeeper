@@ -129,6 +129,11 @@ TextArea:focused .content {
     -fx-padding: 5 15;
 }
 
+.button--secondary{
+    -fx-background-color: #aaa;
+    -fx-border-color: transparent transparent #888 transparent;
+}
+
 .background {
     -fx-background-color: #EFEFEF;
 }
