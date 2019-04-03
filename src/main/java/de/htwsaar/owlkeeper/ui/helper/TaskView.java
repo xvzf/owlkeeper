@@ -66,13 +66,18 @@ public final class TaskView{
         TextField name = new TextField();
         name.setPromptText("Projekt Name");
         content.getChildren().add(name);
+        name.setText(taskEntity.getName());
 
         TextArea description = new TextArea();
         description.setPromptText("Projekt Beschreibung");
         content.getChildren().add(description);
+        description.setText(taskEntity.getDescription());
 
         DatePicker deadline = new DatePicker();
         content.getChildren().add(deadline);
+        if (taskEntity.getDeadline() != null){
+            deadline.setValue(taskEntity.getDeadline().toLocalDateTime().toLocalDate());
+        }
 
         Button submit = new Button("Task anlegen");
         content.getChildren().add(submit);
@@ -152,6 +157,16 @@ public final class TaskView{
         description.setWrappingWidth(400);
         content.getChildren().add(description);
 
+        Button editButton = new Button("bearbeiten");
+        editButton.getStyleClass().addAll("button", "button--small", "button--secondary");
+        content.getChildren().add(editButton);
+        editButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            long stage = taskEntity.getProjectStage();
+            long project = new ProjectStageModel(stage).getContainer().getProject();
+            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false, taskEntity));
+        });
+
+
         // HairLine (hr)
         content.getChildren().add(CommonNodes.Hr(400, true));
 
@@ -186,8 +201,7 @@ public final class TaskView{
         // Button
         Button button = new Button();
         button.setText("send");
-        button.getStyleClass().add("button");
-        button.getStyleClass().add("button--small");
+        button.getStyleClass().addAll("button", "button--small");
         comments.getChildren().add(button);
 
         // @todo make current user dynamic

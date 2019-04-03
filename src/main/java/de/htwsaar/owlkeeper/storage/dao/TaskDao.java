@@ -39,12 +39,12 @@ public interface TaskDao {
      * @return
      */
     @SqlQuery("update task set"
-            + "deadline = :deadline"
-            + ", set name = :name"
-            + ", set description = :description"
-            + ", set fulfilled = :fulfilled"
-            + ", set project_stage = :project_stage"
-            + ", set team = :team "
+            + " deadline = :deadline"
+            + ", name = :name"
+            + ", description = :description"
+            + ", fulfilled = :fulfilled"
+            + ", project_stage = :projectStage"
+            + ", team = :team "
             + "where id = :id returning id;"
     )
     int updateTask(@BindBean Task t);
