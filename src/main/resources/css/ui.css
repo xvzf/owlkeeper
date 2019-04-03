@@ -54,6 +54,7 @@ TextArea:focused .content {
     -fx-background-color: #252525;
     -fx-padding: 25px 30px;
     -fx-spacing: 40;
+    -fx-min-width: 250;
 }
 
 .navigation {
