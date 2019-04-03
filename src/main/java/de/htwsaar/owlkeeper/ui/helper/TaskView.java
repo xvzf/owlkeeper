@@ -3,7 +3,9 @@ package de.htwsaar.owlkeeper.ui.helper;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.entity.TaskComment;
 import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
+import de.htwsaar.owlkeeper.storage.model.TaskCommentModel;
 import de.htwsaar.owlkeeper.storage.model.TaskModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
@@ -18,6 +20,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 /**
  * Collection of helpers for the Task-View
@@ -161,16 +164,16 @@ public final class TaskView{
         comments.getStyleClass().add("comments");
         content.getChildren().add(comments);
 
-        //@todo taskEntity.getComments() needs to be implemented
 
-        for (int i = 0; i < 2; i++) {
+        List<TaskComment> tasksComments = new TaskModel(taskEntity).getComments();
+        for (TaskComment commentEntity : tasksComments) {
             HBox comment = new HBox();
             comment.getStyleClass().add("comments__item");
             comments.getChildren().add(comment);
 
             comment.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
 
-            Text commentText = new Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+            Text commentText = new Text(commentEntity.getContent());
             commentText.setWrappingWidth(350);
             comment.getChildren().add(commentText);
         }
@@ -188,6 +191,15 @@ public final class TaskView{
         button.getStyleClass().add("button");
         button.getStyleClass().add("button--small");
         comments.getChildren().add(button);
+
+        // @todo make current user dynamic
+        button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            TaskCommentModel comment = new TaskCommentModel(input.getText(), 1, taskEntity.getId());
+            comment.save();
+            long stage = taskEntity.getProjectStage();
+            long project = new ProjectStageModel(stage).getContainer().getProject();
+            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
+        });
 
 
         return sidebar;
