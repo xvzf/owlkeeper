@@ -5,168 +5,225 @@
 \set VERBOSITY terse
 \set ON_ERROR_STOP true
 
-do language plpgsql $$
-    declare
-        exc_message text;
-        exc_context text;
-        exc_detail  text;
-    begin
+do language plpgsql $$ declare
+  exc_message text;
+  exc_context text;
+  exc_detail text;
+begin
 
-        raise notice '[+] Creating dummy developers and teams';
-        do $fill$
-            begin
+raise notice '[+] Creating dummy developers and teams';
+do $fill$ begin
 
-                -- Dummy developers
-                insert into developer (name, email) values ('Developer 1', 'devel1@owlkeeper.de');
-                insert into developer (name, email) values ('Developer 2', 'devel2@owlkeeper.de');
-                insert into developer (name, email) values ('Developer 3', 'devel3@owlkeeper.de');
-                insert into developer (name, email) values ('Developer 4', 'devel4@owlkeeper.de');
-                insert into developer (name, email) values ('Developer 5', 'devel5@owlkeeper.de');
+  -- (Dummy?) groups
+  insert into "group" (name, description) values ('admin', 'Administrator - manages user groups and system parameters');
+  insert into "group" (name, description) values ('project', 'Project owner - assign team to tasks, not allowed to create tasks');
+  insert into "group" (name, description) values ('task', 'Create tasks in projects the user is belonging to');
 
-                -- Dummy teams
-                insert into team (name, leader)
-                values ('Team 1',
-                        (select id from developer where email = 'devel1@owlkeeper.de'));
-                insert into team (name, leader)
-                values ('Team 2',
-                        (select id from developer where email = 'devel4@owlkeeper.de'));
+  -- Dummy developers
+  insert into developer (name, email) values ('Developer 1', 'devel1@owlkeeper.de');
+  insert into developer (name, email) values ('Developer 2', 'devel2@owlkeeper.de');
+  insert into developer (name, email) values ('Developer 3', 'devel3@owlkeeper.de');
+  insert into developer (name, email) values ('Developer 4', 'devel4@owlkeeper.de');
+  insert into developer (name, email) values ('Developer 5', 'devel5@owlkeeper.de');
 
-                -- Team relationships
-                insert into developer_team_relation (team, developer)
-                values ((select id from team where name = 'Team 1'),
-                        (select id from developer where email = 'devel1@owlkeeper.de'));
-                insert into developer_team_relation (team, developer)
-                values ((select id from team where name = 'Team 1'),
-                        (select id from developer where email = 'devel2@owlkeeper.de'));
-                insert into developer_team_relation (team, developer)
-                values ((select id from team where name = 'Team 1'),
-                        (select id from developer where email = 'devel3@owlkeeper.de'));
-                insert into developer_team_relation (team, developer)
-                values ((select id from team where name = 'Team 2'),
-                        (select id from developer where email = 'devel3@owlkeeper.de'));
-                insert into developer_team_relation (team, developer)
-                values ((select id from team where name = 'Team 2'),
-                        (select id from developer where email = 'devel4@owlkeeper.de'));
-            end $fill$;
+  -- Dummy groups
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel1@owlkeeper.de')
+    , (select id from "group" where name = 'admin')
+  ); -- devel1@owlkeeper.de -> admin
 
-        raise notice '[+] Creating dummy project, project stages and tasks';
-        do $fill$
-            begin
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel2@owlkeeper.de')
+    , (select id from "group" where name = 'project')
+  ); -- devel2@owlkeeper.de -> project
 
-                insert into project (name, description, type)
-                values ('Testproject1',
-                        'Blubdidu description... what is that?',
-                        'waterfall');
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel3@owlkeeper.de')
+    , (select id from "group" where name = 'task')
+  ); -- devel3@owlkeeper.de -> task
 
-                insert into project (name, description, type)
-                values ('Testproject2',
-                        'TestProject2 Dummy blubdidupdadalalaland',
-                        'spiral');
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel4@owlkeeper.de')
+    , (select id from "group" where name = 'project')
+  );
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel4@owlkeeper.de')
+    , (select id from "group" where name = 'task')
+  ); -- devel4@owlkeeper.de -> project, task
 
-                insert into project_stage (name, project, index)
-                values ( 'Stage 1'
-                       , (select id from project where name = 'Testproject1')
-                       , 0);
 
-                insert into project_stage (name, project, index)
-                values ( 'Stage 2'
-                       , (select id from project where name = 'Testproject1')
-                       , 1);
+  -- Dummy teams
+  insert into team (name, leader) values (
+    'Team 1',
+    (select id from developer where email = 'devel1@owlkeeper.de')
+  );
+  insert into team (name, leader) values(
+    'Team 2',
+    (select id from developer where email = 'devel4@owlkeeper.de')
+  );
 
-                insert into project_stage (name, project, index)
-                values ( 'Stage 1'
-                       , (select id from project where name = 'Testproject2')
-                       , 0);
 
-                insert into project_stage (name, project, index)
-                values ( 'Stage 2'
-                       , (select id from project where name = 'Testproject2')
-                       , 1);
+  -- Team relationships :-)
+  insert into developer_team_relation (team, developer) values (
+    (select id from team where name = 'Team 1'),
+    (select id from developer where email = 'devel1@owlkeeper.de')
+  );
+  insert into developer_team_relation (team, developer) values (
+    (select id from team where name = 'Team 1'),
+    (select id from developer where email = 'devel2@owlkeeper.de')
+  );
+  insert into developer_team_relation (team, developer) values (
+    (select id from team where name = 'Team 1'),
+    (select id from developer where email = 'devel3@owlkeeper.de')
+  );
+  insert into developer_team_relation (team, developer) values (
+    (select id from team where name = 'Team 2'),
+    (select id from developer where email = 'devel3@owlkeeper.de')
+  );
+  insert into developer_team_relation (team, developer) values (
+    (select id from team where name = 'Team 2'),
+    (select id from developer where email = 'devel4@owlkeeper.de')
+  );
+end $fill$;
 
-                insert into task (name, description, deadline, project_stage, team)
-                values ( 'Task 1'
-                       , 'Task 1 description'
-                       , (select now() + interval '7 days')
-                       , (select id from project_stage where name = 'Stage 1' and project = 2)
-                       , null);
 
-                insert into task (name, description, deadline, project_stage, team)
-                values ( 'Task 1'
-                       , 'Task 1 description'
-                       , (select now() + interval '7 days')
-                       , (select id from project_stage where name = 'Stage 2' and project = 2)
-                       , null);
+raise notice '[+] Creating dummy project, project stages and tasks';
+  do $fill$
+  begin
 
-                insert into task (name, description, deadline, project_stage, team)
-                values ( 'Task 1'
-                       , 'Task 1 description'
-                       , (select now() + interval '7 days')
-                       , (select id from project_stage where name = 'Stage 1' and project = 1)
-                       , null);
+  insert into project (name, description, type) values (
+    'Testproject1'
+    , 'Blubdidu description... what is that?'
+    , 'waterfall'
+  );
 
-                insert into task (name, description, deadline, project_stage, team)
-                values ( 'Task 2'
-                       , 'Task 2 description'
-                       , (select now() + interval '7 days')
-                       , (select id from project_stage where name = 'Stage 1'and project = 1)
-                       , (select id from team where name = 'Team 1'));
+  insert into project (name, description, type) values (
+    'Testproject2'
+    , 'TestProject2 Dummy blubdidupdadalalaland'
+    , 'spiral'
+  );
 
-                insert into task (name, description, deadline, fulfilled, project_stage, team)
-                values ( 'Task 1'
-                       , 'Task 1 Stage 2 description'
-                       , (select now() + interval '7 days')
-                       , (select now() + interval '3 days')
-                       , (select id from project_stage where name = 'Stage 2'and project = 1)
-                       , (select id from team where name = 'Team 2'));
+  insert into project_stage (name, project, index) values (
+    'Stage 1'
+    , (select id from project where name = 'Testproject1')
+    , 0
+  );
 
-                insert into task (name, description, deadline, project_stage, team)
-                values ( 'Task 2'
-                       , 'Task 2 Stage 2 description'
-                       , (select now() + interval '7 days')
-                       , (select id from project_stage where name = 'Stage 2'and project = 1)
-                       , null);
+  insert into project_stage (name, project, index) values (
+    'Stage 2'
+   , (select id from project where name = 'Testproject1')
+   , 1
+);
 
-                insert into task_dependency (task, depends)
-                values ( (select id from task
-                where description = 'Task 1 description'
-                and project_stage = (select id from project_stage where name = 'Stage 1'and project = 1))
-                       , (select id from task where description = 'Task 1 Stage 2 description'));
+  insert into project_stage (name, project, index) values (
+    'Stage 1'
+    , (select id from project where name = 'Testproject2')
+    , 0
+  );
 
-                insert into team_project_relation (team, project)
-                values ((select id from team where name = 'Team 2'),
-                        (select id from project where name = 'Testproject2'));
+  insert into project_stage (name, project, index) values (
+    'Stage 2'
+    , (select id from project where name = 'Testproject2')
+    , 1
+  );
 
-            end $fill$;
+  insert into task (name, description, deadline, project_stage, team) values (
+    'Task 1'
+    , 'Task 1 description'
+    , (select now() + interval '7 days')
+    , (select id from project_stage where name = 'Stage 1' and project = 2)
+    , null
+  );
 
-        raise notice '[+] Creating task_comments';
-        do $fill$
-            begin
+  insert into task (name, description, deadline, project_stage, team) values (
+    'Task 1'
+    , 'Task 1 description'
+    , (select now() + interval '7 days')
+    , (select id from project_stage where name = 'Stage 2' and project = 2)
+    , null
+  );
 
-                insert into task_comment (content, developer, task)
-                values( 'this is a taskComment in stage 1 task 1 by dev 1'
-                        , (select id from developer where email = 'devel1@owlkeeper.de')
-                        , (select id from task where id = 1));
+  insert into task (name, description, deadline, project_stage, team) values (
+    'Task 1'
+    , 'Task 1 description'
+    , (select now() + interval '7 days')
+    , (select id from project_stage where name = 'Stage 1' and project = 1)
+    , null
+  );
 
-                insert into task_comment (content, developer, task)
-                values( 'this is a taskComment in stage 1 task 2 by dev 4'
-                        , (select id from developer where email = 'devel4@owlkeeper.de')
-                        , (select id from task where id = 2));
+  insert into task (name, description, deadline, project_stage, team) values (
+    'Task 2'
+    , 'Task 2 description'
+    , (select now() + interval '7 days')
+    , (select id from project_stage where name = 'Stage 1'and project = 1)
+    , (select id from team where name = 'Team 1'
+  ));
 
-                insert into task_comment (content, developer, task)
-                values( 'this is a taskComment in stage 1 task 2 by dev 3'
-                        , (select id from developer where email = 'devel3@owlkeeper.de')
-                        , (select id from task where id = 2));
+  insert into task (name, description, deadline, fulfilled, project_stage, team) values (
+    'Task 1'
+    , 'Task 1 Stage 2 description'
+    , (select now() + interval '7 days')
+    , (select now() + interval '3 days')
+    , (select id from project_stage where name = 'Stage 2'and project = 1)
+    , (select id from team where name = 'Team 2')
+  );
 
-                insert into task_comment (content, developer, task)
-                values( 'this is a taskComment in stage 2 task 1 by dev 3'
-                        , (select id from developer where email = 'devel3@owlkeeper.de')
-                        , (select id from task where id = 3));
+  insert into task (name, description, deadline, project_stage, team) values (
+    'Task 2'
+    , 'Task 2 Stage 2 description'
+    , (select now() + interval '7 days')
+    , (select id from project_stage where name = 'Stage 2'and project = 1)
+    , null
+  );
 
-                insert into task_comment (content, developer, task)
-                values( 'this is a taskComment in stage 2 task 2 by dev 5'
-                        , (select id from developer where email = 'devel5@owlkeeper.de')
-                        , (select id from task where id = 4));
+  insert into task_dependency (task, depends) values (
+    (
+      select id from task
+        where description = 'Task 1 description'
+          and project_stage = (select id from project_stage where name = 'Stage 1'and project = 1))
+    , (select id from task where description = 'Task 1 Stage 2 description')
+  );
 
-            end $fill$;
+  insert into team_project_relation (team, project) values (
+    (select id from team where name = 'Team 2')
+    , (select id from project where name = 'Testproject2'));
 
-    end $$
+end $fill$;
+
+raise notice '[+] Creating task_comments';
+do $fill$
+  begin
+
+  insert into task_comment (content, developer, task) values (
+    'this is a taskComment in stage 1 task 1 by dev 1'
+    , (select id from developer where email = 'devel1@owlkeeper.de')
+    , (select id from task where id = 1)
+  );
+
+  insert into task_comment (content, developer, task) values (
+    'this is a taskComment in stage 1 task 2 by dev 4'
+    , (select id from developer where email = 'devel4@owlkeeper.de')
+    , (select id from task where id = 2)
+  );
+
+  insert into task_comment (content, developer, task) values (
+    'this is a taskComment in stage 1 task 2 by dev 3'
+    , (select id from developer where email = 'devel3@owlkeeper.de')
+    , (select id from task where id = 2)
+  );
+
+  insert into task_comment (content, developer, task) values (
+    'this is a taskComment in stage 2 task 1 by dev 3'
+    , (select id from developer where email = 'devel3@owlkeeper.de')
+    , (select id from task where id = 3)
+  );
+
+  insert into task_comment (content, developer, task) values (
+    'this is a taskComment in stage 2 task 2 by dev 5'
+    , (select id from developer where email = 'devel5@owlkeeper.de')
+    , (select id from task where id = 4)
+  );
+
+end $fill$;
+
+end$$

@@ -12,9 +12,10 @@ public class MyTaskList extends BaseState {
     private Developer currentUser;
     private List<Task> tasks;
 
-    public void handleQuery(HashMap<String, Object> query) {
+
+    public void handleQuery(HashMap<String, Object> query, int devID) {
         super.handleQuery(query);
-        this.currentUser = new DeveloperModel(1).getContainer(); // @todo make current user dynamic
+        this.currentUser = new DeveloperModel(devID).getContainer();    //Set devID to 1, to see the myTasks page
         this.tasks = new DeveloperModel(currentUser).getTasks();
     }
 

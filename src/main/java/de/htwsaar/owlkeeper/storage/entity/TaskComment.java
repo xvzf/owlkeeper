@@ -1,8 +1,10 @@
 package de.htwsaar.owlkeeper.storage.entity;
 
+import de.htwsaar.owlkeeper.service.PermissionHandler;
+
 import java.sql.Timestamp;
 
-public class TaskComment implements HasID{
+public class TaskComment extends HasID {
     long id;
     Timestamp created;
     String content;
@@ -30,6 +32,8 @@ public class TaskComment implements HasID{
     }
 
     public void setContent(String content) {
+        // You may not edit comments of other users
+        PermissionHandler.checkPermission(user -> user.getId() == developer);
         this.content = content;
     }
 
@@ -38,6 +42,8 @@ public class TaskComment implements HasID{
     }
 
     public void setDeveloper(long developer) {
+        // You may not impersonate another user.
+        PermissionHandler.checkPermission(user -> user.getId() == developer);
         this.developer = developer;
     }
 
@@ -58,5 +64,16 @@ public class TaskComment implements HasID{
                 ", developer=" + developer +
                 ", task=" + task +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof TaskComment)) return false;
+
+        TaskComment other = (TaskComment) o;
+
+        return other.getId() == this.getId();
     }
 }

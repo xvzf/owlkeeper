@@ -1,4 +1,4 @@
-package de.htwsaar.owlkeeper.storage.local.config;
+package de.htwsaar.owlkeeper.helper.exceptions;
 
 public class ConfigurationException extends RuntimeException {
     public ConfigurationException() {
