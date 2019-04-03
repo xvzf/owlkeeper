@@ -93,7 +93,7 @@ public final class TaskView{
             new TaskModel(taskEntity).save();
             long stage = taskEntity.getProjectStage();
             long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false));
+            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false), true);
         });
 
 
@@ -198,7 +198,7 @@ public final class TaskView{
             comment.save();
             long stage = taskEntity.getProjectStage();
             long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
+            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false), true);
         });
 
         return sidebar;
