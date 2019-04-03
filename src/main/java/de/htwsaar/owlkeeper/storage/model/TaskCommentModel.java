@@ -65,5 +65,11 @@ public class TaskCommentModel extends AbstractModel<TaskComment, TaskCommentDao>
         return TCList;
     }
 
+    public List<TaskComment> getCommentsforTask() {
+        long id = this.getContainer().getId();
+        List<TaskComment> TCList = DBConnection.getJdbi().withExtension(TaskCommentDao.class, (dao -> dao.getCommentsForTask(id)));
+        return TCList;
+    }
+
 
 }
