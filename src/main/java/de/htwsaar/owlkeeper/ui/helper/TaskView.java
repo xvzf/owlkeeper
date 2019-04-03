@@ -8,12 +8,16 @@ import de.htwsaar.owlkeeper.storage.model.TaskModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -37,13 +41,11 @@ public final class TaskView{
         // Sidebar Pane
         ScrollPane sidebar = new ScrollPane();
         sidebar.setFitToHeight(true);
-        sidebar.setPrefWidth(450);
-
+        sidebar.setMinWidth(450);
+		sidebar.setHbarPolicy(ScrollBarPolicy.NEVER);
 
         // Sidebar Box
         VBox content = new VBox();
-        content.setPrefHeight(0);
-        content.setPrefWidth(450);
         content.getStyleClass().add("sidebar");
         sidebar.setContent(content);
         return sidebar;
@@ -109,15 +111,11 @@ public final class TaskView{
 
         // Tags
         HBox tags = new HBox();
-        tags.setPrefHeight(0);
-        tags.setPrefWidth(0);
         tags.getStyleClass().add("sidebar__tags");
         content.getChildren().add(tags);
 
-
         // Individual Tags
         tags.getChildren().add(CommonNodes.Tag("blocked", "#E14B4B"));
-
 
         // Title
         Text title = new Text(taskEntity.getName());
@@ -125,11 +123,8 @@ public final class TaskView{
         title.setWrappingWidth(400);
         content.getChildren().add(title);
 
-
         // Date & Team -- Wrapper
         HBox meta = new HBox();
-        meta.setPrefHeight(0);
-        meta.setPrefWidth(200);
         meta.getStyleClass().add("sidebar__meta");
         meta.setAlignment(Pos.CENTER_LEFT);
         content.getChildren().add(meta);
@@ -142,8 +137,6 @@ public final class TaskView{
 
         // Team
         HBox team = new HBox();
-        team.setPrefWidth(20000);
-        team.setPrefHeight(100);
         team.setAlignment(Pos.CENTER_RIGHT);
         team.getStyleClass().add("sidebar__team");
         meta.getChildren().add(team);
@@ -166,35 +159,30 @@ public final class TaskView{
             app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false, taskEntity));
         });
 
-
         // HairLine (hr)
-        content.getChildren().add(CommonNodes.Hr(400, true));
+        content.getChildren().add(CommonNodes.Hr(375, true));
 
         // Comments
         VBox comments = new VBox();
-        comments.setPrefWidth(400);
-        comments.setPrefHeight(275);
         comments.getStyleClass().add("comments");
         content.getChildren().add(comments);
-
 
         List<TaskComment> tasksComments = new TaskModel(taskEntity).getComments();
         for (TaskComment commentEntity : tasksComments) {
             HBox comment = new HBox();
             comment.getStyleClass().add("comments__item");
-            comments.getChildren().add(comment);
-
             comment.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
-
             Text commentText = new Text(commentEntity.getContent());
             commentText.setWrappingWidth(350);
             comment.getChildren().add(commentText);
+            comments.getChildren().add(comment);
         }
 
         // TextArea
         TextArea input = new TextArea();
-        input.getStyleClass().add("comments__input");
+		input.setMaxWidth(375);
         input.setWrapText(true);
+        input.getStyleClass().add("comments__input");
         input.setPromptText("write a comment...");
         comments.getChildren().add(input);
 
@@ -212,7 +200,6 @@ public final class TaskView{
             long project = new ProjectStageModel(stage).getContainer().getProject();
             app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
         });
-
 
         return sidebar;
     }
@@ -239,7 +226,6 @@ public final class TaskView{
         meta.setAlignment(Pos.CENTER_RIGHT);
         meta.setPrefWidth(20000);
         task.getChildren().add(meta);
-
 
         // Team
         HBox team = new HBox();

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="root" VBox.vgrow="ALWAYS" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.MyTasksController" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
-    <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
-        <VBox fx:id="tasks" prefHeight="0.0" prefWidth="1043.0" styleClass="main">
+<HBox fx:id="root" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.MyTasksController">
+   <children>
+       <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
+          <content>
+              <VBox fx:id="tasks" styleClass="main">
             <!-- Gets filled by the controller -->
         </VBox>
-    </ScrollPane>
+          </content>
+       </ScrollPane>
+   </children>
     <!-- Sidebar gets injected through the controller -->
 </HBox>
