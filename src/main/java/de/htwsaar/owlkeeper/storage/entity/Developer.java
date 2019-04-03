@@ -1,7 +1,5 @@
 package de.htwsaar.owlkeeper.storage.entity;
 
-import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
-
 import java.sql.Timestamp;
 
 /**
@@ -46,16 +44,11 @@ public class Developer extends HasID {
         this.email = email;
     }
 
-    public String getPwhash() throws InsufficientPermissionsException {
-        //PermissionHandler.checkPermission(this::equals);
-        // TODO Can't be here currently as it breaks logging in a new user.
-        //  Possible solution: Pass the email from the DeveloperManager to the permissionHandler, then rewrite all checks
-        //  to check only on email instead of id.
+    public String getPwhash() {
         return pwhash;
     }
 
-    public void setPwhash(String pwhash) throws InsufficientPermissionsException {
-        // PermissionHandler.checkPermission(this::equals); TODO
+    public void setPwhash(String pwhash) {
         this.pwhash = pwhash;
     }
 
