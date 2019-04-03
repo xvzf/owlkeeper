@@ -60,16 +60,13 @@ public class TaskCommentModel extends AbstractModel<TaskComment, TaskCommentDao>
         super(TaskComment, logger, TaskCommentDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
     }
 
+    /**
+     * Retrieves List with all comments sorted by task and creation date
+     *
+     * @return
+     */
     public List<TaskComment> getTaskcomments() {
         List<TaskComment> TCList = DBConnection.getJdbi().withExtension(TaskCommentDao.class, (dao -> dao.getCommentsSorted()));
         return TCList;
     }
-
-    public List<TaskComment> getCommentsforTask() {
-        long id = this.getContainer().getId();
-        List<TaskComment> TCList = DBConnection.getJdbi().withExtension(TaskCommentDao.class, (dao -> dao.getCommentsForTask(id)));
-        return TCList;
-    }
-
-
 }

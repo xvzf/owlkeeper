@@ -59,13 +59,13 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
     }
 
     /**
-     * returns TaskId the original Task is depeding on.
+     * returns TaskIds the original Task is depeding on.
      *
      * @return dependingTask
      */
-    public List<Integer> getDependency () {
+    public List<Integer> getDependencies () {
         long taskId = this.getContainer().getId();
-        return DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.getDependency(taskId)));
+        return DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.getDependencies(taskId)));
     }
 
     /**
@@ -76,5 +76,14 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
         long dependsId = dependsTask.getId();
 
         DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.setDependency(taskId, dependsId)));
+    }
+
+    /**
+     * retrieves all comments for a task
+     */
+    public List<TaskComment> getComments() {
+        long id = this.getContainer().getId();
+        List<TaskComment> TCList = DBConnection.getJdbi().withExtension(TaskCommentDao.class, (dao -> dao.getCommentsForTask(id)));
+        return TCList;
     }
 }
