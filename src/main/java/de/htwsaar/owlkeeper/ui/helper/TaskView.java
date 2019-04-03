@@ -1,7 +1,5 @@
 package de.htwsaar.owlkeeper.ui.helper;
 
-import de.htwsaar.owlkeeper.storage.entity.Project;
-import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.TaskComment;
 import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
@@ -135,7 +133,7 @@ public final class TaskView{
         meta.getChildren().add(CommonNodes.Image("/images/calendar.png", 30, 150));
 
         // Date-Text
-        meta.getChildren().add(CommonNodes.Date(new SimpleDateFormat("dd.MM.yyyy").format(taskEntity.getDeadline())));
+        meta.getChildren().add(CommonNodes.Date(taskEntity.getDeadline()));
 
         // Team
         HBox team = new HBox();
@@ -249,9 +247,9 @@ public final class TaskView{
             tags.getChildren().add(CommonNodes.Tag("blocked", "#5A4BE1"));
         }
 
-
         // Date
-        meta.getChildren().add(CommonNodes.Date("23.07.2019"));
+        Text date = CommonNodes.Date(taskEntity.getDeadline());
+        meta.getChildren().add(date);
 
         return task;
     }
