@@ -44,6 +44,7 @@ public class PageController extends Controller {
     public MyTasksController tasksController;
 
     public void boot(HashMap<String, Object> state) {
+        this.tasksController.setUiScene(this.getUiScene());
 
         UiApp app = this.getApp();
         Developer currentUser = (Developer) state.get("currentUser");

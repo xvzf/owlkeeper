@@ -49,7 +49,7 @@ public class IterationBarController extends Controller {
 			leftText.getStyleClass().add("h2");
 			left.getChildren().add(leftText);
 			left.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration",
-					TaskListState.getQueryMap(project.getId(), leftStage.getId(), null, false)));
+					TaskListState.getQueryMap(project.getId(), leftStage.getId(), null, false), true));
 		}
 
 		currentPos = Pos.CENTER;
@@ -67,7 +67,7 @@ public class IterationBarController extends Controller {
 			right.getChildren().add(rightText);
 			right.getChildren().add(CommonNodes.Image("/images/arrow-right.png", 30, 150));
 			right.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration",
-					TaskListState.getQueryMap(project.getId(), rightStage.getId(), null, false)));
+					TaskListState.getQueryMap(project.getId(), rightStage.getId(), null, false), true));
 		}
 
 		HBox.setHgrow(center, Priority.ALWAYS);
