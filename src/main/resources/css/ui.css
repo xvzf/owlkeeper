@@ -33,6 +33,10 @@ TextArea {
     -fx-background-color: #fff, #fff;
 }
 
+TextArea Text{
+    -fx-line-spacing: 0;
+}
+
 TextArea .content {
     -fx-background-color: #fff;
     -fx-padding: 0;
@@ -123,6 +127,11 @@ TextArea:focused .content {
 .button--small {
     -fx-font-size: 16;
     -fx-padding: 5 15;
+}
+
+.button--secondary{
+    -fx-background-color: #aaa;
+    -fx-border-color: transparent transparent #888 transparent;
 }
 
 .background {
@@ -239,6 +248,7 @@ TextArea:focused .content {
 .comments__input {
     -fx-font-size: 13;
     -fx-padding: 10;
+    -fx-min-height: 120;
 }
 
 .iteration-bar {

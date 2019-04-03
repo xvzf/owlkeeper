@@ -39,12 +39,12 @@ public interface TaskDao {
      * @return
      */
     @SqlQuery("update task set"
-            + "deadline = :deadline"
-            + ", set name = :name"
-            + ", set description = :description"
-            + ", set fulfilled = :fulfilled"
-            + ", set project_stage = :project_stage"
-            + ", set team = :team "
+            + " deadline = :deadline"
+            + ", name = :name"
+            + ", description = :description"
+            + ", fulfilled = :fulfilled"
+            + ", project_stage = :projectStage"
+            + ", team = :team "
             + "where id = :id returning id;"
     )
     int updateTask(@BindBean Task t);
@@ -166,7 +166,7 @@ public interface TaskDao {
     @SqlQuery("select depends from task_dependency where task = taskId;"
     )
     @RegisterBeanMapper(Task.class)
-    int getDependency (long taskId);
+    List<Integer> getDependencies (long taskId);
 
     /**
      * inserts a task which the original task depends on

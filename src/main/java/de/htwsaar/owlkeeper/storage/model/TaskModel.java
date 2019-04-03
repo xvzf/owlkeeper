@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.function.Function;
 
 import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
@@ -77,13 +78,14 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
     }
 
     /**
-     * returns TaskId the original Task is depeding on.
+     * returns TaskIds the original Task is depeding on.
      *
      * @return dependingTask
      */
-    public int getDependency() {
+
+    public List<Integer> getDependencies () {
         long taskId = this.getContainer().getId();
-        return DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.getDependency(taskId)));
+        return DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.getDependencies(taskId)));
     }
 
     /**
@@ -97,5 +99,14 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
         long dependsId = dependsTask.getId();
 
         DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.setDependency(taskId, dependsId)));
+    }
+
+    /**
+     * retrieves all comments for a task
+     */
+    public List<TaskComment> getComments() {
+        long id = this.getContainer().getId();
+        List<TaskComment> TCList = DBConnection.getJdbi().withExtension(TaskCommentDao.class, (dao -> dao.getCommentsForTask(id)));
+        return TCList;
     }
 }

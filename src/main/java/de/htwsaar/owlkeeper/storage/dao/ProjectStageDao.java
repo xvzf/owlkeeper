@@ -65,7 +65,8 @@ public interface ProjectStageDao {
      * @param id id of the ProjectStage
      * @return all Tasks
      */
-    @SqlQuery("select * from task as t where t.project_stage = ?;")
+
+    @SqlQuery("select * from task as t where t.project_stage = ? order by created, id;")
     @RegisterBeanMapper(Task.class)
     List<Task> getTasks(long id);
 
