@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.function.Function;
 
 public class TaskModel extends AbstractModel<Task, TaskDao> {
@@ -62,7 +63,7 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
      *
      * @return dependingTask
      */
-    public int getDependency () {
+    public List<Integer> getDependency () {
         long taskId = this.getContainer().getId();
         return DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.getDependency(taskId)));
     }
