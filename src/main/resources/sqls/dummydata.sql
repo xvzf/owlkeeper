@@ -102,14 +102,14 @@ do language plpgsql $$
                        , 'Task 1 Stage 2 description'
                        , (select now() + interval '7 days')
                        , (select now() + interval '3 days')
-                       , (select id from project_stage where name = 'Stage 2')
+                       , (select id from project_stage where name = 'Stage 2'and project = 1)
                        , (select id from team where name = 'Team 2'));
 
                 insert into task (name, description, deadline, project_stage, team)
                 values ( 'Task 2'
                        , 'Task 2 Stage 2 description'
                        , (select now() + interval '7 days')
-                       , (select id from project_stage where name = 'Stage 2')
+                       , (select id from project_stage where name = 'Stage 2'and project = 1)
                        , null);
 
                 insert into task_dependency (task, depends)
