@@ -16,12 +16,16 @@ import java.util.List;
 public class ProjectTasksController extends MyTasksController{
 
     private boolean newTask;
+    private Task editTask;
 
-    public void setContent(UiApp app, List<Task> tasks, Project project, ProjectStage stage, Task sidebar, boolean newTask){
+    public void setContent(UiApp app, List<Task> tasks, Project project, ProjectStage stage, Task sidebar, boolean newTask, Task editTask){
         this.newTask = newTask;
+        this.editTask = editTask;
         super.setContent(app, tasks, sidebar);
 
-        if (this.newTask && sidebar == null) {
+        if (this.editTask != null) {
+            this.addSidebar(this.editTask, app);
+        } else if (this.newTask) {
             Task emptyTask = new Task();
             emptyTask.setProjectStage(stage.getId());
             this.addSidebar(emptyTask, app);
@@ -36,7 +40,7 @@ public class ProjectTasksController extends MyTasksController{
 
     @Override
     ScrollPane buildSidebar(Task task, UiApp app){
-        if (this.newTask) {
+        if (this.newTask || this.editTask != null) {
             return TaskView.buildNewTaskSidebar(task, app);
         }
         return TaskView.buildSidebar(task, app);

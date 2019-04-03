@@ -1,9 +1,9 @@
 package de.htwsaar.owlkeeper.ui.helper;
 
-import de.htwsaar.owlkeeper.storage.entity.Project;
-import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.entity.TaskComment;
 import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
+import de.htwsaar.owlkeeper.storage.model.TaskCommentModel;
 import de.htwsaar.owlkeeper.storage.model.TaskModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
@@ -18,6 +18,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 /**
  * Collection of helpers for the Task-View
@@ -65,13 +66,18 @@ public final class TaskView{
         TextField name = new TextField();
         name.setPromptText("Projekt Name");
         content.getChildren().add(name);
+        name.setText(taskEntity.getName());
 
         TextArea description = new TextArea();
         description.setPromptText("Projekt Beschreibung");
         content.getChildren().add(description);
+        description.setText(taskEntity.getDescription());
 
         DatePicker deadline = new DatePicker();
         content.getChildren().add(deadline);
+        if (taskEntity.getDeadline() != null){
+            deadline.setValue(taskEntity.getDeadline().toLocalDateTime().toLocalDate());
+        }
 
         Button submit = new Button("Task anlegen");
         content.getChildren().add(submit);
@@ -132,7 +138,7 @@ public final class TaskView{
         meta.getChildren().add(CommonNodes.Image("/images/calendar.png", 30, 150));
 
         // Date-Text
-        meta.getChildren().add(CommonNodes.Date(new SimpleDateFormat("dd.MM.yyyy").format(taskEntity.getDeadline())));
+        meta.getChildren().add(CommonNodes.Date(taskEntity.getDeadline()));
 
         // Team
         HBox team = new HBox();
@@ -151,6 +157,16 @@ public final class TaskView{
         description.setWrappingWidth(400);
         content.getChildren().add(description);
 
+        Button editButton = new Button("bearbeiten");
+        editButton.getStyleClass().addAll("button", "button--small", "button--secondary");
+        content.getChildren().add(editButton);
+        editButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            long stage = taskEntity.getProjectStage();
+            long project = new ProjectStageModel(stage).getContainer().getProject();
+            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false, taskEntity));
+        });
+
+
         // HairLine (hr)
         content.getChildren().add(CommonNodes.Hr(400, true));
 
@@ -161,16 +177,16 @@ public final class TaskView{
         comments.getStyleClass().add("comments");
         content.getChildren().add(comments);
 
-        //@todo taskEntity.getComments() needs to be implemented
 
-        for (int i = 0; i < 2; i++) {
+        List<TaskComment> tasksComments = new TaskModel(taskEntity).getComments();
+        for (TaskComment commentEntity : tasksComments) {
             HBox comment = new HBox();
             comment.getStyleClass().add("comments__item");
             comments.getChildren().add(comment);
 
             comment.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
 
-            Text commentText = new Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+            Text commentText = new Text(commentEntity.getContent());
             commentText.setWrappingWidth(350);
             comment.getChildren().add(commentText);
         }
@@ -185,9 +201,17 @@ public final class TaskView{
         // Button
         Button button = new Button();
         button.setText("send");
-        button.getStyleClass().add("button");
-        button.getStyleClass().add("button--small");
+        button.getStyleClass().addAll("button", "button--small");
         comments.getChildren().add(button);
+
+        // @todo make current user dynamic
+        button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            TaskCommentModel comment = new TaskCommentModel(input.getText(), 1, taskEntity.getId());
+            comment.save();
+            long stage = taskEntity.getProjectStage();
+            long project = new ProjectStageModel(stage).getContainer().getProject();
+            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
+        });
 
 
         return sidebar;
@@ -237,9 +261,9 @@ public final class TaskView{
             tags.getChildren().add(CommonNodes.Tag("blocked", "#5A4BE1"));
         }
 
-
         // Date
-        meta.getChildren().add(CommonNodes.Date("23.07.2019"));
+        Text date = CommonNodes.Date(taskEntity.getDeadline());
+        meta.getChildren().add(date);
 
         return task;
     }
