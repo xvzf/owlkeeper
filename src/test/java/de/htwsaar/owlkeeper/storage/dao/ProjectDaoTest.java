@@ -6,6 +6,7 @@ import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Team;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class ProjectDaoTest {
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
     }
 

@@ -1,7 +1,9 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.Task;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,6 +11,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskDaoTest {
+
+    @BeforeAll
+    static void setUp() {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
+    }
+
 
     @Test
     void testGetTask() {
@@ -20,7 +28,7 @@ class TaskDaoTest {
         assertEquals(1, task.getId());
         assertEquals("Task 1", task.getName());
         assertEquals("Task 1 description", task.getDescription());
-        assertEquals(1, task.getProjectStage());
+        assertEquals(3, task.getProjectStage());
         assertNull(task.getFulfilled());
     }
 
@@ -45,7 +53,7 @@ class TaskDaoTest {
         assertEquals(1, tasks.size());
         Task task = tasks.get(0);
         assertNotNull(task.getFulfilled());
-        assertEquals(3, task.getId());
+        assertEquals(5, task.getId());
     }
 
     @Test
@@ -58,10 +66,10 @@ class TaskDaoTest {
         assertEquals(2, tasks.size());
         Task task = tasks.get(0);
         assertNull(task.getFulfilled());
-        assertEquals(1, task.getId());
+        assertEquals(3, task.getId());
         task = tasks.get(1);
         assertNull(task.getFulfilled());
-        assertEquals(2, task.getId());
+        assertEquals(4, task.getId());
     }
 
     @Test
@@ -85,7 +93,7 @@ class TaskDaoTest {
         assertEquals(1, tasks.size());
         Task task = tasks.get(0);
         assertNotNull(task.getFulfilled());
-        assertEquals(3, task.getId());
+        assertEquals(5, task.getId());
     }
 
     @Test
@@ -98,7 +106,7 @@ class TaskDaoTest {
         assertEquals(1, tasks.size());
         Task task = tasks.get(0);
         assertNull(task.getFulfilled());
-        assertEquals(2, task.getId());
+        assertEquals(4, task.getId());
     }
 
 }

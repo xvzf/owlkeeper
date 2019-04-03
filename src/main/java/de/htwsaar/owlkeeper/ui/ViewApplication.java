@@ -7,25 +7,24 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 
 /**
- * Extension of the JavaFx Application object to
- * extend the functionality of it while inside the GUI
+ * Extension of the JavaFx Application object to extend the functionality of it
+ * while inside the GUI
  */
-abstract public class ViewApplication extends Application{
+abstract public class ViewApplication extends Application {
 
+    public static String TITLE = "title";
     public static String STARTING_SCENE = "default";
 
     /**
-     * Interface used to define build processes
-     * for the individual scenes
+     * Interface used to define build processes for the individual scenes
      */
-    public interface SceneBuilder{
+    public interface SceneBuilder {
         Scene build(ViewApplication application) throws Exception;
     }
 
     private HashMap<String, Scene> scenes = new HashMap<>();
     private Stage stage = null;
     private String currentScene = ViewApplication.STARTING_SCENE;
-
 
     /**
      * Main entry point for JavaFX application and starting point for the GUI
@@ -34,8 +33,9 @@ abstract public class ViewApplication extends Application{
      * @throws Exception if something goes wrong
      */
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
+        primaryStage.setTitle(TITLE);
         this.boot(primaryStage);
     }
 
@@ -44,7 +44,7 @@ abstract public class ViewApplication extends Application{
      *
      * @return HashMap of all defined Scenes with their registered name
      */
-    public HashMap<String, Scene> getScenes(){
+    public HashMap<String, Scene> getScenes() {
         return this.scenes;
     }
 
@@ -53,7 +53,7 @@ abstract public class ViewApplication extends Application{
      *
      * @return The primary application stage
      */
-    public Stage getStage(){
+    public Stage getStage() {
         return this.stage;
     }
 
@@ -62,7 +62,7 @@ abstract public class ViewApplication extends Application{
      *
      * @param key name of the new scene
      */
-    public void switchScene(String key){
+    public void switchScene(String key) {
         boolean resize = false;
         Stage stage = this.getStage();
 
@@ -88,10 +88,10 @@ abstract public class ViewApplication extends Application{
     /**
      * Adds a new scene to the GUI
      *
-     * @param key     the scenes name
+     * @param key the scenes name
      * @param builder the scenes build process
      */
-    public void addScene(String key, SceneBuilder builder) throws Exception{
+    public void addScene(String key, SceneBuilder builder) throws Exception {
         this.scenes.put(key, builder.build(this));
     }
 
@@ -101,13 +101,13 @@ abstract public class ViewApplication extends Application{
      * @param key name of the scene
      * @return true if a scene with the given name is registered
      */
-    public boolean hasScene(String key){
+    public boolean hasScene(String key) {
         return this.scenes.get(key) != null;
     }
 
     /**
-     * Main starting point for the GUI
-     * Here all scenes are finally registered and defined
+     * Main starting point for the GUI Here all scenes are finally registered and
+     * defined
      *
      * @param primaryStage the primary stage for this application
      * @throws Exception if something goes wrong
@@ -119,9 +119,8 @@ abstract public class ViewApplication extends Application{
      *
      * @return current scene name
      */
-    public String getCurrentSceneName(){
+    public String getCurrentSceneName() {
         return this.currentScene;
     }
 
 }
-

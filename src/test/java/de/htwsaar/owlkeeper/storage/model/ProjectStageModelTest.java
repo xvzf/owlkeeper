@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ProjectStageModelTest {
 
     private final String PS_NAME_1 = "testProjectStage";
-    private final long PS_INDEX_1 = 1;
+    private final long PS_INDEX_1 = 3;
     private final long PS_PROJECT_1 = 2;
 
     private final long PS_ID_2 = 1;
