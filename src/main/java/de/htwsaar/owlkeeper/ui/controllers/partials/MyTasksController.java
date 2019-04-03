@@ -23,12 +23,8 @@ public class MyTasksController extends SidebarController<Task> {
     public void setContent(UiApp app, List<Task> tasks, Task sidebar) {
         this.removeSidebar();
         if (sidebar != null) {
-            if (sidebar.getId() != focusID) {
-                this.addSidebar(sidebar, app);
-                focusID = sidebar.getId();
-            } else {
-                focusID = -1;
-            }
+            this.addSidebar(sidebar, app);
+            focusID = sidebar.getId();
         }
         this.tasks.getChildren().clear();
         if (tasks != null) {
@@ -68,7 +64,12 @@ public class MyTasksController extends SidebarController<Task> {
         task.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             long stage = taskEntity.getProjectStage();
             long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
+            Task focus = (Task) this.getUiScene().getState().getQuery().get("focus");
+            if (focus == null || focus.getId() != taskEntity.getId()) {
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
+            } else {
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false));
+            }
         });
         return task;
     }
