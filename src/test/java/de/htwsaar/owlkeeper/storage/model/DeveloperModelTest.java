@@ -12,6 +12,8 @@ class DeveloperModelTest {
     private final String D_EMAIL_1 = "root@example.org";
     private final boolean D_CHIEF_1 = false;
 
+    private final long D_ID_2 = 3;
+
     @Test
     void testConstructor() {
         DeveloperModel dm = new DeveloperModel(D_NAME_1, D_ROLE_1, D_EMAIL_1, D_CHIEF_1);
@@ -45,5 +47,17 @@ class DeveloperModelTest {
         assertEquals(dloaded.getPwhash(), d.getPwhash());
         assertEquals(dloaded.isChief(), d.isChief());
         dmloaded.removeFromDB();
+    }
+
+    @Test
+    void testGetTeams() {
+        DeveloperModel dm = new DeveloperModel(D_ID_2);
+        assertEquals(2, dm.getTeams().size());
+    }
+
+    @Test
+    void testGetTasks() {
+        DeveloperModel dm = new DeveloperModel(D_ID_2);
+        assertEquals(2, dm.getTasks().size());
     }
 }
