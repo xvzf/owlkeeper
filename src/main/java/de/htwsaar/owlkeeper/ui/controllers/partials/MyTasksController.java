@@ -14,13 +14,13 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MyTasksController extends SidebarController<Task>{
+public class MyTasksController extends SidebarController<Task> {
 
     @FXML
     public VBox tasks;
     private long focusID = -1;
 
-    public void setContent(UiApp app, List<Task> tasks, Task sidebar){
+    public void setContent(UiApp app, List<Task> tasks, Task sidebar) {
         this.removeSidebar();
         if (sidebar != null) {
             if (sidebar.getId() != focusID) {
@@ -42,7 +42,7 @@ public class MyTasksController extends SidebarController<Task>{
      *
      * @return the full task-list Node
      */
-    private VBox getTaskList(UiApp app, String titleText, List<Task> taskList){
+    private VBox getTaskList(UiApp app, String titleText, List<Task> taskList) {
         VBox taskListing = new VBox();
         taskListing.getStyleClass().add("task-list");
 
@@ -63,7 +63,7 @@ public class MyTasksController extends SidebarController<Task>{
      *
      * @return the task Node
      */
-    private HBox getTask(UiApp app, Task taskEntity){
+    private HBox getTask(UiApp app, Task taskEntity) {
         HBox task = TaskView.getTaskNode(taskEntity);
         task.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             long stage = taskEntity.getProjectStage();
@@ -74,7 +74,7 @@ public class MyTasksController extends SidebarController<Task>{
     }
 
     @Override
-    ScrollPane buildSidebar(Task task, UiApp app){
+    ScrollPane buildSidebar(Task task, UiApp app) {
         return TaskView.buildSidebar(task, app);
     }
 }

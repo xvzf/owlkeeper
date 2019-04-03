@@ -11,8 +11,11 @@ import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.lang.String;
+import java.security.*;
 
 import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
 
@@ -113,5 +116,22 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
             tasks.addAll(new TeamModel(team).getTasks());
         }
         return tasks;
+    }
+
+    private String getHash(String pw) {
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("MD5");
+        } catch (java.security.NoSuchAlgorithmException e) {
+            return "Nicht gefunden!";   //TODO Something better than that
+        }
+        byte[] hash;
+        try {
+            hash = digest.digest(pw.getBytes("UTF_8"));
+        }catch(java.io.UnsupportedEncodingException e){
+            return "FEHLER";            //TODO something better
+        }
+        return Arrays.toString(hash);
+
     }
 }
