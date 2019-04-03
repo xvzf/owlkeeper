@@ -41,7 +41,7 @@ public final class TaskView{
         // Sidebar Pane
         ScrollPane sidebar = new ScrollPane();
         sidebar.setFitToHeight(true);
-        sidebar.setPrefWidth(450);
+        sidebar.setMinWidth(450);
 		sidebar.setHbarPolicy(ScrollBarPolicy.NEVER);
 
         // Sidebar Box
