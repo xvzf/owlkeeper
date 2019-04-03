@@ -178,6 +178,7 @@ public final class TaskView{
         // TextArea
         TextArea input = new TextArea();
         input.getStyleClass().add("comments__input");
+        input.setWrapText(true);
         input.setPromptText("write a comment...");
         comments.getChildren().add(input);
 
