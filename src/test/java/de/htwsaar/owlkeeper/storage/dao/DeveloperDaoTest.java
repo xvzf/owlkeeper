@@ -1,7 +1,10 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,6 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
  * Needs to run against test database !!!
  */
 class DeveloperDaoTest {
+
+    @BeforeAll
+    static void setUp() {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
+    }
+
 
     @Test
     void testGetDevelopers() {

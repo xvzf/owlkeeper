@@ -1,6 +1,8 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Task;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;
@@ -17,6 +19,11 @@ class TaskModelTest {
     private final Timestamp T_FULFILLED_1 = new Timestamp(12);
     private final long T_PROJECT_STAGE_1 = 1;
     private final long T_TEAM_1 = 2;
+
+    @BeforeAll
+    static void setUp() {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
+    }
 
     @Test
     void testConstructor() {

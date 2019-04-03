@@ -14,21 +14,15 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class MyTasksController extends SidebarController<Task>{
+public class MyTasksController extends SidebarController<Task> {
 
     @FXML
     public VBox tasks;
-    private long focusID = -1;
 
-    public void setContent(UiApp app, List<Task> tasks, Task sidebar){
+    public void setContent(UiApp app, List<Task> tasks, Task sidebar) {
         this.removeSidebar();
         if (sidebar != null) {
-            if (sidebar.getId() != focusID) {
-                this.addSidebar(sidebar, app);
-                focusID = sidebar.getId();
-            } else {
-                focusID = -1;
-            }
+            this.addSidebar(sidebar, app);
         }
         this.tasks.getChildren().clear();
         if (tasks != null) {
@@ -42,7 +36,7 @@ public class MyTasksController extends SidebarController<Task>{
      *
      * @return the full task-list Node
      */
-    private VBox getTaskList(UiApp app, String titleText, List<Task> taskList){
+    private VBox getTaskList(UiApp app, String titleText, List<Task> taskList) {
         VBox taskListing = new VBox();
         taskListing.getStyleClass().add("task-list");
 
@@ -63,18 +57,23 @@ public class MyTasksController extends SidebarController<Task>{
      *
      * @return the task Node
      */
-    private HBox getTask(UiApp app, Task taskEntity){
+    private HBox getTask(UiApp app, Task taskEntity) {
         HBox task = TaskView.getTaskNode(taskEntity);
         task.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             long stage = taskEntity.getProjectStage();
             long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
+            Task focus = (Task) this.getUiScene().getState().getQuery().get("focus");
+            if (focus == null || focus.getId() != taskEntity.getId()) {
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
+            } else {
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false));
+            }
         });
         return task;
     }
 
     @Override
-    ScrollPane buildSidebar(Task task, UiApp app){
+    ScrollPane buildSidebar(Task task, UiApp app) {
         return TaskView.buildSidebar(task, app);
     }
 }

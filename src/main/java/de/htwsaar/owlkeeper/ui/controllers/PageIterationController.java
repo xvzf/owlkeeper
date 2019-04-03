@@ -49,6 +49,7 @@ public class PageIterationController extends Controller {
 	public ProjectTasksController tasksController;
 
 	public void boot(HashMap<String, Object> state) {
+		this.tasksController.setUiScene(this.getUiScene());
 
 		UiApp app = this.getApp();
 		List<ProjectStage> stages = (List<ProjectStage>) state.get("stages");

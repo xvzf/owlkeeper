@@ -1,5 +1,7 @@
 package de.htwsaar.owlkeeper.helper;
 
+import de.htwsaar.owlkeeper.helper.exceptions.UserInitializationException;
+import de.htwsaar.owlkeeper.service.PermissionHandler;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 
 /**
@@ -16,6 +18,7 @@ public class DeveloperManager {
      */
     public static void loginDeveloper(String email) {
         currUser = new DeveloperModel(email);
+        PermissionHandler.initialize();
     }
 
     /**
@@ -24,6 +27,10 @@ public class DeveloperManager {
      * @return
      */
     public static DeveloperModel getCurrentDeveloper() {
+        if (currUser == null)
+            throw new UserInitializationException("No current user has been set. Call DeveloperManager.login() first!");
+
         return currUser;
     }
+
 }

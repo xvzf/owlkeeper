@@ -92,4 +92,18 @@ public interface ProjectDao {
             "where tpr.project = ?;")
     @RegisterBeanMapper(Team.class)
     List<Team> getTeams(long id);
+
+    /**
+     * Gets the projects a user is assigned to.
+     *
+     * @param id the id of the developer
+     * @return a list with the projects he is assigned to
+     */
+    @SqlQuery("SELECT p.id, p.created, p.name, p.description, p.type " +
+            "FROM project AS p " +
+            "JOIN team_project_relation AS tpr ON p.id = tpr.project " +
+            "JOIN developer_team_relation AS dtr ON dtr.team = tpr.team " +
+            "WHERE dtr.developer = ?;")
+    @RegisterBeanMapper(Project.class)
+    List<Project> getProjectsOfUser(long id);
 }

@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 public class Login extends UiScene{
+
     @Override
     public String getName(){
         return "login";
@@ -21,4 +22,5 @@ public class Login extends UiScene{
             return new Scene(root, 1000, 800);
         };
     }
+
 }

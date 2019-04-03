@@ -1,4 +1,4 @@
-package de.htwsaar.owlkeeper.helper;
+package de.htwsaar.owlkeeper.helper.exceptions;
 
 import java.io.FileNotFoundException;
 

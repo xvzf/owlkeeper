@@ -1,6 +1,7 @@
 package de.htwsaar.owlkeeper.storage.local.config;
 
 import de.htwsaar.owlkeeper.helper.Resource;
+import de.htwsaar.owlkeeper.helper.exceptions.ConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,8 +1,10 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -16,6 +18,11 @@ class TeamModelTest {
     private final long T_LEADER_1 = 2;
 
     private final long T_ID_2 = 1;
+
+    @BeforeAll
+    static void setUp() {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
+    }
 
     @Test
     void testConstructor() {
@@ -49,7 +56,7 @@ class TeamModelTest {
     @Test
     void testGetProjects() {
         TeamModel tm = new TeamModel(T_ID_2);
-        List<Project> projects = tm.getProjects();
+        List<Project> projects = tm.getProjects(tm.getContainer().getId());
         assertEquals(1, projects.size());
         assertEquals("Testproject1", projects.get(0).getName());
     }

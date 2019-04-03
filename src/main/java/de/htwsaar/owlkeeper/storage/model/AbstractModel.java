@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.HasID;
 import org.apache.logging.log4j.Logger;
@@ -24,8 +25,8 @@ public abstract class AbstractModel<R extends HasID, E> {
     private Logger logger;
     private Class<E> DAOClass;  // Save E in DAOClass because java generics are awful
     private Function<Long, ExtensionCallback<R, E, RuntimeException>> loadCallbackFactory;
-    private Function<Long, ExtensionCallback<Integer, E, RuntimeException>> removeCallbackFactory;
-    private Function<R, ExtensionCallback<Integer, E, RuntimeException>> saveCallbackFactory;
+    private Function<Long, ExtensionCallback<Integer, E, InsufficientPermissionsException>> removeCallbackFactory;
+    private Function<R, ExtensionCallback<Integer, E, InsufficientPermissionsException>> saveCallbackFactory;
     private R container;
 
     /**
@@ -50,8 +51,8 @@ public abstract class AbstractModel<R extends HasID, E> {
     public AbstractModel(Logger logger,
                          Class<E> DAOClass,
                          Function<Long, ExtensionCallback<R, E, RuntimeException>> loadCallbackFactory,
-                         Function<Long, ExtensionCallback<Integer, E, RuntimeException>> removeCallbackFactory,
-                         Function<R, ExtensionCallback<Integer, E, RuntimeException>> saveCallbackFactory) {
+                         Function<Long, ExtensionCallback<Integer, E, InsufficientPermissionsException>> removeCallbackFactory,
+                         Function<R, ExtensionCallback<Integer, E, InsufficientPermissionsException>> saveCallbackFactory) {
         this.logger = logger;
         this.DAOClass = DAOClass;
         this.loadCallbackFactory = loadCallbackFactory;
@@ -68,8 +69,8 @@ public abstract class AbstractModel<R extends HasID, E> {
                          Logger logger,
                          Class<E> DAOClass,
                          Function<Long, ExtensionCallback<R, E, RuntimeException>> loadCallbackFactory,
-                         Function<Long, ExtensionCallback<Integer, E, RuntimeException>> removeCallbackFactory,
-                         Function<R, ExtensionCallback<Integer, E, RuntimeException>> saveCallbackFactory){
+                         Function<Long, ExtensionCallback<Integer, E, InsufficientPermissionsException>> removeCallbackFactory,
+                         Function<R, ExtensionCallback<Integer, E, InsufficientPermissionsException>> saveCallbackFactory) {
         this(logger, DAOClass, loadCallbackFactory, removeCallbackFactory, saveCallbackFactory);
         setContainer(container);
     }
@@ -81,7 +82,7 @@ public abstract class AbstractModel<R extends HasID, E> {
      */
     public void getFromDB(long id) {
         ExtensionCallback<R, E, RuntimeException> loadCallback = loadCallbackFactory.apply(id);
-        container = DBConnection.getJdbi().withExtension(DAOClass, loadCallback);
+        setContainer(DBConnection.getJdbi().withExtension(DAOClass, loadCallback));
         logger.info("Loaded " + toString() + " from index " + id);
     }
 
@@ -99,7 +100,9 @@ public abstract class AbstractModel<R extends HasID, E> {
      * @param container the new container
      */
     public void setContainer(R container) {
+        //TODO Container has been changed. checkPermission(something) call?
         this.container = container;
+
     }
 
     /**
@@ -107,8 +110,8 @@ public abstract class AbstractModel<R extends HasID, E> {
      *
      * @return
      */
-    public void save() {
-        ExtensionCallback<Integer, E, RuntimeException> saveCallback = saveCallbackFactory.apply(container);
+    public void save() throws InsufficientPermissionsException {
+        ExtensionCallback<Integer, E, InsufficientPermissionsException> saveCallback = saveCallbackFactory.apply(container);
         int newId = DBConnection.getJdbi().withExtension(DAOClass, saveCallback);
 
         // Refresh every time
@@ -116,8 +119,8 @@ public abstract class AbstractModel<R extends HasID, E> {
         logger.info("Saved " + toString() + " to index " + newId);
     }
 
-    public int removeFromDB(){
-        ExtensionCallback<Integer, E, RuntimeException> removeCallback = removeCallbackFactory.apply(getContainer().getId());
+    public int removeFromDB() throws InsufficientPermissionsException {
+        ExtensionCallback<Integer, E, InsufficientPermissionsException> removeCallback = removeCallbackFactory.apply(getContainer().getId());
         int removedId = DBConnection.getJdbi().withExtension(DAOClass, removeCallback);
         logger.info("Removed " + toString() + " from index " + removedId);
         return removedId;
@@ -132,4 +135,5 @@ public abstract class AbstractModel<R extends HasID, E> {
     public String toString() {
         return getContainer().toString();
     }
+
 }

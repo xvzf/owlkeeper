@@ -1,5 +1,7 @@
 package de.htwsaar.owlkeeper.ui;
 
+import de.htwsaar.owlkeeper.ui.state.BaseState;
+import de.htwsaar.owlkeeper.ui.state.State;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -28,12 +30,28 @@ public class UiApp extends ViewApplication {
      *
      * @param key name of the new scene
      * @param data data object passed to the scenes state
+     * @param force forces redrawing of the given scene
      */
-    public void route(String key, HashMap<String, Object> data) {
+    public void route(String key, HashMap<String, Object> data, boolean force) {
         UiScene scene = scenes.get(key);
-        scene.getState().handleQuery(data);
-        scene.getController().boot(scene.getState().collectState());
+        State state = scene.getState();
+        // only handle the new query if the target scene does not have this query prepared already
+        if (force || !BaseState.compareQueries(state.getQuery(), data)){
+            scene.getState().handleQuery(data);
+            scene.getController().boot(scene.getState().collectState());
+        }
         this.switchScene(key);
+    }
+
+    /**
+     * Routes the application to the given scene using the given data object as
+     * route-information
+     *
+     * @param key name of the new scene
+     * @param data data object passed to the scenes state
+     */
+    public void route(String key, HashMap<String, Object> data){
+        this.route(key, data, false);
     }
 
     /**
