@@ -5,8 +5,10 @@ import de.htwsaar.owlkeeper.ui.ViewApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import java.security.*;
 
 public class Login extends UiScene{
+
     @Override
     public String getName(){
         return "login";
@@ -20,5 +22,16 @@ public class Login extends UiScene{
             this.prepareFxml(loader);
             return new Scene(root, 1000, 800);
         };
+    }
+
+    private String getHash(string pw) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+        } catch (java.security.NoSuchAlgorithmException e) {
+            return "Nicht gefunden!";   //TODO Something better than that
+        }
+        byte[] pwBytes = pw.getBytes("UTF-8");
+        byte[] hash = md.digest(pwBytes);
+        return hash.toString();
     }
 }
