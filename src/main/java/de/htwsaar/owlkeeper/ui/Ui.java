@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.ui;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.ui.scenes.*;
 
 /**
@@ -36,6 +37,7 @@ public class Ui {
      * @param args CLI args
      */
     public static void main(String[] args) {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
         new Ui();
     }
 }
