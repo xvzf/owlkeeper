@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyTasksController extends SidebarController<Task> {
@@ -26,19 +27,20 @@ public class MyTasksController extends SidebarController<Task> {
         }
         this.tasks.getChildren().clear();
         if (tasks != null) {
-            // @todo dynamic sections maybe
-            Task task;
-            for(int i = 0; i < tasks.size(); i++) {
-                task = tasks.get(i);
+            List<Task> openTasks = new ArrayList<>();
+            List<Task> closedTasks = new ArrayList<>();
+            for (Task task : tasks) {
                 if (task.getFulfilled() == null) {
-                    this.tasks.getChildren().add(this.getTaskList(app, "Open tasks", tasks));
+                    openTasks.add(task);
+                } else {
+                    closedTasks.add(task);
                 }
             }
-            for(int i = 0; i < tasks.size(); i++) {
-                task = tasks.get(i);
-                if (task.getFulfilled() != null) {
-                    this.tasks.getChildren().add(this.getTaskList(app, "Closed tasks", tasks));
-                }
+            if (!openTasks.isEmpty()) {
+                this.tasks.getChildren().add(this.getTaskList(app, "Open tasks", openTasks));
+            }
+            if (!closedTasks.isEmpty()) {
+                this.tasks.getChildren().add(this.getTaskList(app, "Closed tasks", closedTasks));
             }
         }
     }
