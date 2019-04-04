@@ -257,9 +257,13 @@ TextArea:focused .content {
 }
 
 .iteration-bar__column {
+    /*-fx-spacing: 10;*/
+    /*-fx-cursor: hand;*/
+}
+
+.iteration-bar__column HBox{
     -fx-spacing: 10;
     -fx-cursor: hand;
-
 }
 
 .iteration-bar .h2 {
