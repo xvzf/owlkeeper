@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.ui.helper;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.TaskComment;
 import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
