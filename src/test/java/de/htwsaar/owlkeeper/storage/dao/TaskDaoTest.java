@@ -27,7 +27,7 @@ class TaskDaoTest {
 
         assertEquals(1, task.getId());
         assertEquals("Task 5", task.getName());
-        assertEquals("Task 1 description", task.getDescription());
+        assertEquals("Task 5 description", task.getDescription());
         assertEquals(3, task.getProjectStage());
         assertNull(task.getFulfilled());
     }
