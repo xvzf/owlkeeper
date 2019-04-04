@@ -191,10 +191,9 @@ public final class TaskView{
         button.setText("send");
         button.getStyleClass().addAll("button", "button--small");
         comments.getChildren().add(button);
-
-        // @todo make current user dynamic
         button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            TaskCommentModel comment = new TaskCommentModel(input.getText(), 1, taskEntity.getId());
+            long id = DeveloperManager.getCurrentDeveloper().getContainer().getId();
+            TaskCommentModel comment = new TaskCommentModel(input.getText(),id, taskEntity.getId());
             comment.save();
             long stage = taskEntity.getProjectStage();
             long project = new ProjectStageModel(stage).getContainer().getProject();
