@@ -309,8 +309,19 @@ TextArea:focused .content {
     -fx-background-color: #FFFFFF;
     -fx-padding: 10;
     -fx-pref-width: 200;
+    -fx-cursor: hand;
 }
 
 .project__stage-form {
     -fx-spacing: 10;
+}
+
+.project-form {
+    -fx-spacing: 20;
+    -fx-padding: 10 0 0 0;
+    -fx-max-width: 600;
+}
+
+.project-form__item {
+    -fx-spacing: 5;
 }
