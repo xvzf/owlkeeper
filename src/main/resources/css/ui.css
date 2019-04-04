@@ -33,7 +33,7 @@ TextArea {
     -fx-background-color: #fff, #fff;
 }
 
-TextArea Text{
+TextArea Text {
     -fx-line-spacing: 0;
 }
 
@@ -130,7 +130,7 @@ TextArea:focused .content {
     -fx-padding: 5 15;
 }
 
-.button--secondary{
+.button--secondary {
     -fx-background-color: #aaa;
     -fx-border-color: transparent transparent #888 transparent;
 }
@@ -276,7 +276,7 @@ TextArea:focused .content {
 }
 
 .team-unit {
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
     -fx-background-color: #FFFFFF;
     -fx-padding: 20;
     -fx-spacing: 10;
@@ -284,5 +284,33 @@ TextArea:focused .content {
 
 .team-unit__member {
     -fx-padding: 0 10 0 0;
+    -fx-spacing: 10;
+}
+
+.project {
+    -fx-spacing: 20;
+}
+
+.project__header {
+    -fx-spacing: 15;
+    -fx-pref-width: 500;
+}
+
+.project__stage-wrapper {
+    -fx-spacing: 50;
+}
+
+.project__stage-listing {
+    -fx-spacing: 10;
+}
+
+.project__stage {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 10;
+    -fx-pref-width: 200;
+}
+
+.project__stage-form {
     -fx-spacing: 10;
 }

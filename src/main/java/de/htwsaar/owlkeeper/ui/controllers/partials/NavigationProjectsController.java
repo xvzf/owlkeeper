@@ -16,8 +16,22 @@ public class NavigationProjectsController extends Controller{
     @FXML
     private VBox root;
 
+    @FXML
+    private VBox main;
+
     public void setContent(UiApp app, HashMap<Long, Project> projects){
+        main.getChildren().clear();
         this.root.getChildren().clear();
+
+        // Add headline
+        Text headline = new Text("Projects");
+        headline.getStyleClass().add("navigation-item__text");
+        headline.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            app.route("projects", new HashMap<>());
+        });
+        main.getChildren().add(headline);
+
+        // Fill Projects
         projects.forEach((id, project) -> {
             root.getChildren().add(this.getProject(app, project));
         });

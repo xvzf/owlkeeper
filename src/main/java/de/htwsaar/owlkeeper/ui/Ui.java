@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.ui;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.ui.scenes.*;
 
 /**
@@ -23,6 +24,7 @@ public class Ui {
         UiApp.stageScene(new Page());
         UiApp.stageScene(new PageIteration());
         UiApp.stageScene(new PageTeam());
+        UiApp.stageScene(new Projects());
 
         // Change this to test individual scenes
         UiApp.STARTING_SCENE = "page";
@@ -36,6 +38,7 @@ public class Ui {
      * @param args CLI args
      */
     public static void main(String[] args) {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
         new Ui();
     }
 }
