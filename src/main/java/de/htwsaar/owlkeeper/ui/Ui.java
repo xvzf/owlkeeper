@@ -1,6 +1,15 @@
 package de.htwsaar.owlkeeper.ui;
 
-import de.htwsaar.owlkeeper.ui.scenes.*;
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
+import de.htwsaar.owlkeeper.ui.scenes.InstallConnect;
+import de.htwsaar.owlkeeper.ui.scenes.InstallDB;
+import de.htwsaar.owlkeeper.ui.scenes.InstallLogin;
+import de.htwsaar.owlkeeper.ui.scenes.InstallSelect;
+import de.htwsaar.owlkeeper.ui.scenes.InstallSuccess;
+import de.htwsaar.owlkeeper.ui.scenes.Login;
+import de.htwsaar.owlkeeper.ui.scenes.Page;
+import de.htwsaar.owlkeeper.ui.scenes.PageIteration;
+import de.htwsaar.owlkeeper.ui.scenes.PageTeam;
 
 /**
  * Main class to stage the individual Application Scenes
@@ -36,6 +45,7 @@ public class Ui {
      * @param args CLI args
      */
     public static void main(String[] args) {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
         new Ui();
     }
 }
