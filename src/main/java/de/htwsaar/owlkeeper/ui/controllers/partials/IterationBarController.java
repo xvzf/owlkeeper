@@ -39,6 +39,7 @@ public class IterationBarController extends Controller {
 		if (index > 0) {
 			ProjectStage leftStage = stageList.get(index - 1);
 			left.getStyleClass().add("iteration-bar__column");
+			left.setAlignment(Pos.CENTER_LEFT);
 			HBox leftInner = new HBox();
 			leftInner.setAlignment(Pos.CENTER_LEFT);
 			leftInner.getChildren().add(CommonNodes.Image("/images/arrow-left.png", 30, 150));
