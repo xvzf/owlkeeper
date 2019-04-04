@@ -123,4 +123,14 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
         DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.removeDeveloper(developerId, teamId)));
 
     }
+
+    /**
+     * Retrieves all developers of a team
+     *
+     * @return all devs
+     */
+    public List<Developer> getDevelopers() {
+        long id = getContainer().getId();
+        return DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getDevelopersPerTeam(id)));
+    }
 }
