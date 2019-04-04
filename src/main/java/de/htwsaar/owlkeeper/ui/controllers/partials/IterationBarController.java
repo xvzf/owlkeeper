@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class IterationBarController extends Controller {
@@ -24,10 +25,6 @@ public class IterationBarController extends Controller {
 	@FXML
 	private HBox right;
 
-	public void clear() {
-
-	}
-
 	public void initialize(UiApp app, Project project, ProjectStage stage, List<ProjectStage> stageList) {
 		left.getChildren().clear();
 		center.getChildren().clear();
@@ -38,22 +35,22 @@ public class IterationBarController extends Controller {
 		}
 
 		int index = stageList.indexOf(stage);
-		Pos currentPos = Pos.CENTER_LEFT;
 
 		if (index > 0) {
 			ProjectStage leftStage = stageList.get(index - 1);
 			left.getStyleClass().add("iteration-bar__column");
-			left.setAlignment(Pos.CENTER_LEFT);
-			left.getChildren().add(CommonNodes.Image("/images/arrow-left.png", 30, 150));
+			HBox leftInner = new HBox();
+			leftInner.setAlignment(Pos.CENTER_LEFT);
+			leftInner.getChildren().add(CommonNodes.Image("/images/arrow-left.png", 30, 150));
 			Text leftText = new Text(leftStage.getName());
 			leftText.getStyleClass().add("h2");
-			left.getChildren().add(leftText);
-			left.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration",
+			leftInner.getChildren().add(leftText);
+			leftInner.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration",
 					TaskListState.getQueryMap(project.getId(), leftStage.getId(), null, false)));
+			left.getChildren().add(leftInner);
 		}
 
-		currentPos = Pos.CENTER;
-		center.setAlignment(currentPos);
+		center.setAlignment(Pos.CENTER);
 		Text centerText = new Text(stage.getName());
 		centerText.getStyleClass().add("h2");
 		center.getChildren().add(centerText);
@@ -62,12 +59,16 @@ public class IterationBarController extends Controller {
 			ProjectStage rightStage = stageList.get(index + 1);
 			right.getStyleClass().add("iteration-bar__column");
 			right.setAlignment(Pos.CENTER_RIGHT);
+			HBox rightInner = new HBox();
+			rightInner.setAlignment(Pos.CENTER_RIGHT);
 			Text rightText = new Text(rightStage.getName());
 			rightText.getStyleClass().add("h2");
-			right.getChildren().add(rightText);
-			right.getChildren().add(CommonNodes.Image("/images/arrow-right.png", 30, 150));
-			right.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration",
-					TaskListState.getQueryMap(project.getId(), rightStage.getId(), null, false)));
+			rightInner.getChildren().add(rightText);
+			rightInner.getChildren().add(CommonNodes.Image("/images/arrow-right.png", 30, 150));
+			rightInner.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                app.route("page-iteration", TaskListState.getQueryMap(project.getId(), rightStage.getId(), null, false));
+            });
+			right.getChildren().add(rightInner);
 		}
 
 		HBox.setHgrow(center, Priority.ALWAYS);
