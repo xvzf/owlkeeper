@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.ui.state;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
@@ -13,9 +14,10 @@ public class MyTaskList extends BaseState {
     private List<Task> tasks;
 
 
-    public void handleQuery(HashMap<String, Object> query, int devID) {
+    public void handleQuery(HashMap<String, Object> query) {
         super.handleQuery(query);
-        this.currentUser = new DeveloperModel(devID).getContainer();    //Set devID to 1, to see the myTasks page
+        long id = DeveloperManager.getCurrentDeveloper().getContainer().getId();
+        this.currentUser = new DeveloperModel(id).getContainer();
         this.tasks = new DeveloperModel(currentUser).getTasks();
     }
 

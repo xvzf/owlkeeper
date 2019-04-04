@@ -80,7 +80,7 @@ class TeamDaoTest {
     void testGetTasks() {
         List<Task> tasks = DBConnection.getJdbi().withExtension(TeamDao.class, dao -> (dao.getTasks(2)));
         assertEquals(1, tasks.size());
-        assertEquals("Task 1 Stage 2 description", tasks.get(0).getDescription());
+        assertEquals("Task 3 description", tasks.get(0).getDescription());
     }
 
 }

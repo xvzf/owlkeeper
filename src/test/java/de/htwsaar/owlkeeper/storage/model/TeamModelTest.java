@@ -1,6 +1,7 @@
 package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.helper.DeveloperManager;
+import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
@@ -67,5 +68,13 @@ class TeamModelTest {
         List<Task> tasks = tm.getTasks();
         assertEquals(1, tasks.size());
         assertEquals("Task 2 description", tasks.get(0).getDescription());
+    }
+
+    @Test
+    void testGetDevelopers(){
+        TeamModel tm = new TeamModel(T_ID_2);
+        List<Developer> developers = tm.getDevelopers();
+        assertEquals(3, developers.size());
+
     }
 }
