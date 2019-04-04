@@ -27,7 +27,19 @@ public class MyTasksController extends SidebarController<Task> {
         this.tasks.getChildren().clear();
         if (tasks != null) {
             // @todo dynamic sections maybe
-            this.tasks.getChildren().add(this.getTaskList(app, "Open tasks", tasks));
+            Task task;
+            for(int i = 0; i < tasks.size(); i++) {
+                task = tasks.get(i);
+                if (task.getFulfilled() == null) {
+                    this.tasks.getChildren().add(this.getTaskList(app, "Open tasks", tasks));
+                }
+            }
+            for(int i = 0; i < tasks.size(); i++) {
+                task = tasks.get(i);
+                if (task.getFulfilled() != null) {
+                    this.tasks.getChildren().add(this.getTaskList(app, "Closed tasks", tasks));
+                }
+            }
         }
     }
 
