@@ -71,10 +71,15 @@ class TeamModelTest {
     }
 
     @Test
+    void getLeaderTest() {
+        TeamModel tm = new TeamModel(T_ID_2);
+        assertEquals(1, tm.getLeader());
+    }
+
+    @Test
     void testGetDevelopers(){
         TeamModel tm = new TeamModel(T_ID_2);
         List<Developer> developers = tm.getDevelopers();
         assertEquals(3, developers.size());
-
     }
 }
