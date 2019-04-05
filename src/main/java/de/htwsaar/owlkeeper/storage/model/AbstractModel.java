@@ -12,7 +12,7 @@ import java.util.function.Function;
  * AbstractModel class provides basic Model functionalities for Model classes
  * Model classes generate, save, remove and load Object from/to/for/whatever the database
  * Example with an TaskModel:
- *
+ * <p>
  * Task task = new Task(param1, param2....);
  * TaskModel tm = new TaskModel(task);
  * tm.save();
@@ -29,24 +29,29 @@ public abstract class AbstractModel<R extends HasID, E> {
     private Function<R, ExtensionCallback<Integer, E, InsufficientPermissionsException>> saveCallbackFactory;
     private R container;
 
+    private static final String LOGGER_INFO_FORMAT_LOAD = "Loaded %s from index %s";
+    private static final String LOGGER_INFO_FORMAT_REMOVE = "Removed %s from index %s";
+    private static final String LOGGER_INFO_FORMAT_SAVE = "Saved %s to index %s";
+
     /**
      * Constructor
-     * @param logger A logger for errors and infos
-     * @param DAOClass MUST BE THE CLASS OF <E>
-     * @param loadCallbackFactory A factory generating the callback for getFromDB.
-     *                            Its parameter is the id.
-     *                            Returns a function with parameter dao, that loads the container from db.
-     *                            Example: id -> (dao -> dao.getFromId(id))
+     *
+     * @param logger                A logger for errors and infos
+     * @param DAOClass              MUST BE THE CLASS OF <E>
+     * @param loadCallbackFactory   A factory generating the callback for getFromDB.
+     *                              Its parameter is the id.
+     *                              Returns a function with parameter dao, that loads the container from db.
+     *                              Example: id -> (dao -> dao.getFromId(id))
      * @param removeCallbackFactory A factory generating the callback for removeFromDB
      *                              Its parameter is the id
      *                              Returns a function with parameter dao, that removes the container from the db
      *                              Example: id -> (dao -> dao.remove(id))
-     * @param saveCallbackFactory A factory generating the callback for save.
-     *                            Its parameter is the container that will be saved.
-     *                            Returns a function with parameter dao, that saves the container to the db
-     *                            Important: This function must check on its own, if the container must be
-     *                            inserted or updated into the db
-     *                            Example: c -> (dao -> (c.isSaved() ? dao.update(c) : dao.insert(c)))
+     * @param saveCallbackFactory   A factory generating the callback for save.
+     *                              Its parameter is the container that will be saved.
+     *                              Returns a function with parameter dao, that saves the container to the db
+     *                              Important: This function must check on its own, if the container must be
+     *                              inserted or updated into the db
+     *                              Example: c -> (dao -> (c.isSaved() ? dao.update(c) : dao.insert(c)))
      */
     public AbstractModel(Logger logger,
                          Class<E> DAOClass,
@@ -62,8 +67,8 @@ public abstract class AbstractModel<R extends HasID, E> {
 
     /**
      * Constructor used for generating a model with existing container
+     *
      * @param container the container
-
      */
     public AbstractModel(R container,
                          Logger logger,
@@ -83,7 +88,7 @@ public abstract class AbstractModel<R extends HasID, E> {
     public void getFromDB(long id) {
         ExtensionCallback<R, E, RuntimeException> loadCallback = loadCallbackFactory.apply(id);
         setContainer(DBConnection.getJdbi().withExtension(DAOClass, loadCallback));
-        logger.info("Loaded " + toString() + " from index " + id);
+        logger.info(String.format(LOGGER_INFO_FORMAT_LOAD, toString(), id));
     }
 
     /**
@@ -97,6 +102,7 @@ public abstract class AbstractModel<R extends HasID, E> {
 
     /**
      * Set Container
+     *
      * @param container the new container
      */
     public void setContainer(R container) {
@@ -107,8 +113,6 @@ public abstract class AbstractModel<R extends HasID, E> {
 
     /**
      * Saves changes to the DB
-     *
-     * @return
      */
     public void save() throws InsufficientPermissionsException {
         ExtensionCallback<Integer, E, InsufficientPermissionsException> saveCallback = saveCallbackFactory.apply(container);
@@ -116,13 +120,18 @@ public abstract class AbstractModel<R extends HasID, E> {
 
         // Refresh every time
         getFromDB(newId);
-        logger.info("Saved " + toString() + " to index " + newId);
+        logger.info(String.format(LOGGER_INFO_FORMAT_SAVE, toString(), newId));
     }
 
+    /**
+     * Removes the container from the database
+     *
+     * @return the id of the successfully removed object
+     */
     public int removeFromDB() throws InsufficientPermissionsException {
         ExtensionCallback<Integer, E, InsufficientPermissionsException> removeCallback = removeCallbackFactory.apply(getContainer().getId());
         int removedId = DBConnection.getJdbi().withExtension(DAOClass, removeCallback);
-        logger.info("Removed " + toString() + " from index " + removedId);
+        logger.info(String.format(LOGGER_INFO_FORMAT_REMOVE, toString(), removedId));
         return removedId;
     }
 
