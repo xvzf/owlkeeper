@@ -5,7 +5,7 @@ import de.htwsaar.owlkeeper.service.PermissionHandler;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 
 /**
- *
+ * A Manager for login a developer
  */
 public class DeveloperManager {
 
