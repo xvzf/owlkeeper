@@ -23,7 +23,14 @@ public class NavigationMainController extends Controller{
     public void setContent(UiApp app, List<Page> pages){
         this.root.getChildren().clear();
         for (Page page : pages) {
-            this.root.getChildren().add(this.buildItem(app, page, "/images/home.png", false));
+            switch (page.getName()) {
+            case "Team":
+                this.root.getChildren().add(this.buildItem(app, page, "/images/users.png", false));
+                break;
+            default:
+                this.root.getChildren().add(this.buildItem(app, page, "/images/home.png", false));
+                break;
+            }
         }
     }
 
