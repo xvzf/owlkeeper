@@ -81,6 +81,10 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
         super(dev, logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
     }
 
+    /**
+     * Retrieves the group of the developer
+     * @return the group
+     */
     public String getGroup() {
         return DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> dao.getGroup(getContainer().getId()));
     }
@@ -118,6 +122,11 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
         return tasks;
     }
 
+    /**
+     * Creates a password hash
+     * @param pw the password
+     * @return the hash
+     */
     private String getHash(String pw) {
         MessageDigest digest;
         try {
