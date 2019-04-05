@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<VBox styleClass="root" stylesheets="@/css/ui.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.htwsaar.owlkeeper.ui.controllers.ProjectsController">
+    <children>
+        <HBox styleClass="split" VBox.vgrow="ALWAYS">
+            <children>
+                <VBox styleClass="navbar">
+                    <children>
+                        <fx:include fx:id="navigation" source="partials/navigation-main.fxml"/>
+                        <fx:include fx:id="projects" source="partials/navigation-projects.fxml"/>
+                    </children>
+                </VBox>
+                <VBox HBox.hgrow="ALWAYS">
+                    <children>
+                        <fx:include fx:id="topbar" source="partials/topbar.fxml"/>
+                        <fx:include fx:id="projectList" source="partials/projects.fxml"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</VBox>

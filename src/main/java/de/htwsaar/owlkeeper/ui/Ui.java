@@ -1,15 +1,7 @@
 package de.htwsaar.owlkeeper.ui;
 
 import de.htwsaar.owlkeeper.helper.DeveloperManager;
-import de.htwsaar.owlkeeper.ui.scenes.InstallConnect;
-import de.htwsaar.owlkeeper.ui.scenes.InstallDB;
-import de.htwsaar.owlkeeper.ui.scenes.InstallLogin;
-import de.htwsaar.owlkeeper.ui.scenes.InstallSelect;
-import de.htwsaar.owlkeeper.ui.scenes.InstallSuccess;
-import de.htwsaar.owlkeeper.ui.scenes.Login;
-import de.htwsaar.owlkeeper.ui.scenes.Page;
-import de.htwsaar.owlkeeper.ui.scenes.PageIteration;
-import de.htwsaar.owlkeeper.ui.scenes.PageTeam;
+import de.htwsaar.owlkeeper.ui.scenes.*;
 
 /**
  * Main class to stage the individual Application Scenes
@@ -32,6 +24,7 @@ public class Ui {
         UiApp.stageScene(new Page());
         UiApp.stageScene(new PageIteration());
         UiApp.stageScene(new PageTeam());
+        UiApp.stageScene(new Projects());
 
         // Change this to test individual scenes
         UiApp.STARTING_SCENE = "page";
