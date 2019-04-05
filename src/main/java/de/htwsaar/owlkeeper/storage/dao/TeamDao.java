@@ -131,8 +131,8 @@ public interface TeamDao {
     /**
      * Retrieves leader
      *
-     * @param teamId
-     * @return teamId
+     * @param id
+     * @return leader
      */
     @SqlQuery("select leader from team where id = ?;"
     )
