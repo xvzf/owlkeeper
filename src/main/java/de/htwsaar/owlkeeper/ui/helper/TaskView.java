@@ -59,6 +59,9 @@ public final class TaskView{
      * @return scrollpane sidebar
      */
     public static ScrollPane buildNewTaskSidebar(Task taskEntity, UiApp app){
+
+        Validator validator = new Validator();
+
         ScrollPane sidebar = buildSidebarWrapper();
         VBox content = (VBox) sidebar.getContent();
 
@@ -82,21 +85,30 @@ public final class TaskView{
             deadline.setValue(taskEntity.getDeadline().toLocalDateTime().toLocalDate());
         }
 
-        Button submit = new Button("Task anlegen");
-        content.getChildren().add(submit);
+        VBox submitBox = new VBox();
+        Button submit = new Button("save task");
+        submitBox.getChildren().add(submit);
+        content.getChildren().add(submitBox);
 
         //@todo add team value
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            taskEntity.setName(name.getText());
-            taskEntity.setDescription(description.getText());
-            taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
-            taskEntity.setTeam(1);
-            new TaskModel(taskEntity).save();
-            long stage = taskEntity.getProjectStage();
-            long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false), true);
+            if (validator.execute()){
+                taskEntity.setName(name.getText());
+                taskEntity.setDescription(description.getText());
+                taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
+                taskEntity.setTeam(1);
+                new TaskModel(taskEntity).save();
+                long stage = taskEntity.getProjectStage();
+                long project = new ProjectStageModel(stage).getContainer().getProject();
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false), true);
+            }
+            validator.reset();
         });
 
+        validator.addRule(new Validator.Rule(name, Validator::TextNotEmpty, "Project name can't be empty."));
+        validator.addRule(new Validator.Rule(description, Validator::TextNotEmpty, "Project description can't be empty."));
+        validator.addRule(new Validator.Rule(deadline, node -> ((DatePicker) node).getValue() != null, "Deadline needs to be defined"));
+        submitBox.getChildren().add(validator.getMessageField());
 
         return sidebar;
     }
@@ -164,6 +176,7 @@ public final class TaskView{
         content.getChildren().add(CommonNodes.Hr(375, true));
 
         // Comments
+        Validator validator = new Validator();
         VBox comments = new VBox();
         comments.getStyleClass().add("comments");
         content.getChildren().add(comments);
@@ -188,18 +201,27 @@ public final class TaskView{
         comments.getChildren().add(input);
 
         // Button
+        VBox submitBox = new VBox();
         Button button = new Button();
         button.setText("send");
         button.getStyleClass().addAll("button", "button--small");
-        comments.getChildren().add(button);
+        submitBox.getChildren().add(button);
+        comments.getChildren().add(submitBox);
         button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            long id = DeveloperManager.getCurrentDeveloper().getContainer().getId();
-            TaskCommentModel comment = new TaskCommentModel(input.getText(),id, taskEntity.getId());
-            comment.save();
-            long stage = taskEntity.getProjectStage();
-            long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false), true);
+            if (validator.execute()){
+                long id = DeveloperManager.getCurrentDeveloper().getContainer().getId();
+                TaskCommentModel comment = new TaskCommentModel(input.getText(),id, taskEntity.getId());
+                comment.save();
+                long stage = taskEntity.getProjectStage();
+                long project = new ProjectStageModel(stage).getContainer().getProject();
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false), true);
+            }
+            validator.reset();
         });
+
+        // Validations
+        validator.addRule(new Validator.Rule(input, Validator::TextNotEmpty, "The new comment can't be empty."));
+        submitBox.getChildren().add(validator.getMessageField());
 
         return sidebar;
     }

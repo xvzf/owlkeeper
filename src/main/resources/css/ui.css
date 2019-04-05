@@ -261,7 +261,7 @@ TextArea:focused .content {
     /*-fx-cursor: hand;*/
 }
 
-.iteration-bar__column HBox{
+.iteration-bar__column HBox {
     -fx-spacing: 10;
     -fx-cursor: hand;
 }
@@ -328,4 +328,13 @@ TextArea:focused .content {
 
 .project-form__item {
     -fx-spacing: 5;
+}
+
+.form-error {
+    -fx-padding: 10 0 0 0;
+    -fx-spacing: 5;
+}
+
+.form-error Text {
+    -fx-fill: #ff3a35;
 }

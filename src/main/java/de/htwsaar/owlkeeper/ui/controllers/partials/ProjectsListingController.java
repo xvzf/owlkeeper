@@ -7,6 +7,7 @@ import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
+import de.htwsaar.owlkeeper.ui.helper.Validator;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -35,7 +36,14 @@ public class ProjectsListingController extends Controller{
         this.listing.getChildren().add(this.newProjectForm(app));
     }
 
+    /**
+     * Builds the new project form
+     * @param app Main UiApp object
+     * @return VBox javafx node object
+     */
     private VBox newProjectForm(UiApp app){
+        Validator validator = new Validator();
+
         VBox wrapper = new VBox();
 
         Text headline = new Text("New project");
@@ -84,20 +92,34 @@ public class ProjectsListingController extends Controller{
         submit.getStyleClass().addAll("button");
         form.getChildren().add(submit);
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            ProjectModel newProject = new ProjectModel(name.getText(), desc.getText(), type.getValue());
-            newProject.save();
-            long id = newProject.getContainer().getId();
-            System.out.println(id);
-            ProjectStageModel newStage = new ProjectStageModel(stage.getText(), id, 0);
-            newStage.save();
-            app.route("projects", new HashMap<>(), true);
+            if (validator.execute()){
+                ProjectModel newProject = new ProjectModel(name.getText(), desc.getText(), type.getValue());
+                newProject.save();
+                long id = newProject.getContainer().getId();
+                System.out.println(id);
+                ProjectStageModel newStage = new ProjectStageModel(stage.getText(), id, 0);
+                newStage.save();
+                app.route("projects", new HashMap<>(), true);
+            }
+            validator.reset();
         });
-
-
         wrapper.getChildren().add(form);
+
+        // Validations
+        validator.addRule(new Validator.Rule(name, Validator::TextNotEmpty, "Project name can't be empty."));
+        validator.addRule(new Validator.Rule(desc, Validator::TextNotEmpty, "Project description  can't be empty."));
+        validator.addRule(new Validator.Rule(stage, Validator::TextNotEmpty, "The initial project-stage needs to have a name."));
+        wrapper.getChildren().add(validator.getMessageField());
+
         return wrapper;
     }
 
+    /**
+     * Builds a single project view
+     * @param app Main UiApp
+     * @param project project entity object
+     * @return javafx node object
+     */
     private VBox getProject(UiApp app, Project project){
         ProjectModel model = new ProjectModel(project);
         List<ProjectStage> stages = model.getStages();
@@ -138,6 +160,22 @@ public class ProjectsListingController extends Controller{
         stageWrapper.getChildren().add(stagesBox);
 
         // New Stage Form
+        stageWrapper.getChildren().add(this.getNewStageForm(app, project, model));
+
+        box.getChildren().add(stageWrapper);
+        return box;
+    }
+
+    /**
+     * Build the new stage form
+     * @param app UiApp object
+     * @param project project entity object
+     * @param model projectmodel object used for querying the project-stages
+     * @return javafx vbox node object
+     */
+    private VBox getNewStageForm(UiApp app, Project project, ProjectModel model){
+        Validator validator = new Validator();
+
         VBox newStage = new VBox();
         newStage.getStyleClass().add("project__stage-form");
         newStage.getChildren().add(new Text("New Stage"));
@@ -149,14 +187,18 @@ public class ProjectsListingController extends Controller{
         submit.getStyleClass().addAll("button", "button--small");
         newStage.getChildren().add(submit);
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            ProjectStageModel newStageModel = new ProjectStageModel(input.getText(), project.getId(), model.getStages().size() + 1);
-            newStageModel.save();
-            app.route("projects", new HashMap<>(), true);
+            if (validator.execute()){
+                ProjectStageModel newStageModel = new ProjectStageModel(input.getText(), project.getId(), model.getStages().size() + 1);
+                newStageModel.save();
+                app.route("projects", new HashMap<>(), true);
+            }
+            validator.reset();
         });
-        stageWrapper.getChildren().add(newStage);
 
-        box.getChildren().add(stageWrapper);
+        // Validations
+        validator.addRule(new Validator.Rule(input, Validator::TextNotEmpty, "The new Stage must have a name."));
+        newStage.getChildren().add(validator.getMessageField());
 
-        return box;
+        return newStage;
     }
 }
