@@ -35,6 +35,7 @@ public class TaskListState extends BaseState{
         state.put("stage", ((long) this.query.get("stage") >= 0) ? this.query.get("stage") : null);
         state.put("focus", this.query.get("focus"));
         state.put("newtask", ((this.query.get("newtask")) != null) && (boolean) this.query.get("newtask"));
+        state.put("edittask", this.query.get("edittask"));
         return state;
     }
 
@@ -46,17 +47,33 @@ public class TaskListState extends BaseState{
     /**
      * Helper to build the TaskListState query object
      *
-     * @param project project id
-     * @param stage   stage id
-     * @param focus   task id to open in the sidebar
+     * @param project  project id
+     * @param stage    stage id
+     * @param focus    task id to open in the sidebar
+     * @param newtask  true if a new task should be added
+     * @param edittask taskobject to edit
      * @return TaskListState query object
      */
-    public static HashMap<String, Object> getQueryMap(long project, long stage, Task focus, boolean newtask){
+    public static HashMap<String, Object> getQueryMap(long project, long stage, Task focus, boolean newtask, Task edittask){
         HashMap<String, Object> query = new HashMap<>();
         query.put("project", project);
         query.put("stage", stage);
         query.put("focus", focus);
         query.put("newtask", newtask);
+        query.put("edittask", edittask);
         return query;
+    }
+
+    /**
+     * Helper to build the TaskList State query object
+     *
+     * @param project project id
+     * @param stage   stage id
+     * @param focus   task id to open in the sidebar
+     * @param newtask true if a new task should be added
+     * @return TaskListState query object
+     */
+    public static HashMap<String, Object> getQueryMap(long project, long stage, Task focus, boolean newtask){
+        return getQueryMap(project, stage, focus, newtask, null);
     }
 }
