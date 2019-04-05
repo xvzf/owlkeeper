@@ -1,24 +1,38 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.Permissions;
+import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
+import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
 import de.htwsaar.owlkeeper.storage.entity.Project;
-import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
-import java.util.List;
 
+import java.util.List;
 import java.util.function.Function;
+
+import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
+
 
 public class ProjectModel extends AbstractModel<Project, ProjectDao> {
 
     private static Logger logger = LogManager.getLogger(ProjectModel.class);
     private static Function<Long, ExtensionCallback<Project, ProjectDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getProject(id));
-    private static Function<Long, ExtensionCallback<Integer, ProjectDao, RuntimeException>> deleteCallbackFactory = id -> (dao -> dao.deleteProject(id));
-    private static Function<Project, ExtensionCallback<Integer, ProjectDao, RuntimeException>> saveCallbackFactory1 =
-            p -> (dao -> (p.getId() != 0 ? dao.updateProject(p) : dao.insertProject(p)));
+    private static Function<Long, ExtensionCallback<Integer, ProjectDao, InsufficientPermissionsException>> deleteCallbackFactory =
+            id -> (dao -> {
+                checkPermission(Permissions.DELETE_PROJECT.get());
+                return dao.deleteProject(id);
+            });
+    private static Function<Project, ExtensionCallback<Integer, ProjectDao, InsufficientPermissionsException>> saveCallbackFactory1 =
+            p -> (dao -> {
+                // To be allowed to make changes to the details: Be ProjectOwner and be assigned to this project.
+                checkPermission(Permissions.CREATE_PROJECT.get());
+                checkPermission(user -> dao.getProjectsOfUser(user.getId()).contains(p));
+                return (p.getId() != 0 ? dao.updateProject(p) : dao.insertProject(p));
+            });
 
 
     /**
@@ -60,6 +74,7 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
      * @return ps List with all Stages
      */
     public List<ProjectStage> getStages() {
+        checkPermission(user -> isAssignedToProject(user.getId())); // Only get stages for projects that a user is assigned to
         long id = getContainer().getId();
         List<ProjectStage> ps = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getStagesForProject(id)));
         return ps;
@@ -71,7 +86,7 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
      * @return projectlist List with all Projects
      */
     public static List<Project> getProjects() {
-        List<Project> projectlist = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getProjects()));
+        List<Project> projectlist = DBConnection.getJdbi().withExtension(ProjectDao.class, (ProjectDao::getProjects));
         return projectlist;
     }
 
@@ -82,5 +97,14 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
     public List<Team> getTeams(){
         long id = getContainer().getId();
         return DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getTeams(id)));
+    }
+
+    /**
+     * Checks, whether a user is assigned to a project.
+     * @param id of the user
+     * @return true if the user is assigned to a project.
+     */
+    public boolean isAssignedToProject(final long id) {
+        return DBConnection.getJdbi().withExtension(ProjectDao.class, dao -> dao.getProjectsOfUser(id)).contains(this.getContainer());
     }
 }

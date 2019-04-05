@@ -34,7 +34,9 @@ public class ProjectTasksController extends MyTasksController{
 
         Button btn = new Button("Neuer Task hinzufügen");
         btn.getStyleClass().addAll("button", "button--small");
-        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> app.route("page-iteration", TaskListState.getQueryMap(project.getId(), stage.getId(), null, true)));
+        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            app.route("page-iteration", TaskListState.getQueryMap(project.getId(), stage.getId(), null, true), true);
+        });
         this.tasks.getChildren().add(btn);
     }
 

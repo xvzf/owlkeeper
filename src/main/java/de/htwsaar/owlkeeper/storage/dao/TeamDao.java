@@ -1,6 +1,7 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
 import de.htwsaar.owlkeeper.storage.entity.Developer;
+import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
@@ -46,7 +47,7 @@ public interface TeamDao {
      * @return
      */
     @SqlQuery(
-            "select d.id, d.created, d.name, d.role, d.email, d.chief "
+            "select d.id, d.created, d.name, d.email "
                     + "from developer_team_relation as tdr "
                     + "left join developer as d on tdr.developer = d.id "
                     + "where tdr.team = ?;"
@@ -138,4 +139,15 @@ public interface TeamDao {
     )
     @RegisterBeanMapper(Team.class)
     int getLeader(long id);
+
+    /**
+     * Retrieves all projects a team is involved in.
+     * @param teamId
+     * @return a list of projects this team is involved in.
+     */
+    @SqlQuery("select p.id, p.created, p.name, p.description, p.type " +
+            "from team_project_relation tpr join project p on tpr.project = p.id " +
+            "where tpr.team = ?;")
+    @RegisterBeanMapper(Project.class)
+    List<Project> getProjectForTeam(long teamId);
 }

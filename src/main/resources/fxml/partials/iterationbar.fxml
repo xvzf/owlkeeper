@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="10.0" maxHeight="75.0" fx:id="iterationBar"
-      minHeight="75.0" prefHeight="100.0" prefWidth="200.0" styleClass="iteration-bar" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.IterationBarController" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
-    <!-- Gets filled in IterationBarController -->
-</HBox>
 
+<HBox fx:id="iterationBar" alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="10.0" maxHeight="75.0" minHeight="75.0" styleClass="iteration-bar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.IterationBarController">
+   <children>
+      <HBox fx:id="left" prefWidth="150.0" />
+      <HBox fx:id="center" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+      <HBox fx:id="right" prefWidth="150.0" />
+   </children>
+</HBox>

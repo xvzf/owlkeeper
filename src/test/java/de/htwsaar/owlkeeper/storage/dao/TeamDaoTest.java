@@ -1,9 +1,11 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.DBConnection;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,6 +17,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * Needs to run against test database !!!
  */
 class TeamDaoTest {
+
+    @BeforeAll
+    static void setUp() {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
+    }
 
     @Test
     void testGetTeam() {
@@ -73,7 +80,7 @@ class TeamDaoTest {
     void testGetTasks() {
         List<Task> tasks = DBConnection.getJdbi().withExtension(TeamDao.class, dao -> (dao.getTasks(2)));
         assertEquals(1, tasks.size());
-        assertEquals("Task 1 Stage 2 description", tasks.get(0).getDescription());
+        assertEquals("Task 3 description", tasks.get(0).getDescription());
     }
 
 }

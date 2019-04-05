@@ -2,7 +2,7 @@ package de.htwsaar.owlkeeper.storage.entity;
 
 import java.sql.Timestamp;
 
-public class Team implements HasID{
+public class Team extends HasID {
     private long id;
     private Timestamp created;
     private String name;
@@ -48,5 +48,16 @@ public class Team implements HasID{
                 ", name='" + name + '\'' +
                 ", leader=" + leader +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Team)) return false;
+
+        Team other = (Team) o;
+
+        return other.getId() == this.getId();
     }
 }

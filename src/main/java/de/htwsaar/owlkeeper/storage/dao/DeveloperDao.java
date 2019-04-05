@@ -1,12 +1,13 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
 import de.htwsaar.owlkeeper.storage.entity.Developer;
+import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
-import org.jdbi.v3.sqlobject.config.RegisterFieldMapper;
+import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
-import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
+import javax.xml.bind.annotation.XmlInlineBinaryData;
 import java.util.List;
 
 public interface DeveloperDao {
@@ -45,8 +46,8 @@ public interface DeveloperDao {
      * @return Inserted id
      */
     @SqlQuery("insert into developer "
-            + "(name, role, email, chief) values "
-            + "(:name, :role, :email, :chief) returning id;"
+            + "(name, email) values "
+            + "(:name, :email) returning id;"
     )
     int insertDeveloper(@BindBean Developer d);
 
@@ -59,9 +60,7 @@ public interface DeveloperDao {
      */
     @SqlQuery("update developer set "
             + "name = :name"
-            + ", role = :role"
             + ", email = :email"
-            + ", is_chief = :chief "
             + "where id = :id returning id;"
     )
     int updateDeveloper(@BindBean Developer d);
@@ -79,4 +78,29 @@ public interface DeveloperDao {
     )
     @RegisterBeanMapper(Developer.class)
     int deleteDeveloper(long id);
+
+    /**
+     * Get the group of a developer
+     *
+     * @param id
+     * @return String group name
+     */
+    @SqlQuery("select g.name from "
+            + "developer d join developer_group_relation dg on d.id = dg.developer "
+            + "join \"group\" g on dg.group = g.id "
+            + "where d.id = ?"
+    )
+    @RegisterBeanMapper(Developer.class)
+    String getGroup(long id);
+
+    /**
+     * Queries all teams of a developer
+     *
+     * @param d developer
+     * @return all teams
+     */
+    @SqlQuery("select distinct  t.id as id, t.created as created, t.name as name, t.leader as leader " +
+            " from team as t, developer_team_relation as dtr where dtr.developer = :id;")
+    @RegisterBeanMapper(Team.class)
+    List<Team> getTeams(@BindBean Developer d);
 }
