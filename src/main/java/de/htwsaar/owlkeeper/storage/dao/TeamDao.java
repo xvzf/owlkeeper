@@ -130,17 +130,6 @@ public interface TeamDao {
     long removeDeveloper(long developerId, long teamId);
 
     /**
-     * Retrieves leader
-     *
-     * @param id
-     * @return leader
-     */
-    @SqlQuery("select leader from team where id = ?;"
-    )
-    @RegisterBeanMapper(Team.class)
-    int getLeader(long id);
-
-    /**
      * Retrieves all projects a team is involved in.
      * @param teamId
      * @return a list of projects this team is involved in.

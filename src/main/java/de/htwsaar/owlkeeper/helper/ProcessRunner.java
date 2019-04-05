@@ -9,10 +9,15 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
- * Helperclass to run processes
+ * Helper-class to run processes
  */
 public class ProcessRunner {
     private static Logger logger = LogManager.getLogger(ProcessRunner.class);
+
+    private static final String CMD_ARGUMENT_DELIMITER = " ";
+    private static final String REGEX_END_OF_INPUT = "\\Z";
+    private static final String LOGGER_OUTPUT_TEXT = "Output: ";
+    private static final String LOGGER_OUTPUT_EMPTY_STREAM = "Empty ¯\\_(ツ)_/¯";
 
     /**
      * Run process
@@ -20,20 +25,21 @@ public class ProcessRunner {
      *
      * @param cmd           The entire commandline with all arguments. Accepts no shell features like pipes
      * @param redirectinput null, if not input shall be redirected, otherwise a file being fed to the process stdin
-     * @throws IOException
+     * @throws IOException when cmd executable can't be found
      */
     public static void run(String cmd, File redirectinput) throws IOException {
-        ProcessBuilder pb = new ProcessBuilder(cmd.split(" "));
+        ProcessBuilder pb = new ProcessBuilder(cmd.split(CMD_ARGUMENT_DELIMITER));
         if (redirectinput != null) {
             pb.redirectInput(redirectinput);
         }
 
         Process p = pb.start();
-        Scanner s = new Scanner(p.getInputStream()).useDelimiter("\\Z");
+        Scanner s = new Scanner(p.getInputStream()).useDelimiter(REGEX_END_OF_INPUT);
         try {
-            logger.info("Output: " + s.next());
+            logger.info(LOGGER_OUTPUT_TEXT + s.next());
         } catch (NoSuchElementException e) {
-            logger.info("Output: Empty ¯\\_(ツ)_/¯");
+            logger.info(LOGGER_OUTPUT_TEXT + LOGGER_OUTPUT_EMPTY_STREAM);
         }
+        s.close();
     }
 }

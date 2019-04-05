@@ -125,16 +125,6 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
     }
 
     /**
-     * Retrieves leader
-     *
-     * @return leader
-     */
-    public int getLeader() {
-        long id = this.getContainer().getId();
-        return DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getLeader(id)));
-    }
-
-    /**
      * Retrieves all developers of a team
      *
      * @return all devs
@@ -142,6 +132,5 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
     public List<Developer> getDevelopers() {
         long id = getContainer().getId();
         return DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getDevelopersPerTeam(id)));
-
     }
 }

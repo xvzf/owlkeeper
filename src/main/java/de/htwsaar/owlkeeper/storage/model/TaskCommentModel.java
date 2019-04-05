@@ -16,14 +16,6 @@ import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
 
 public class TaskCommentModel extends AbstractModel<TaskComment, TaskCommentDao> {
 
-    /**
-     * long id;
-     * Timestamp created;
-     * String content;
-     * long developer;
-     * long task;
-     */
-
     private static Logger logger = LogManager.getLogger(TaskCommentModel.class);
     private static Function<Long, ExtensionCallback<TaskComment, TaskCommentDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getComment(id));
     private static Function<Long, ExtensionCallback<Integer, TaskCommentDao, InsufficientPermissionsException>> deleteCallbackFactory = id -> (dao -> {
