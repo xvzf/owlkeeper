@@ -39,6 +39,5 @@ public class ProcessRunner {
         } catch (NoSuchElementException e) {
             logger.info(LOGGER_OUTPUT_TEXT + LOGGER_OUTPUT_EMPTY_STREAM);
         }
-        s.close();
     }
 }
