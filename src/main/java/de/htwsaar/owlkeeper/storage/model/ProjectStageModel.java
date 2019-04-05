@@ -1,8 +1,10 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.Permissions;
+import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
 import de.htwsaar.owlkeeper.storage.DBConnection;
+import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
 import de.htwsaar.owlkeeper.storage.dao.ProjectStageDao;
-import de.htwsaar.owlkeeper.storage.dao.TaskDao;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
@@ -14,13 +16,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
+
 public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageDao> {
 
     private static Logger logger = LogManager.getLogger(ProjectStageModel.class);
     private static Function<Long, ExtensionCallback<ProjectStage, ProjectStageDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getProjectStage(id));
-    private static Function<Long, ExtensionCallback<Integer, ProjectStageDao, RuntimeException>> removeCallbackFactory = id -> (dao -> dao.removeProjectStage(id));
-    private static Function<ProjectStage, ExtensionCallback<Integer, ProjectStageDao, RuntimeException>> saveCallbackFactory1 =
-            p -> (dao -> (p.getId() != 0 ? dao.updateProjectStage(p) : dao.insertProjectStage(p)));
+    private static Function<Long, ExtensionCallback<Integer, ProjectStageDao, InsufficientPermissionsException>> removeCallbackFactory =
+        id -> (dao -> {
+            checkPermission(Permissions.DELETE_PROJECT_STAGE.get());
+            checkPermission(user -> // Check that the user is assigned to the project.
+                    DBConnection.getJdbi().withExtension(ProjectDao.class,
+                            projectDao -> projectDao.getProjectsOfUser(user.getId())).contains(dao.getProject(id)));
+            return dao.removeProjectStage(id);
+        });
+    private static Function<ProjectStage, ExtensionCallback<Integer, ProjectStageDao, InsufficientPermissionsException>> saveCallbackFactory1 =
+            p -> (dao -> {
+                checkPermission(Permissions.CREATE_PROJECT_STAGE.get());
+                checkPermission(user -> // Check that the user is assigned to the project.
+                        DBConnection.getJdbi().withExtension(ProjectDao.class,
+                                projectDao -> projectDao.getProjectsOfUser(user.getId())).contains(dao.getProject(p.getId())));
+                return (p.getId() != 0 ? dao.updateProjectStage(p) : dao.insertProjectStage(p));
+            });
 
 
     /**

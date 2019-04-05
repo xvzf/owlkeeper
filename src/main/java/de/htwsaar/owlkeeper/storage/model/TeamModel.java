@@ -1,26 +1,35 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.Permissions;
+import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
 import de.htwsaar.owlkeeper.storage.DBConnection;
-import de.htwsaar.owlkeeper.storage.dao.ProjectDao;
 import de.htwsaar.owlkeeper.storage.dao.TeamDao;
-import de.htwsaar.owlkeeper.storage.entity.*;
-import de.htwsaar.owlkeeper.storage.dao.TeamDao;
+import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Project;
+import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+
+import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
 
 public class TeamModel extends AbstractModel<Team, TeamDao> {
 
     private static Logger logger = LogManager.getLogger(TeamModel.class);
     private static Function<Long, ExtensionCallback<Team, TeamDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getTeam(id));
-    private static Function<Long, ExtensionCallback<Integer, TeamDao, RuntimeException>> deleteCallbackFactory = id -> (dao -> dao.deleteTeam(id));
-    private static Function<Team, ExtensionCallback<Integer, TeamDao, RuntimeException>> saveCallbackFactory1 =
-            p -> (dao -> (p.getId() != 0 ? dao.updateTeam(p) : dao.insertTeam(p)));
+    private static Function<Long, ExtensionCallback<Integer, TeamDao, InsufficientPermissionsException>> deleteCallbackFactory = id -> (dao -> {
+        checkPermission(Permissions.DISSOLVE_TEAM.get());
+        return dao.deleteTeam(id);
+    });
+    private static Function<Team, ExtensionCallback<Integer, TeamDao, InsufficientPermissionsException>> saveCallbackFactory1 =
+            p -> (dao -> {
+                checkPermission(Permissions.CREATE_TEAM.get());
+                return (p.getId() != 0 ? dao.updateTeam(p) : dao.insertTeam(p));
+            });
 
 
     /**
@@ -49,18 +58,19 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
     /**
      * Constructor for already existing Teams
      *
-     * @param Team Team
+     * @param team team
      */
-    public TeamModel(Team Team) {
-        super(Team, logger, TeamDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
+    public TeamModel(Team team) {
+        super(team, logger, TeamDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
     }
 
 
     /**
      * Retrieves all Teams
+     *
      * @return teamList List with all Projects
      */
-    public static List<Team> getTeams(){
+    public static List<Team> getTeams() {
         List<Team> teamList = DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getTeams()));
         return teamList;
     }
@@ -71,6 +81,9 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      * @return all tasks
      */
     public List<Task> getTasks() {
+        // Only users assigned to the team should be allowed to see the tasks.
+        checkPermission(user -> DBConnection.getJdbi().withExtension(TeamDao.class,
+                teamDao -> teamDao.getTeamForDeveloper(user.getId()).contains(this.getContainer())));
         long id = getContainer().getId();
         return DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getTasks(id)));
     }
@@ -80,28 +93,18 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      *
      * @return all projects
      */
-    public List<Project> getProjects() {
-        List<Task> tasks = getTasks();
-        ArrayList<Project> projects = new ArrayList<>();
-        for (Task task : tasks) {
-            long project_stage_id = task.getProjectStage();
-            if (project_stage_id != 0) {
-                long project_id = new ProjectStageModel(project_stage_id).getContainer().getProject();
-                if (project_id != 0) {
-                    projects.add(new ProjectModel(project_id).getContainer());
-                }
-            }
-        }
-        return projects;
+    public List<Project> getProjects(long teamId) {
+        return DBConnection.getJdbi().withExtension(TeamDao.class, dao -> dao.getProjectForTeam(teamId));
     }
 
     /**
      * Adds Developer to Team
      *
-     * @param Dev Developer
+     * @param dev Developer
      */
-    public void addDeveloper (Developer Dev) {
-        long developerId = Dev.getId();
+    public void addDeveloper(Developer dev) {
+        checkPermission(user -> this.getContainer().getLeader() == user.getId()); // Team Leader is allowed to add users to the team
+        long developerId = dev.getId();
         long teamId = this.getContainer().getId();
 
         DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.addDeveloper(developerId, teamId)));
@@ -110,10 +113,11 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
     /**
      * Deletes Developer from Team
      *
-     * @param Dev Developer
+     * @param dev Developer
      */
-    public void removeDeveloper (Developer Dev) {
-        long developerId = Dev.getId();
+    public void removeDeveloper(Developer dev) {
+        checkPermission(user -> dev.equals(user) || this.getContainer().getLeader() == user.getId()); // Team leader and the user itself can leave the team
+        long developerId = dev.getId();
         long teamId = this.getContainer().getId();
 
         DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.removeDeveloper(developerId, teamId)));
@@ -128,5 +132,16 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
     public int getLeader() {
         long id = this.getContainer().getId();
         return DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getLeader(id)));
+    }
+
+    /**
+     * Retrieves all developers of a team
+     *
+     * @return all devs
+     */
+    public List<Developer> getDevelopers() {
+        long id = getContainer().getId();
+        return DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getDevelopersPerTeam(id)));
+
     }
 }

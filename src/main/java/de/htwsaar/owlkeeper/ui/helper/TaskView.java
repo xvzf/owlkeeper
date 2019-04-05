@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.ui.helper;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.TaskComment;
 import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
@@ -8,12 +9,16 @@ import de.htwsaar.owlkeeper.storage.model.TaskModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -37,13 +42,11 @@ public final class TaskView{
         // Sidebar Pane
         ScrollPane sidebar = new ScrollPane();
         sidebar.setFitToHeight(true);
-        sidebar.setPrefWidth(450);
-
+        sidebar.setMinWidth(450);
+		sidebar.setHbarPolicy(ScrollBarPolicy.NEVER);
 
         // Sidebar Box
         VBox content = new VBox();
-        content.setPrefHeight(0);
-        content.setPrefWidth(450);
         content.getStyleClass().add("sidebar");
         sidebar.setContent(content);
         return sidebar;
@@ -56,6 +59,9 @@ public final class TaskView{
      * @return scrollpane sidebar
      */
     public static ScrollPane buildNewTaskSidebar(Task taskEntity, UiApp app){
+
+        Validator validator = new Validator();
+
         ScrollPane sidebar = buildSidebarWrapper();
         VBox content = (VBox) sidebar.getContent();
 
@@ -79,21 +85,30 @@ public final class TaskView{
             deadline.setValue(taskEntity.getDeadline().toLocalDateTime().toLocalDate());
         }
 
-        Button submit = new Button("Task anlegen");
-        content.getChildren().add(submit);
+        VBox submitBox = new VBox();
+        Button submit = new Button("save task");
+        submitBox.getChildren().add(submit);
+        content.getChildren().add(submitBox);
 
         //@todo add team value
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            taskEntity.setName(name.getText());
-            taskEntity.setDescription(description.getText());
-            taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
-            taskEntity.setTeam(1);
-            new TaskModel(taskEntity).save();
-            long stage = taskEntity.getProjectStage();
-            long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false));
+            if (validator.execute()){
+                taskEntity.setName(name.getText());
+                taskEntity.setDescription(description.getText());
+                taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
+                taskEntity.setTeam(1);
+                new TaskModel(taskEntity).save();
+                long stage = taskEntity.getProjectStage();
+                long project = new ProjectStageModel(stage).getContainer().getProject();
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false), true);
+            }
+            validator.reset();
         });
 
+        validator.addRule(new Validator.Rule(name, Validator::TextNotEmpty, "Project name can't be empty."));
+        validator.addRule(new Validator.Rule(description, Validator::TextNotEmpty, "Project description can't be empty."));
+        validator.addRule(new Validator.Rule(deadline, node -> ((DatePicker) node).getValue() != null, "Deadline needs to be defined"));
+        submitBox.getChildren().add(validator.getMessageField());
 
         return sidebar;
     }
@@ -109,15 +124,11 @@ public final class TaskView{
 
         // Tags
         HBox tags = new HBox();
-        tags.setPrefHeight(0);
-        tags.setPrefWidth(0);
         tags.getStyleClass().add("sidebar__tags");
         content.getChildren().add(tags);
 
-
         // Individual Tags
         tags.getChildren().add(CommonNodes.Tag("blocked", "#E14B4B"));
-
 
         // Title
         Text title = new Text(taskEntity.getName());
@@ -125,11 +136,8 @@ public final class TaskView{
         title.setWrappingWidth(400);
         content.getChildren().add(title);
 
-
         // Date & Team -- Wrapper
         HBox meta = new HBox();
-        meta.setPrefHeight(0);
-        meta.setPrefWidth(200);
         meta.getStyleClass().add("sidebar__meta");
         meta.setAlignment(Pos.CENTER_LEFT);
         content.getChildren().add(meta);
@@ -142,8 +150,6 @@ public final class TaskView{
 
         // Team
         HBox team = new HBox();
-        team.setPrefWidth(20000);
-        team.setPrefHeight(100);
         team.setAlignment(Pos.CENTER_RIGHT);
         team.getStyleClass().add("sidebar__team");
         meta.getChildren().add(team);
@@ -166,53 +172,56 @@ public final class TaskView{
             app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false, taskEntity));
         });
 
-
         // HairLine (hr)
-        content.getChildren().add(CommonNodes.Hr(400, true));
+        content.getChildren().add(CommonNodes.Hr(375, true));
 
         // Comments
+        Validator validator = new Validator();
         VBox comments = new VBox();
-        comments.setPrefWidth(400);
-        comments.setPrefHeight(275);
         comments.getStyleClass().add("comments");
         content.getChildren().add(comments);
-
 
         List<TaskComment> tasksComments = new TaskModel(taskEntity).getComments();
         for (TaskComment commentEntity : tasksComments) {
             HBox comment = new HBox();
             comment.getStyleClass().add("comments__item");
-            comments.getChildren().add(comment);
-
             comment.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
-
             Text commentText = new Text(commentEntity.getContent());
             commentText.setWrappingWidth(350);
             comment.getChildren().add(commentText);
+            comments.getChildren().add(comment);
         }
 
         // TextArea
         TextArea input = new TextArea();
-        input.getStyleClass().add("comments__input");
+		input.setMaxWidth(375);
         input.setWrapText(true);
+        input.getStyleClass().add("comments__input");
         input.setPromptText("write a comment...");
         comments.getChildren().add(input);
 
         // Button
+        VBox submitBox = new VBox();
         Button button = new Button();
         button.setText("send");
         button.getStyleClass().addAll("button", "button--small");
-        comments.getChildren().add(button);
-
-        // @todo make current user dynamic
+        submitBox.getChildren().add(button);
+        comments.getChildren().add(submitBox);
         button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            TaskCommentModel comment = new TaskCommentModel(input.getText(), 1, taskEntity.getId());
-            comment.save();
-            long stage = taskEntity.getProjectStage();
-            long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
+            if (validator.execute()){
+                long id = DeveloperManager.getCurrentDeveloper().getContainer().getId();
+                TaskCommentModel comment = new TaskCommentModel(input.getText(),id, taskEntity.getId());
+                comment.save();
+                long stage = taskEntity.getProjectStage();
+                long project = new ProjectStageModel(stage).getContainer().getProject();
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false), true);
+            }
+            validator.reset();
         });
 
+        // Validations
+        validator.addRule(new Validator.Rule(input, Validator::TextNotEmpty, "The new comment can't be empty."));
+        submitBox.getChildren().add(validator.getMessageField());
 
         return sidebar;
     }
@@ -239,7 +248,6 @@ public final class TaskView{
         meta.setAlignment(Pos.CENTER_RIGHT);
         meta.setPrefWidth(20000);
         task.getChildren().add(meta);
-
 
         // Team
         HBox team = new HBox();

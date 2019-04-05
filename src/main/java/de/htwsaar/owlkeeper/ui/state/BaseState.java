@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class BaseState implements State{
+public class BaseState extends State{
 
     private List<Page> pages;
     private HashMap<Long, Project> projects;
-    HashMap<String, Object> query;
 
     /**
      * Returns a project by its id
@@ -26,21 +25,8 @@ public class BaseState implements State{
         return this.projects.get(id);
     }
 
-    /**
-     * Merges two queries into one new one
-     * @param defaultQuery defaulty query object
-     * @param query given query object
-     * @return merged query object
-     */
-    private static HashMap<String, Object> mergeQueries(HashMap<String, Object> defaultQuery, HashMap<String, Object> query){
-        HashMap<String, Object> newQuery = new HashMap<String, Object>();
-        defaultQuery.forEach(newQuery::put);
-        query.forEach(newQuery::put);
-        return newQuery;
-    }
-
     @Override
-    public void handleQuery(HashMap <String, Object> query){
+    public void handleQuery(HashMap<String, Object> query){
         this.query = mergeQueries(this.getDefaultQuery(), query);
         this.pages = this.getNavigationList();
         this.projects = new HashMap<>();

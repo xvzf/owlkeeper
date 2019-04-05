@@ -73,7 +73,7 @@ public final class CommonNodes{
      */
     public static Rectangle Hr(int width, boolean light){
         Rectangle hr = new Rectangle();
-        hr.setWidth(400);
+        hr.setWidth(width);
         hr.setHeight(1);
         ;
         hr.getStyleClass().add("hr");

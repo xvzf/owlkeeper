@@ -1,8 +1,10 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,11 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ProjectStageModelTest {
 
     private final String PS_NAME_1 = "testProjectStage";
-    private final long PS_INDEX_1 = 1;
+    private final long PS_INDEX_1 = 3;
     private final long PS_PROJECT_1 = 2;
 
     private final long PS_ID_2 = 1;
     private final long PS_ACTUAL_NO_OF_TASKS = 2;
+
+    @BeforeAll
+    static void setUp() {
+        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
+    }
 
     @Test
     void testConstructor() {

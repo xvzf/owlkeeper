@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox fx:id="root" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.ProjectsListingController">
+    <children>
+        <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
+            <content>
+                <VBox fx:id="listing" styleClass="main">
+                    <!-- Gets filled by the controller -->
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</HBox>

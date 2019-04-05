@@ -12,22 +12,36 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MyTasksController extends SidebarController<Task>{
+public class MyTasksController extends SidebarController<Task> {
 
     @FXML
     public VBox tasks;
 
-    public void setContent(UiApp app, List<Task> tasks, Task sidebar){
+    public void setContent(UiApp app, List<Task> tasks, Task sidebar) {
         this.removeSidebar();
         if (sidebar != null) {
             this.addSidebar(sidebar, app);
         }
         this.tasks.getChildren().clear();
         if (tasks != null) {
-            // @todo dynamic sections maybe
-            this.tasks.getChildren().add(this.getTaskList(app, "Open tasks", tasks));
+            List<Task> openTasks = new ArrayList<>();
+            List<Task> closedTasks = new ArrayList<>();
+            for (Task task : tasks) {
+                if (task.getFulfilled() == null) {
+                    openTasks.add(task);
+                } else {
+                    closedTasks.add(task);
+                }
+            }
+            if (!openTasks.isEmpty()) {
+                this.tasks.getChildren().add(this.getTaskList(app, "Open tasks", openTasks));
+            }
+            if (!closedTasks.isEmpty()) {
+                this.tasks.getChildren().add(this.getTaskList(app, "Closed tasks", closedTasks));
+            }
         }
     }
 
@@ -36,7 +50,7 @@ public class MyTasksController extends SidebarController<Task>{
      *
      * @return the full task-list Node
      */
-    private VBox getTaskList(UiApp app, String titleText, List<Task> taskList){
+    private VBox getTaskList(UiApp app, String titleText, List<Task> taskList) {
         VBox taskListing = new VBox();
         taskListing.getStyleClass().add("task-list");
 
@@ -57,18 +71,23 @@ public class MyTasksController extends SidebarController<Task>{
      *
      * @return the task Node
      */
-    private HBox getTask(UiApp app, Task taskEntity){
+    private HBox getTask(UiApp app, Task taskEntity) {
         HBox task = TaskView.getTaskNode(taskEntity);
         task.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             long stage = taskEntity.getProjectStage();
             long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
+            Task focus = (Task) this.getUiScene().getState().getQuery().get("focus");
+            if (focus == null || focus.getId() != taskEntity.getId()) {
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false));
+            } else {
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false));
+            }
         });
         return task;
     }
 
     @Override
-    ScrollPane buildSidebar(Task task, UiApp app){
+    ScrollPane buildSidebar(Task task, UiApp app) {
         return TaskView.buildSidebar(task, app);
     }
 }
