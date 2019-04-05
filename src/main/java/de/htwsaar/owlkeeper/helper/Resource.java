@@ -22,6 +22,8 @@ public class Resource {
     private static final String SQL_TRIM = " +";
     private static Logger logger = LogManager.getLogger(Resource.class);
 
+    private static final String FOLDER_SQL_FILES = "/sqls/";
+
     /**
      * Creates an input stream from a resource
      *
@@ -46,6 +48,13 @@ public class Resource {
         return Resource.class.getResource(resourcePath).getPath().replace("%20", " ");
     }
 
+    /**
+     * Returns the absolute path of a resource
+     * @param clazz
+     * @param resourcePath
+     * @return
+     * @throws ResourceNotFoundException
+     */
     public static String resourceToAbsolutePath(Class<?> clazz, String resourcePath) throws ResourceNotFoundException {
         URL resource = clazz.getResource(resourcePath);
         if (resource == null) { // Didnt find the resource.
@@ -87,7 +96,7 @@ public class Resource {
      * @throws ResourceNotFoundException SQL-File could not be accessed
      */
     public static String getSQLResource(String name) throws ResourceNotFoundException {
-        String commentedSql = Resource.getResourceAsString(new Resource(), "/sqls/" + name);
+        String commentedSql = Resource.getResourceAsString(new Resource(), FOLDER_SQL_FILES + name);
 
         Optional<String> parsedSQL = Arrays.stream(commentedSql.split("\n"))
                 .map(e -> {
@@ -107,8 +116,15 @@ public class Resource {
         return parsedSQL.get();
     }
 
+    /**
+     * Retrieves the absolute path to a sql file in the sql-folder
+     *
+     * @param name name of the sql file
+     * @return the absolute path
+     * @throws ResourceNotFoundException when the file could not be found
+     */
     public static String getSQLResourcePath(String name) throws ResourceNotFoundException {
-        return Resource.resourceToAbsolutePath("/sqls/" + name);
+        return Resource.resourceToAbsolutePath(FOLDER_SQL_FILES + name);
     }
 
     /**

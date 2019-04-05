@@ -8,6 +8,10 @@ import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 
 import java.util.Properties;
 
+/**
+ * Class for initiating and getting connections to the database
+ * Parameters are defined in the owlkeeper.properties file
+ */
 public class DBConnection {
     private static final String URL_CONFIG_SECTION = "db";
     private static final String URL_CONFIG_KEY = "url";
@@ -15,6 +19,18 @@ public class DBConnection {
     private static Properties config = ConfigurationManager.getConfigManager().getConfig(URL_CONFIG_SECTION);
     private static Jdbi jdbi;
 
+    private static final String LOGGER_ERROR_FORMAT_NO_KEY =
+            "Could not find key \"%s\" in section \"%s\" in config file";
+    private static final String LOGGER_INFO_FORMAT_CONNECTION_OK = "Connection to DB at %s established";
+    private static final String LOGGER_ERROR_FORMAT_CONNECTION_NOT_OK =
+            "Connection to DB at %s could not be established";
+
+    /**
+     * Get a connection to the database.
+     * If non is initiated, a new one will be initiated
+     *
+     * @return a connection to the database
+     */
     public static Jdbi getJdbi() {
 
         if (jdbi == null) {
@@ -24,13 +40,15 @@ public class DBConnection {
         return jdbi;
     }
 
+    /**
+     * Initiate a connection to the database
+     */
     public static void initiateDBConnection() {
         String url;
         try {
             url = config.getProperty(URL_CONFIG_KEY);
         } catch (Exception e) {
-            logger.error("Could not find key \"" + URL_CONFIG_KEY +
-                    "\" in section \"" + URL_CONFIG_SECTION + "\" in config file", e);
+            logger.error(String.format(LOGGER_ERROR_FORMAT_NO_KEY, URL_CONFIG_KEY, URL_CONFIG_SECTION), e);
             throw e;
         }
         try {
@@ -38,9 +56,9 @@ public class DBConnection {
             jdbi.installPlugin(new SqlObjectPlugin());
             // open and close a connection to check if it's established
             jdbi.open().close();
-            logger.info("Connection to DB at " + url + " established");
+            logger.info(String.format(LOGGER_INFO_FORMAT_CONNECTION_OK, url));
         } catch (Exception e) {
-            logger.error("Connection to DB at " + url + " could not be established", e);
+            logger.error(String.format(LOGGER_ERROR_FORMAT_CONNECTION_NOT_OK, url), e);
         }
     }
 }

@@ -81,6 +81,9 @@ public class ConfigurationManager {
         return manager;
     }
 
+    /**
+     * Gets a ConfigurationManager
+     */
     public static ConfigurationManager getConfigManager(Class<?> clazz, String path) {
         if (manager == null) manager = new ConfigurationManager(clazz, path);
 
