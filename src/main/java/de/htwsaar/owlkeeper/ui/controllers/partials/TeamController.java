@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
+import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 import de.htwsaar.owlkeeper.storage.model.TeamModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
@@ -57,14 +58,13 @@ public class TeamController extends SidebarController<Object> {
         List<Developer> developers = new TeamModel(teamEntity).getDevelopers();
         VBox unit = new VBox();
         unit.getStyleClass().add("team-unit");
-        new Text("Leader: " + teamEntity.getLeader());
         unit.getChildren().add(new Text("Leader:"));
 
         HBox leader = new HBox();
         leader.getStyleClass().add("team-unit__member");
         leader.getChildren().add(CommonNodes.Image("/images/users.png", 30, 30));
         // TODO: get leader of team
-        leader.getChildren().add(new Text(developers.get(0).getName()));
+        leader.getChildren().add(new Text(Long.toString(teamEntity.getLeader())));
         unit.getChildren().add(leader);
 
         unit.getChildren().add(new Text("Members:"));
