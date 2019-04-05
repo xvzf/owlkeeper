@@ -30,8 +30,12 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
             p -> (dao -> {
                 // To be allowed to make changes to the details: Be ProjectOwner and be assigned to this project.
                 checkPermission(Permissions.CREATE_PROJECT.get());
-                checkPermission(user -> dao.getProjectsOfUser(user.getId()).contains(p));
-                return (p.getId() != 0 ? dao.updateProject(p) : dao.insertProject(p));
+                if (p.getId() != 0) {
+                    checkPermission(user -> dao.getProjectsOfUser(user.getId()).contains(p));
+                    return dao.updateProject(p);
+                } else {
+                    return dao.insertProject(p);
+                }
             });
 
 
