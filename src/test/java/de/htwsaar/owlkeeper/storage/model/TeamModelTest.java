@@ -61,4 +61,10 @@ class TeamModelTest {
         assertEquals(1, tasks.size());
         assertEquals("Task 2 description", tasks.get(0).getDescription());
     }
+
+    @Test
+    void getLeaderTest() {
+        TeamModel tm = new TeamModel(T_ID_2);
+        assertEquals(1, tm.getLeader());
+    }
 }

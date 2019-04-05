@@ -127,4 +127,15 @@ public interface TeamDao {
     )
     @RegisterBeanMapper(Developer.class)
     long removeDeveloper(long developerId, long teamId);
+
+    /**
+     * Retrieves leader
+     *
+     * @param teamId
+     * @return teamId
+     */
+    @SqlQuery("select leader from team where id = ?;"
+    )
+    @RegisterBeanMapper(Team.class)
+    int getLeader(long id);
 }

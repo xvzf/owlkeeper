@@ -119,4 +119,14 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
         DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.removeDeveloper(developerId, teamId)));
 
     }
+
+    /**
+     * Retrieves leader
+     *
+     * @return leader
+     */
+    public int getLeader() {
+        long id = this.getContainer().getId();
+        return DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getLeader(id)));
+    }
 }
