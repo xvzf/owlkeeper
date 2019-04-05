@@ -6,18 +6,18 @@ import de.htwsaar.owlkeeper.storage.model.TeamModel;
 import java.util.HashMap;
 import java.util.List;
 
-public class TeamListState extends BaseState{
+public class TeamListState extends BaseState {
     private List<Team> teams;
 
     @Override
-    public void handleQuery(HashMap<String, Object> query){
+    public void handleQuery(HashMap<String, Object> query) {
         super.handleQuery(query);
         this.teams = TeamModel.getTeams();
     }
 
     @Override
-    public HashMap<String, Object> collectState(){
-        HashMap<String, Object> state = (HashMap) super.collectState();
+    public HashMap<String, Object> collectState() {
+        HashMap<String, Object> state = (HashMap<String, Object>) super.collectState();
         state.put("teams", this.teams);
         return state;
     }

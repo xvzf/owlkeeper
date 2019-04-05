@@ -13,7 +13,6 @@ public class MyTaskList extends BaseState {
     private Developer currentUser;
     private List<Task> tasks;
 
-
     public void handleQuery(HashMap<String, Object> query) {
         super.handleQuery(query);
         long id = DeveloperManager.getCurrentDeveloper().getContainer().getId();

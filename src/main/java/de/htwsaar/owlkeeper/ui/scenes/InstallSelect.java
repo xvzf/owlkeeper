@@ -6,14 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class InstallSelect extends UiScene{
+public class InstallSelect extends UiScene {
     @Override
-    public String getName(){
+    public String getName() {
         return "install-select";
     }
 
     @Override
-    public ViewApplication.SceneBuilder getBuilder(){
+    public ViewApplication.SceneBuilder getBuilder() {
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/install-select.fxml"));
             Parent root = loader.load();

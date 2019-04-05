@@ -10,15 +10,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 
-
 import java.util.List;
 
-public class ProjectTasksController extends MyTasksController{
+public class ProjectTasksController extends MyTasksController {
+    private static final String NEW_TASK = "New task";
+    private static final String STYLE_BUTTON = "button";
+    private static final String STYLE_BUTTON_SMALL = "button--small";
 
     private boolean newTask;
     private Task editTask;
 
-    public void setContent(UiApp app, List<Task> tasks, Project project, ProjectStage stage, Task sidebar, boolean newTask, Task editTask){
+    public void setContent(UiApp app, List<Task> tasks, Project project, ProjectStage stage, Task sidebar,
+            boolean newTask, Task editTask) {
         this.newTask = newTask;
         this.editTask = editTask;
         super.setContent(app, tasks, sidebar);
@@ -31,9 +34,8 @@ public class ProjectTasksController extends MyTasksController{
             this.addSidebar(emptyTask, app);
         }
 
-
-        Button btn = new Button("Neuer Task hinzufügen");
-        btn.getStyleClass().addAll("button", "button--small");
+        Button btn = new Button(NEW_TASK);
+        btn.getStyleClass().addAll(STYLE_BUTTON, STYLE_BUTTON_SMALL);
         btn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             app.route("page-iteration", TaskListState.getQueryMap(project.getId(), stage.getId(), null, true), true);
         });
@@ -41,7 +43,7 @@ public class ProjectTasksController extends MyTasksController{
     }
 
     @Override
-    ScrollPane buildSidebar(Task task, UiApp app){
+    ScrollPane buildSidebar(Task task, UiApp app) {
         if (this.newTask || this.editTask != null) {
             return TaskView.buildNewTaskSidebar(task, app);
         }

@@ -8,14 +8,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class Page extends UiScene{
+public class Page extends UiScene {
     @Override
-    public String getName(){
+    public String getName() {
         return "page";
     }
 
     @Override
-    public ViewApplication.SceneBuilder getBuilder(){
+    public ViewApplication.SceneBuilder getBuilder() {
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/page.fxml"));
             Parent root = loader.load();
@@ -24,7 +24,7 @@ public class Page extends UiScene{
         };
     }
 
-    public State initState(){
+    public State initState() {
         return new MyTaskList();
     }
 }

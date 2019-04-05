@@ -29,8 +29,7 @@ public class ProcessRunner {
         }
 
         Process p = pb.start();
-        Scanner s = new Scanner(p.getInputStream()).useDelimiter("\\Z");
-        try {
+        try (Scanner s = new Scanner(p.getInputStream()).useDelimiter("\\Z")) {
             logger.info("Output: " + s.next());
         } catch (NoSuchElementException e) {
             logger.info("Output: Empty ¯\\_(ツ)_/¯");

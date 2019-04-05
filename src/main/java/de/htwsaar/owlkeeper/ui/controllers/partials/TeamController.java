@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
-import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 import de.htwsaar.owlkeeper.storage.model.TeamModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
@@ -15,6 +14,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class TeamController extends SidebarController<Object> {
+    private static final String LEADER = "Leader:";
+    private static final String MEMBERS = "Members:";
+    private static final String IMG_USERS = "/images/users.png";
+    private static final String STYLE_H2 = "h2";
+    private static final String STYLE_TEAM = "team";
+    private static final String STYLE_TEAM_UNITS = "team__units";
+    private static final String STYLE_TEAM_UNIT = "team-unit";
+    private static final String STYLE_TEAM_UNIT_MEMBER = "team-unit__member";
 
     @FXML
     public HBox team;
@@ -34,14 +41,14 @@ public class TeamController extends SidebarController<Object> {
      */
     private VBox buildTeam(Team teamEntity) {
         VBox team = new VBox();
-        team.getStyleClass().add("team");
+        team.getStyleClass().add(STYLE_TEAM);
 
         Text title = new Text(teamEntity.getName());
-        title.getStyleClass().add("h2");
+        title.getStyleClass().add(STYLE_H2);
         team.getChildren().add(title);
 
         HBox units = new HBox();
-        units.getStyleClass().add("team__units");
+        units.getStyleClass().add(STYLE_TEAM_UNITS);
         team.getChildren().add(units);
 
         units.getChildren().add(this.buildUnit(teamEntity));
@@ -57,22 +64,22 @@ public class TeamController extends SidebarController<Object> {
     private VBox buildUnit(Team teamEntity) {
         List<Developer> developers = new TeamModel(teamEntity).getDevelopers();
         VBox unit = new VBox();
-        unit.getStyleClass().add("team-unit");
-        unit.getChildren().add(new Text("Leader:"));
+        unit.getStyleClass().add(STYLE_TEAM_UNIT);
+        unit.getChildren().add(new Text(LEADER));
 
         HBox leader = new HBox();
-        leader.getStyleClass().add("team-unit__member");
-        leader.getChildren().add(CommonNodes.Image("/images/users.png", 30, 30));
+        leader.getStyleClass().add(STYLE_TEAM_UNIT_MEMBER);
+        leader.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 30));
         // TODO: get leader of team
         leader.getChildren().add(new Text(Long.toString(teamEntity.getLeader())));
         unit.getChildren().add(leader);
 
-        unit.getChildren().add(new Text("Members:"));
+        unit.getChildren().add(new Text(MEMBERS));
 
         for (Developer dev : developers) {
             HBox member = new HBox();
-            member.getStyleClass().add("team-unit__member");
-            member.getChildren().add(CommonNodes.Image("/images/users.png", 30, 30));
+            member.getStyleClass().add(STYLE_TEAM_UNIT_MEMBER);
+            member.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 30));
             member.getChildren().add(new Text(dev.getName()));
             unit.getChildren().add(member);
         }
