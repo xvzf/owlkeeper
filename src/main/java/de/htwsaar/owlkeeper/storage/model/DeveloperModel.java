@@ -10,10 +10,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -128,16 +128,10 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * @param pw the password
      * @return the hash
      */
-    private String getHash(String pw) {
-        MessageDigest digest = null;
-        try {
-            digest = MessageDigest.getInstance("MD5");
-        } catch (java.security.NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        byte[] hash;
-        hash = digest.digest(pw.getBytes(StandardCharsets.UTF_8));
-        return Arrays.toString(hash);
+    public static String getHash(String pw) throws Exception{
+        MessageDigest digest = MessageDigest.getInstance("MD5");
+        byte[] hash = digest.digest(pw.getBytes(StandardCharsets.UTF_8));
+        BigInteger bigInt = new BigInteger(1, hash);
+        return bigInt.toString(16);
     }
 }

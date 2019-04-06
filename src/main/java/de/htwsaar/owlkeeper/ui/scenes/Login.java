@@ -2,9 +2,13 @@ package de.htwsaar.owlkeeper.ui.scenes;
 
 import de.htwsaar.owlkeeper.ui.UiScene;
 import de.htwsaar.owlkeeper.ui.ViewApplication;
+import de.htwsaar.owlkeeper.ui.state.EmptyState;
+import de.htwsaar.owlkeeper.ui.state.State;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import java.util.HashMap;
 
 public class Login extends UiScene {
 
@@ -21,6 +25,10 @@ public class Login extends UiScene {
             this.prepareFxml(loader);
             return new Scene(root, 1000, 800);
         };
+    }
+
+    public State initState() {
+        return new EmptyState();
     }
 
 }

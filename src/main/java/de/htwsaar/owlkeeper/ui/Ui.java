@@ -1,6 +1,5 @@
 package de.htwsaar.owlkeeper.ui;
 
-import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.ui.scenes.*;
 
 /**
@@ -13,24 +12,24 @@ public class Ui {
      * launched
      */
     Ui() {
-        // @todo remove absolute positions
-        // @todo fix issue with resized images
-        UiApp.stageScene(new InstallConnect());
-        UiApp.stageScene(new InstallDB());
-        UiApp.stageScene(new InstallLogin());
-        UiApp.stageScene(new InstallSelect());
-        UiApp.stageScene(new InstallSuccess());
+
+        /*
+            Initialize with only the login view
+            ---
+            the full ui gets initialized after the user
+            is logged in
+
+            @see de.htwsaar.owlkeeper.ui.controllers.LoginController
+        */
         UiApp.stageScene(new Login());
-        UiApp.stageScene(new Page());
-        UiApp.stageScene(new PageIteration());
-        UiApp.stageScene(new PageTeam());
-        UiApp.stageScene(new Projects());
 
         // Change this to test individual scenes
-        UiApp.STARTING_SCENE = "page";
+        UiApp.STARTING_SCENE = "login";
         UiApp.TITLE = "Owlkeeper";
         UiApp.startUi();
     }
+
+
 
     /**
      * Temporary entry point to boot only the ui
@@ -38,7 +37,6 @@ public class Ui {
      * @param args CLI args
      */
     public static void main(String[] args) {
-        DeveloperManager.loginDeveloper("devel1@owlkeeper.de");
         new Ui();
     }
 }
