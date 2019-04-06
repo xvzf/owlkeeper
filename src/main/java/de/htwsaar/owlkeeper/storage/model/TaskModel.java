@@ -81,7 +81,7 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
      * @return dependingTask
      */
 
-    public List<Long> getDependencies () {
+    public List<Integer> getDependencies () {
         long taskId = this.getContainer().getId();
         return DBConnection.getJdbi().withExtension(TaskDao.class, (dao -> dao.getDependencies(taskId)));
     }

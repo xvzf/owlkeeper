@@ -69,8 +69,8 @@ class TaskModelTest {
     @Test
     void testGetDependencies() {
         TaskModel tm = new TaskModel(2);
-        long dependId1 = 1;
-        List<Long> erg = new ArrayList<>();
+        int dependId1 = 1;
+        List<Integer> erg = new ArrayList<>();
         erg.add(dependId1);
 
         assertEquals(erg , tm.getDependencies());
@@ -79,10 +79,10 @@ class TaskModelTest {
     @Test
     void testSetDependency() {
         TaskModel tm = new TaskModel(6);
-        List<Long> taskIdList = new ArrayList<>();
+        List<Integer> taskIdList = new ArrayList<>();
         Task task2 = new TaskModel(1).getContainer();
-        long id1 = 5;
-        long id2 = 1;
+        int id1 = 5;
+        int id2 = 1;
         taskIdList.add(id1);
         taskIdList.add(id2);
 
