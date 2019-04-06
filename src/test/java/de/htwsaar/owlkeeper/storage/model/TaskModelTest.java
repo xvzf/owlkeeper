@@ -2,10 +2,14 @@ package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.entity.TaskComment;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Array;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -41,6 +45,7 @@ class TaskModelTest {
     void testSaveLoadRemove() {
         TaskModel pm = new TaskModel(T_NAME_1,T_DEADLINE_1,T_DESCRIPTION_1,T_FULFILLED_1,T_PROJECT_STAGE_1,T_TEAM_1);
         pm.save();
+        pm.save();
         long id = pm.getContainer().getId();
         Task p = pm.getContainer();
 
@@ -60,5 +65,40 @@ class TaskModelTest {
         assertEquals(p.getName(), p.getName());
         assertEquals(p.getDeadline(), p.getDeadline());
         pmloaded.removeFromDB();
+    }
+
+    @Test
+    void testGetDependencies() {
+        TaskModel tm = new TaskModel(2);
+        int dependId1 = 1;
+        List<Integer> erg = new ArrayList<>();
+        erg.add(dependId1);
+
+        assertEquals(erg , tm.getDependencies());
+    }
+
+    @Test
+    void testSetDependency() {
+        TaskModel tm = new TaskModel(6);
+        List<Integer> taskIdList = new ArrayList<>();
+        Task task2 = new TaskModel(1).getContainer();
+        int id1 = 5;
+        int id2 = 1;
+        taskIdList.add(id1);
+        taskIdList.add(id2);
+
+        tm.setDependency(task2);
+
+        assertEquals(taskIdList, tm.getDependencies());
+    }
+
+    @Test
+    void testGetComments() {
+        TaskModel tm = new TaskModel(1);
+        List<TaskComment> tclist = new ArrayList<>();
+        TaskComment tc = new TaskCommentModel(1).getContainer();
+        tclist.add(tc);
+
+        assertEquals(tclist, tm.getComments());
     }
 }

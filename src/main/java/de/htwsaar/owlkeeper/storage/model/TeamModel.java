@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.helper.Permissions;
 import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
 import de.htwsaar.owlkeeper.storage.DBConnection;
@@ -20,16 +21,16 @@ import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
 public class TeamModel extends AbstractModel<Team, TeamDao> {
 
     private static Logger logger = LogManager.getLogger(TeamModel.class);
-    private static Function<Long, ExtensionCallback<Team, TeamDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao.getTeam(id));
+    private static Function<Long, ExtensionCallback<Team, TeamDao, RuntimeException>> loadCallbackFactory1 = id -> (dao -> dao
+            .getTeam(id));
     private static Function<Long, ExtensionCallback<Integer, TeamDao, InsufficientPermissionsException>> deleteCallbackFactory = id -> (dao -> {
         checkPermission(Permissions.DISSOLVE_TEAM.get());
         return dao.deleteTeam(id);
     });
-    private static Function<Team, ExtensionCallback<Integer, TeamDao, InsufficientPermissionsException>> saveCallbackFactory1 =
-            p -> (dao -> {
-                checkPermission(Permissions.CREATE_TEAM.get());
-                return (p.getId() != 0 ? dao.updateTeam(p) : dao.insertTeam(p));
-            });
+    private static Function<Team, ExtensionCallback<Integer, TeamDao, InsufficientPermissionsException>> saveCallbackFactory1 = p -> (dao -> {
+        checkPermission(Permissions.CREATE_TEAM.get());
+        return (p.getId() != 0 ? dao.updateTeam(p) : dao.insertTeam(p));
+    });
 
 
     /**
@@ -103,7 +104,8 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      * @param dev Developer
      */
     public void addDeveloper(Developer dev) {
-        checkPermission(user -> this.getContainer().getLeader() == user.getId()); // Team Leader is allowed to add users to the team
+        checkPermission(user -> this.getContainer().getLeader() == user
+                .getId()); // Team Leader is allowed to add users to the team
         long developerId = dev.getId();
         long teamId = this.getContainer().getId();
 
@@ -116,7 +118,8 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      * @param dev Developer
      */
     public void removeDeveloper(Developer dev) {
-        checkPermission(user -> dev.equals(user) || this.getContainer().getLeader() == user.getId()); // Team leader and the user itself can leave the team
+        checkPermission(user -> dev.equals(user) || this.getContainer().getLeader() == user
+                .getId()); // Team leader and the user itself can leave the team
         long developerId = dev.getId();
         long teamId = this.getContainer().getId();
 

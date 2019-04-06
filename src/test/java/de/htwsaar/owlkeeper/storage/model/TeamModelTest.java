@@ -37,6 +37,7 @@ class TeamModelTest {
     void testSaveLoadRemove() {
         TeamModel pm = new TeamModel(T_NAME_1, T_LEADER_1);
         pm.save();
+        pm.save();
         long id = pm.getContainer().getId();
 
         Team p = pm.getContainer();
@@ -75,5 +76,23 @@ class TeamModelTest {
         TeamModel tm = new TeamModel(T_ID_2);
         List<Developer> developers = tm.getDevelopers();
         assertEquals(3, developers.size());
+    }
+
+    @Test
+    void testAddDeveloper(){
+        TeamModel tm = new TeamModel(T_ID_2);
+        Developer dev = new DeveloperModel(4).getContainer();
+        tm.addDeveloper(dev);
+        List<Developer> developers = tm.getDevelopers();
+        assertEquals(true, developers.contains(dev));
+    }
+
+    @Test
+    void testDeleteDeveloper() {
+        TeamModel tm = new TeamModel(T_ID_2);
+        Developer dev = new DeveloperModel(1).getContainer();
+        tm.removeDeveloper(dev);
+        List<Developer> developers = tm.getDevelopers();
+        assertEquals(false, developers.contains(dev));
     }
 }
