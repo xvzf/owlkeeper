@@ -87,7 +87,7 @@ public class TeamController extends Controller{
         }
 
         // Only render content if at least one developer does not have a team
-        if (count > 0){
+        if (count > 0) {
             box.getChildren().add(title);
             box.getChildren().add(listing);
         }
@@ -323,9 +323,8 @@ public class TeamController extends Controller{
                 team.setLeader(leadDev.getId());
                 team.setCreated(new Timestamp(System.currentTimeMillis()));
                 TeamModel model = new TeamModel(team);
-                // TODO: 06.04.2019 see issue #113 why this is currently not possible
-                // model.addDeveloper(leadDev);
                 model.save();
+                model.addDeveloper(leadDev);
                 app.route("page-team", new HashMap<>(), true);
             }
             validator.reset();
