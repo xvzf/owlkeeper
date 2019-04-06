@@ -1,3 +1,4 @@
+.login,
 .root {
     -fx-font-size: 16;
     -fx-font-family: "Ubuntu", sans-serif;
@@ -21,7 +22,8 @@ CheckBox .box {
 }
 
 TextArea,
-TextField {
+TextField,
+PasswordField {
     -fx-background-color: #FEFEFE;
     -fx-border-color: #CECECE;
     -fx-padding: 15 15;
@@ -343,8 +345,16 @@ TextArea:focused .content {
     -fx-spacing: 5;
 }
 
+.form{
+    -fx-spacing: 20;
+}
+
 .form-item{
     -fx-spacing: 5;
+}
+.form-item Text,
+.form-item Label{
+    -fx-text-fill: #707070;
 }
 
 .form-error {
@@ -354,4 +364,20 @@ TextArea:focused .content {
 
 .form-error Text {
     -fx-fill: #ff3a35;
+}
+
+.login{
+    -fx-background-color: #EFEFEF;
+    -fx-alignment: center;
+}
+
+.login__content{
+    -fx-spacing: 20;
+}
+
+.login-panel{
+    -fx-background-color: #fff;
+    -fx-padding: 10 30 30 30;
+    -fx-pref-width: 400;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 30, 0, 0, 10);
 }
