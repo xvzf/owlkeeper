@@ -249,16 +249,39 @@ public final class TaskView{
      * @return the full listing Node
      * @todo 27.03.2019 finish dynamic content
      */
-    public static HBox getTaskNode(Task taskEntity){
+    public static HBox getTaskNode(UiApp app, Task taskEntity){
         HBox task = new HBox();
         task.setAlignment(Pos.CENTER_LEFT);
         task.getStyleClass().add("task-listing");
 
         // Status icon
-        task.getChildren().add(CommonNodes.Image("/images/check-square.png", 30, 150));
+        ImageView image = CommonNodes.Image("/images/check-square.png", 26, 25);
+        image.getStyleClass().add("task-list__icon");
+        if (taskEntity.getFulfilled() != null) {
+            image.setImage(new Image("/images/check-square-checked.png"));
+        } else {
+            image.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> image.setImage(new Image("/images/check-square-checked.png")));
+            image.addEventHandler(MouseEvent.MOUSE_EXITED, event -> image.setImage(new Image("/images/check-square.png")));
+        }
+        image.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (taskEntity.getFulfilled() == null){
+                taskEntity.setFulfilled(new Timestamp(System.currentTimeMillis()));
+            }
+            else{
+                taskEntity.setFulfilled(null);
+            }
+            TaskModel model = new TaskModel(taskEntity);
+            model.save();
+            long stage = taskEntity.getProjectStage();
+            long project = new ProjectStageModel(stage).getContainer().getProject();
+            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false), true);
+        });
+        task.getChildren().add(image);
 
         // Title
-        task.getChildren().add(new Text(taskEntity.getName()));
+        Text title = new Text(taskEntity.getName());
+        title.getStyleClass().add("task-list__title");
+        task.getChildren().add(title);
 
         // Meta
         HBox meta = new HBox();
