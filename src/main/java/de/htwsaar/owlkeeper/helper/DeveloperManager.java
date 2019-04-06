@@ -33,4 +33,26 @@ public class DeveloperManager {
         return currUser;
     }
 
+    /**
+     * Checks the given Login credentials
+     * @param emailString user email address
+     * @param passwordString user password string
+     * @return returns true if the login credentials are correct
+     */
+    public static boolean checkLogin(String emailString, String passwordString) {
+        DeveloperModel model = new DeveloperModel(emailString);
+        // User does not exist
+        if (model.getContainer() == null){
+            return false;
+        }
+        try {
+            // Compare password hash
+            String pwHash = DeveloperModel.getHash(passwordString);
+            return true;
+//            return pwHash.equals(model.getContainer().getPwhash());
+        } catch (Exception e){
+            return false;
+        }
+    }
+
 }

@@ -64,14 +64,7 @@ public class UiApp extends ViewApplication {
      */
     @Override
     void boot(Stage primaryStage) throws Exception {
-        UiApp.scenes.forEach((name, scene) -> {
-            try {
-                scene.setApp(this);
-                this.addScene(name, scene.getBuilder());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        this.loadScenes();
         if (!this.hasScene(this.getCurrentSceneName())) {
             throw new Exception("Scene with the name '" + this.getCurrentSceneName() + "' must be defined");
         }
@@ -82,6 +75,24 @@ public class UiApp extends ViewApplication {
         primaryStage.setWidth(1000);
         primaryStage.centerOnScreen();
         primaryStage.show();
+    }
+
+    /**
+     * Loads all scenes which have not been
+     * loaded yet  making them available
+     * with the route method
+     */
+    public void loadScenes(){
+        UiApp.scenes.forEach((name, scene) -> {
+            try {
+                if (!this.hasScene(name)){
+                    scene.setApp(this);
+                    this.addScene(name, scene.getBuilder());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
