@@ -7,14 +7,14 @@
    <children>
        <VBox styleClass="drop-nav">
           <children>
-              <HBox alignment="CENTER_LEFT" styleClass="navigation-item">
+              <HBox fx:id="main" alignment="CENTER_LEFT">
                  <children>
                      <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                             <Image url="@/images/layers.png" />
                         </image>
                      </ImageView>
-                     <VBox fx:id="main" alignment="CENTER_LEFT">
+                     <VBox  alignment="CENTER_LEFT">
                          <!-- Gets filled in NavigationProjectsController -->
                      </VBox>
                  </children>
