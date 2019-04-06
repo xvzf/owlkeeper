@@ -83,12 +83,8 @@ public class TeamModel extends AbstractModel<Team, TeamDao> {
      */
     public List<Task> getTasks() {
         // Only users assigned to the team should be allowed to see the tasks.
-        List<Team> l = DBConnection.getJdbi()
-                .withExtension(TeamDao.class, teamDao -> teamDao.getTeamForDeveloper(DeveloperManager.getCurrentId()));
-        System.out.println("++TEAMS: " + l);
         checkPermission(user -> DBConnection.getJdbi().withExtension(TeamDao.class,
                 teamDao -> teamDao.getTeamForDeveloper(user.getId()).contains(this.getContainer())));
-        System.out.println("PASSED//");
         long id = getContainer().getId();
         return DBConnection.getJdbi().withExtension(TeamDao.class, (dao -> dao.getTasks(id)));
     }
