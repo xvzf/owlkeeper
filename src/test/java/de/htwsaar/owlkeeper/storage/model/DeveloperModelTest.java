@@ -31,6 +31,7 @@ class DeveloperModelTest {
     void testSaveLoad() {
         DeveloperModel dm = new DeveloperModel(D_NAME_1,D_EMAIL_1);
         dm.save();
+        dm.save();
         long id = dm.getContainer().getId();
 
         Developer d = dm.getContainer();

@@ -34,6 +34,7 @@ class ProjectModelTest {
     void testSaveLoadRemove() {
         ProjectModel pm = new ProjectModel(P_NAME_1, P_DESCRIPTION_1, P_TYPE_1);
         pm.save();
+        pm.save();
         long id = pm.getContainer().getId();
 
         Project p = pm.getContainer();

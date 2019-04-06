@@ -37,6 +37,7 @@ class TeamModelTest {
     void testSaveLoadRemove() {
         TeamModel pm = new TeamModel(T_NAME_1, T_LEADER_1);
         pm.save();
+        pm.save();
         long id = pm.getContainer().getId();
 
         Team p = pm.getContainer();
