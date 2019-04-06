@@ -80,6 +80,7 @@ public interface TeamDao {
     )
     int insertTeam(@BindBean Team t);
 
+
     /**
      * Updates an existing team
      *
@@ -89,6 +90,7 @@ public interface TeamDao {
     @SqlQuery("update team set name = :name, leader = :leader where id = :id returning id;"
     )
     int updateTeam(@BindBean Team t);
+
 
     /**
      * Removes a team from the database
@@ -100,7 +102,7 @@ public interface TeamDao {
     )
     @RegisterBeanMapper(Team.class)
     int deleteTeam(long id);
-  
+
     /**
      * Inserts a new developer-team relation
      *
@@ -112,7 +114,7 @@ public interface TeamDao {
     )
     @RegisterBeanMapper(Developer.class)
     long addDeveloper(long developerId, long teamId);
-  
+
     /**
      * deletes a developer-team relation
      *
