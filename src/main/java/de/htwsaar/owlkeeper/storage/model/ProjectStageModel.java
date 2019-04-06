@@ -90,18 +90,7 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
      * @return all Teams
      */
     public List<Team> getTeams() {
-        List<Task> tasks = getTasks();
-        ArrayList<Team> teams = new ArrayList<>();
-        for (Task task : tasks) {
-            long team_id = task.getTeam();
-            if (team_id == 0) {
-                continue;
-            }
-            Team team = new TeamModel(team_id).getContainer();
-            teams.add(team);
-
-        }
-        return teams;
+        return DBConnection.getJdbi().withExtension(ProjectStageDao.class, dao -> dao.getTeams(getContainer().getId()));
     }
 
 }

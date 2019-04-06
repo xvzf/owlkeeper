@@ -50,8 +50,9 @@ class ProjectDaoTest {
     @Test
     void testGetTeams() {
         List<Team> teams = DBConnection.getJdbi().withExtension(ProjectDao.class, dao -> dao.getTeams(2));
-        assertEquals(1, teams.size());
-        assertEquals("Team 2", teams.get(0).getName());
+        List<Team> allTeams = DBConnection.getJdbi().withExtension(TeamDao.class, TeamDao::getTeams);
+        assertEquals(2, teams.size());
+        assertTrue(teams.containsAll(allTeams));
     }
 
     @Test

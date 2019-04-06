@@ -25,7 +25,7 @@ class AccessControlDaoTest {
     @Test
     void testNotAllowedToComment() {
         final Boolean allowed = DBConnection.getJdbi().withExtension(AccessControlDao.class, dao -> {
-            return dao.isAssignedToTask(4, 1);
+            return dao.isAssignedToTask(5, 1);
         });
         assertFalse(allowed);
     }
