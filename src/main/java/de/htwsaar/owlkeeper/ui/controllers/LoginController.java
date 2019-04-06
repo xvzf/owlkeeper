@@ -1,5 +1,7 @@
 package de.htwsaar.owlkeeper.ui.controllers;
 
+import de.htwsaar.owlkeeper.storage.entity.Developer;
+import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 import de.htwsaar.owlkeeper.ui.scenes.*;
 import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.ui.UiApp;
@@ -82,8 +84,8 @@ public class LoginController extends Controller{
 
 
         // Testinput
-//        email.setText("devel1@owlkeeper.de");
-//        password.setText("test");
+        email.setText("devel1@owlkeeper.de");
+        password.setText("password-1");
     }
 
     /**

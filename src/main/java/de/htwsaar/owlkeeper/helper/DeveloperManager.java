@@ -49,8 +49,7 @@ public class DeveloperManager {
         try {
             // Compare password hash
             String pwHash = DeveloperModel.getHash(passwordString);
-            return true;
-//            return pwHash.equals(model.getContainer().getPwhash());
+            return pwHash.equals(model.getContainer().getPwhash());
         } catch (Exception e) {
             return false;
         }

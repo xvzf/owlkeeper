@@ -20,11 +20,11 @@ do $fill$ begin
   insert into "group" (name, description) values ('task', 'Create tasks in projects the user is belonging to');
 
   -- Dummy developers
-  insert into developer (name, email) values ('Developer 1', 'devel1@owlkeeper.de');
-  insert into developer (name, email) values ('Developer 2', 'devel2@owlkeeper.de');
-  insert into developer (name, email) values ('Developer 3', 'devel3@owlkeeper.de');
-  insert into developer (name, email) values ('Developer 4', 'devel4@owlkeeper.de');
-  insert into developer (name, email) values ('Developer 5', 'devel5@owlkeeper.de');
+  insert into developer (name, email, pw_hash) values ('Developer 1', 'devel1@owlkeeper.de', '8d8f2628cfce1853efc0d027be4f6ce4'); -- pw: password-1
+  insert into developer (name, email, pw_hash) values ('Developer 2', 'devel2@owlkeeper.de', '67b942f3e524ec767aa11e247ac01036'); -- pw: password-2
+  insert into developer (name, email, pw_hash) values ('Developer 3', 'devel3@owlkeeper.de', '4aee0e4712257a91f834006fccf16394'); -- pw: password-3
+  insert into developer (name, email, pw_hash) values ('Developer 4', 'devel4@owlkeeper.de', '19fba5a514718a1ff009945297c65ffb'); -- pw: password-4
+  insert into developer (name, email, pw_hash) values ('Developer 5', 'devel5@owlkeeper.de', '69a966c10c28bc4a1f54939c72aeaa69'); -- pw: password-5
 
   -- Dummy groups
   insert into developer_group_relation (developer, "group") values (
