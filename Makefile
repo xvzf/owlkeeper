@@ -1,9 +1,13 @@
 PSQL="PGPASSWORD=owlkeeper psql -h 127.0.0.1 owlkeeper owlkeeper"
+PG_DUMP="PGPASSWORD=owlkeeper pg_dump -U owlkeeper -h 127.0.0.1 owlkeeper"
 SQL_DIR=./src/main/resources/sqls
 DOCKER_FILE=./src/main/resources/docker-compose.yml
 
 db-sh:
 	@sh -c ${PSQL}
+
+db-dump:
+	@sh -c ${PG_DUMP}
 
 db-start:
 	docker-compose -f ${DOCKER_FILE} up -d
