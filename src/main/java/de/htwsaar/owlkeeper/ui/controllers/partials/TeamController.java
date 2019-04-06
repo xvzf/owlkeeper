@@ -62,6 +62,7 @@ public class TeamController extends Controller{
 
         this.team.getChildren().add(this.buildNewDevForm(this.getApp(), teams));
         this.team.getChildren().add(this.buildNewTeamForm(this.getApp(), developers));
+        this.team.getChildren().add(this.buildDevTeamForms(this.getApp(), developers, teams));
     }
 
     /**
@@ -256,29 +257,6 @@ public class TeamController extends Controller{
         return box;
     }
 
-
-    /**
-     * Wraps a Developer entity to return only the email
-     * in the toString method
-     */
-    private class DeveloperWrapper{
-
-        private Developer dev;
-
-        public DeveloperWrapper(Developer dev){
-            this.dev = dev;
-        }
-
-        @Override
-        public String toString(){
-            return dev.getName() + " <" + dev.getEmail() + ">";
-        }
-
-        public Developer getDev(){
-            return this.dev;
-        }
-    }
-
     private VBox buildNewTeamForm(UiApp app, List<Developer> developers){
         Validator validator = new Validator();
         VBox box = new VBox();
@@ -301,11 +279,7 @@ public class TeamController extends Controller{
         VBox leaderBox = new VBox();
         leaderBox.getStyleClass().add(STYLE_FORM_ITEM);
         leaderBox.getChildren().add(new Text("Leader"));
-        ChoiceBox<DeveloperWrapper> leader = new ChoiceBox<>();
-        ObservableList list = FXCollections.observableArrayList();
-        developers.forEach(developer -> list.add(new DeveloperWrapper(developer)));
-        leader.setItems(list);
-        leader.getSelectionModel().select(0);
+        ChoiceBox<CommonNodes.EntityWrapper<Developer>> leader = CommonNodes.ChoiceBox(developers, dev -> dev.getName() + " <" + dev.getEmail() + ">");
         leaderBox.getChildren().add(leader);
         box.getChildren().add(leaderBox);
 
@@ -317,7 +291,7 @@ public class TeamController extends Controller{
 //         Submit event
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (validator.execute()) {
-                Developer leadDev = leader.getValue().getDev();
+                Developer leadDev = leader.getValue().getItem();
                 Team team = new Team();
                 team.setName(name.getText());
                 team.setLeader(leadDev.getId());
@@ -333,7 +307,30 @@ public class TeamController extends Controller{
         // Validations
         validator.addRule(new Validator.Rule(name, Validator::TextNotEmpty, "Name can't be empty"));
 
-
         return box;
+    }
+
+    private VBox buildDevTeamForms(UiApp app, List<Developer> developers, List<Team> teams){
+        VBox form = new VBox();
+
+        // Headline
+        Text headline = new Text("Add/Remove developer to/from a team");
+        headline.getStyleClass().add(STYLE_H2);
+        form.getChildren().add(headline);
+
+        // Form Inputs
+        HBox box = new HBox();
+        form.getChildren().add(box);
+        ChoiceBox<CommonNodes.EntityWrapper<Developer>> developer = CommonNodes.ChoiceBox(developers, dev -> dev.getName() + " <" + dev.getEmail() + ">");
+        ChoiceBox<CommonNodes.EntityWrapper<Team>> team = CommonNodes.ChoiceBox(teams, Team::getName);
+        CheckBox remove = new CheckBox("remove");
+        box.getChildren().addAll(developer, team, remove);
+
+        // Submit
+        Button submit = new Button("execute");
+        submit.getStyleClass().addAll("button", "button--small");
+        form.getChildren().add(submit);
+
+        return form;
     }
 }
