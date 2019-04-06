@@ -38,10 +38,11 @@ import java.util.List;
 public final class TaskView {
     private static final String BLOCKED = "blocked";
     private static final String EDIT = "Edit";
-    private static final String NEW_TASK = "Edit or create Task";
-    private static final String PROJECT_DESC = "Project Description";
-    private static final String PROJECT_NAME = "Project Name";
-    private static final String SAVE_TASK = "Save task";
+    private static final String NEW_TASK = "Edit task";
+    private static final String TASK_DEADLINE = "Task deadline";
+    private static final String TASK_DESC = "Task description";
+    private static final String TASK_NAME = "Task name";
+    private static final String SAVE_TASK = "Save";
     private static final String SUBMIT = "Submit";
     private static final String WRITE_COMMENT = "Write a comment…";
     private static final String IMG_CALENDAR = "/images/calendar.png";
@@ -112,16 +113,16 @@ public final class TaskView {
         content.getChildren().add(headline);
 
         VBox nameBox = new VBox();
-        nameBox.getStyleClass().add("form-item");
-        nameBox.getChildren().add(new Text(PROJECT_NAME));
+        nameBox.getStyleClass().add(STYLE_FORM_ITEM);
+        nameBox.getChildren().add(new Text(TASK_NAME));
         TextField name = new TextField();
         nameBox.getChildren().add(name);
         content.getChildren().add(nameBox);
         name.setText(taskEntity.getName());
 
         VBox descriptionBox = new VBox();
-        descriptionBox.getStyleClass().add("form-item");
-        descriptionBox.getChildren().add(new Text("Projekt description:"));
+        descriptionBox.getStyleClass().add(STYLE_FORM_ITEM);
+        descriptionBox.getChildren().add(new Text(TASK_DESC));
         TextArea description = new TextArea();
         description.setMaxWidth(400);
         description.setWrapText(true);
@@ -131,7 +132,7 @@ public final class TaskView {
 
         VBox dateBox = new VBox();
         dateBox.getStyleClass().add(STYLE_FORM_ITEM);
-        dateBox.getChildren().add(new Text(PROJECT_DESC));
+        dateBox.getChildren().add(new Text(TASK_DEADLINE));
         DatePicker deadline = new DatePicker(new Timestamp(System.currentTimeMillis()).toLocalDateTime().toLocalDate());
         dateBox.getChildren().add(deadline);
         content.getChildren().add(dateBox);
