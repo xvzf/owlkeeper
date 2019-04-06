@@ -181,6 +181,11 @@ raise notice '[+] Creating dummy project, project stages and tasks';
     , (select id from task where description = 'Task 3 description')
   );
 
+  insert into task_dependency (task, depends) values (
+    (select id from task where description = 'Task 6 description')
+    , (select id from task where description = 'Task 5 description')
+  );
+
   insert into team_project_relation (team, project) values (
     (select id from team where name = 'Team 2')
     , (select id from project where name = 'Testproject2'));
