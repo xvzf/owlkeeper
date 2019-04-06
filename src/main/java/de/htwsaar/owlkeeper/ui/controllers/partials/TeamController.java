@@ -331,6 +331,22 @@ public class TeamController extends Controller{
         submit.getStyleClass().addAll("button", "button--small");
         form.getChildren().add(submit);
 
+        submit.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            Developer d = developer.getValue().getItem();
+            Team t = team.getValue().getItem();
+            boolean r = remove.isSelected();
+
+            TeamModel tModel = new TeamModel(t);
+            if (r && tModel.getDevelopers().contains(d)){
+                tModel.removeDeveloper(d);
+            }
+            else if(!tModel.getDevelopers().contains(d)){
+                tModel.addDeveloper(d);
+            }
+            app.route("page-team", new HashMap<>(), true);
+
+        });
+
         return form;
     }
 }
