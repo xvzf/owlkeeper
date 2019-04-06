@@ -10,6 +10,9 @@ import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 import java.util.function.Predicate;
 
 public class PermissionHandler {
+    private static final String NO_CURRENT_USER_SET = "No current user has been set. Call DeveloperManager.login() first!";
+    private static final String USER_OF_GROUP_NO_PRIVILEGES_FOR_ACTION = "User %s of group %s does not have sufficient privileges to execute action %s";
+
     private static PermissionHandler handler;
     private static DeveloperModel user;
     private static String userGroup;
@@ -22,50 +25,59 @@ public class PermissionHandler {
         handler = new PermissionHandler();
         user = DeveloperManager.getCurrentDeveloper();
         if (user == null)
-            throw new UserInitializationException("No current user has been set. Call DeveloperManager.login() first!");
+            throw new UserInitializationException(NO_CURRENT_USER_SET);
         userGroup = user.getGroup();
         return handler;
     }
 
     /**
-     * Check a static permission described in enum {@link de.htwsaar.owlkeeper.helper.Permissions}, each group is given
-     * a set of statically defined permissions. Static permissions are implemented using bitwise permissions.
+     * Check a static permission described in enum
+     * {@link de.htwsaar.owlkeeper.helper.Permissions}, each group is given a set of
+     * statically defined permissions. Static permissions are implemented using
+     * bitwise permissions.
      *
      * @param action the permission to check
-     * @throws InsufficientPermissionsException If the user does not have the requested permission.
+     * @throws InsufficientPermissionsException If the user does not have the
+     *             requested permission.
      */
     public static boolean checkPermission(final int action) throws InsufficientPermissionsException {
-        if (userGroup.equals("admin")) return true;
+        if (userGroup.equals("admin"))
+            return true;
         if (checkAction(userGroup, action)) {
             return true;
         } else {
-            throw new InsufficientPermissionsException("User" + user.getContainer().getEmail() + " of group " + userGroup +
-                    " does not have sufficient privileges to execute action " + action);
+            throw new InsufficientPermissionsException(String.format(USER_OF_GROUP_NO_PRIVILEGES_FOR_ACTION,
+                    user.getContainer().getEmail(), userGroup, action));
         }
     }
 
     /**
-     * Check a dynamic permission described by a SQL Query in {@link de.htwsaar.owlkeeper.storage.dao.AccessControlDao}
-     * or any other conditional using the currently logged in developer to check permissions.
+     * Check a dynamic permission described by a SQL Query in
+     * {@link de.htwsaar.owlkeeper.storage.dao.AccessControlDao} or any other
+     * conditional using the currently logged in developer to check permissions.
      *
-     * @param predicate The conditional to check as a Predicate. The parameter of this predicate is interpreted by the PermissionHandler
-     *                  as the currently authenticated user.
-     * @throws InsufficientPermissionsException If the user does not have the requested permission.
+     * @param predicate The conditional to check as a Predicate. The parameter of
+     *            this predicate is interpreted by the PermissionHandler as the
+     *            currently authenticated user.
+     * @throws InsufficientPermissionsException If the user does not have the
+     *             requested permission.
      */
-    public static boolean checkPermission(final Predicate<Developer> predicate) throws InsufficientPermissionsException {
-        if (userGroup.equals("admin")) return true;
+    public static boolean checkPermission(final Predicate<Developer> predicate)
+            throws InsufficientPermissionsException {
+        if (userGroup.equals("admin"))
+            return true;
         if (predicate.test(user.getContainer())) {
             return true;
         } else {
-            throw new InsufficientPermissionsException("User" + user.getContainer().getEmail() + " of group " + userGroup +
-                    " does not have sufficient privileges to execute action.");
+            throw new InsufficientPermissionsException(String.format(USER_OF_GROUP_NO_PRIVILEGES_FOR_ACTION,
+                    user.getContainer().getEmail(), userGroup, ""));
         }
     }
 
     /**
      * Checks, if the given group has the permission.
      *
-     * @param group  the group to check
+     * @param group the group to check
      * @param action the action to check
      * @return true if the group has the permissions, false if not.
      */

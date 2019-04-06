@@ -1,8 +1,9 @@
 package de.htwsaar.owlkeeper.ui.controllers;
 
-import de.htwsaar.owlkeeper.storage.entity.Developer;
+import java.util.HashMap;
+import java.util.List;
+
 import de.htwsaar.owlkeeper.storage.entity.Project;
-import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.partials.MyTasksController;
@@ -12,10 +13,6 @@ import de.htwsaar.owlkeeper.ui.controllers.partials.TopBarController;
 import de.htwsaar.owlkeeper.ui.pages.Page;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class PageController extends Controller {
 
@@ -47,8 +44,6 @@ public class PageController extends Controller {
         this.tasksController.setUiScene(this.getUiScene());
 
         UiApp app = this.getApp();
-        Developer currentUser = (Developer) state.get("currentUser");
-        // System.out.println(currentUser);
 
         List<Task> tasks = (List<Task>) state.get("tasks");
         Task focus = null;

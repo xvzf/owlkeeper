@@ -11,7 +11,7 @@ import javafx.scene.Parent;
 import java.util.HashMap;
 import java.util.List;
 
-public class TeamViewController extends Controller{
+public class TeamViewController extends Controller {
 
     @FXML
     public Parent topbar;
@@ -19,13 +19,11 @@ public class TeamViewController extends Controller{
     @FXML
     public TopBarController topbarController;
 
-
     @FXML
     public Parent navigation;
 
     @FXML
     public NavigationMainController navigationController;
-
 
     @FXML
     public Parent projects;
@@ -33,21 +31,19 @@ public class TeamViewController extends Controller{
     @FXML
     public NavigationProjectsController projectsController;
 
-
     @FXML
     public Parent teams;
 
     @FXML
     public TeamController teamsController;
 
-
-    public void boot(HashMap<String, Object> state){
+    public void boot(HashMap<String, Object> state) {
 
         UiApp app = this.getApp();
 
         // Meta
         this.navigationController.setContent(app, (List<Page>) state.get("pages"));
-        this.projectsController.setContent(app,  (HashMap<Long, Project>) state.get("projects"));
+        this.projectsController.setContent(app, (HashMap<Long, Project>) state.get("projects"));
 
         // Main
         this.topbarController.setTitle("Team");

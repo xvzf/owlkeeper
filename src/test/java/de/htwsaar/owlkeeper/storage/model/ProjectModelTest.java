@@ -2,6 +2,8 @@ package de.htwsaar.owlkeeper.storage.model;
 
 import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Project;
+import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
+
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -57,7 +59,7 @@ class ProjectModelTest {
     @Test
     void testGetStages() {
         ProjectModel pm = new ProjectModel(1);
-        List ps = pm.getStages();
+        List<ProjectStage> ps = pm.getStages();
         assertEquals(ps.size(), 2);
     }
 }

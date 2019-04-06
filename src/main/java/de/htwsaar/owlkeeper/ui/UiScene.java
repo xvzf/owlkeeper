@@ -1,16 +1,14 @@
 package de.htwsaar.owlkeeper.ui;
 
+import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.state.BaseState;
 import de.htwsaar.owlkeeper.ui.state.State;
-import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import javafx.fxml.FXMLLoader;
-
-import java.util.HashMap;
 
 /**
  * Interface to define a new Scene in the main application GUI
  */
-public abstract class UiScene{
+public abstract class UiScene {
     private UiApp uiApp;
     private State state;
     private Controller controller;
@@ -18,28 +16,31 @@ public abstract class UiScene{
     /**
      * Inits the scene state
      */
-    public UiScene(){
+    public UiScene() {
         this.state = this.initState();
         this.state.handleQuery(this.state.getDefaultQuery());
     }
 
     /**
      * Returns the scenes name
+     * 
      * @return the scene name
      */
     public abstract String getName();
 
     /**
      * The builder lambda expression
+     * 
      * @return function to build the scene
      */
     public abstract ViewApplication.SceneBuilder getBuilder();
 
     /**
      * Loads and initalizes the scenes fxml
+     * 
      * @param loader the fxml loader
      */
-    public void prepareFxml(FXMLLoader loader){
+    public void prepareFxml(FXMLLoader loader) {
         Controller c = loader.getController();
         this.controller = c;
         if (c != null) {
@@ -54,7 +55,7 @@ public abstract class UiScene{
      *
      * @param app Main UiApp reference
      */
-    public void setApp(UiApp app){
+    public void setApp(UiApp app) {
         this.uiApp = app;
     }
 
@@ -63,7 +64,7 @@ public abstract class UiScene{
      *
      * @return Main UiApp reference
      */
-    public UiApp getApp(){
+    public UiApp getApp() {
         return this.uiApp;
     }
 
@@ -72,27 +73,25 @@ public abstract class UiScene{
      *
      * @return result of the State collectState method
      */
-    public State getState(){
+    public State getState() {
         return this.state;
     }
 
     /**
-     * Returns the fxml attached controller for this
-     * UiScene
+     * Returns the fxml attached controller for this UiScene
      *
      * @return the controller created by the fxml syntax
      */
-    public Controller getController(){
+    public Controller getController() {
         return this.controller;
     }
 
     /**
-     * Inits the default scene state
-     * as null
+     * Inits the default scene state as null
      *
      * @return State instance
      */
-    public State initState(){
-       return new BaseState();
+    public State initState() {
+        return new BaseState();
     }
 }

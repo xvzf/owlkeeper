@@ -1,5 +1,8 @@
 package de.htwsaar.owlkeeper.ui.helper;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.TaskComment;
@@ -12,25 +15,51 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
 
 /**
  * Collection of helpers for the Task-View
  */
-public final class TaskView{
+public final class TaskView {
+    private static final String BLOCKED = "blocked";
+    private static final String EDIT = "Edit";
+    private static final String NEW_TASK = "New task";
+    private static final String PROJECT_DESC = "Project Description";
+    private static final String PROJECT_NAME = "Project Name";
+    private static final String SAVE_TASK = "Save task";
+    private static final String SUBMIT = "Submit";
+    private static final String WRITE_COMMENT = "Write a comment…";
+    private static final String IMG_CALENDAR = "/images/calendar.png";
+    private static final String IMG_CHECK_SQUARE = "/images/check-square.png";
+    private static final String IMG_USERS = "/images/users.png";
+    private static final String MSG_DEADLINE_NOT_DEFINED = "Deadline needs to be defined";
+    private static final String MSG_COMMENT_EMPTY = "Comments can't be empty.";
+    private static final String MSG_PROJECT_NAME_EMPTY = "Project name can't be empty.";
+    private static final String MSG_PROJECT_DESC_EMPTY = "Project description can't be empty.";
+    private static final String STYLE_BUTTON = "button";
+    private static final String STYLE_BUTTON_SMALL = "button--small";
+    private static final String STYLE_BUTTON_SECONDARY = "button--secondary";
+    private static final String STYLE_COMMENTS = "comments";
+    private static final String STYLE_COMMENTS_INPUT = "comments__input";
+    private static final String STYLE_COMMENTS_ITEM = "comments__item";
+    private static final String STYLE_H2 = "h2";
+    private static final String STYLE_SIDEBAR = "sidebar";
+    private static final String STYLE_SIDEBAR_META = "sidebar__meta";
+    private static final String STYLE_SIDEBAR_TAGS = "sidebar__tags";
+    private static final String STYLE_SIDEBAR_TEAM = "sidebar__team";
+    private static final String STYLE_SIDEBAR_TITLE = "sidebar__title";
+    private static final String STYLE_TASK_LISTING = "task-listing";
+    private static final String STYLE_TASK_LISTING_ASSIGNED = "task-listing__assigned";
+    private static final String STYLE_TASK_LISTING_TAGS = "task-listing__tags";
+    private static final String COL_RED = "#E14B4B";
 
-    private TaskView(){
+    private TaskView() {
     }
 
     /**
@@ -38,16 +67,16 @@ public final class TaskView{
      *
      * @return scrollpane sidebar
      */
-    private static ScrollPane buildSidebarWrapper(){
+    private static ScrollPane buildSidebarWrapper() {
         // Sidebar Pane
         ScrollPane sidebar = new ScrollPane();
         sidebar.setFitToHeight(true);
         sidebar.setMinWidth(450);
-		sidebar.setHbarPolicy(ScrollBarPolicy.NEVER);
+        sidebar.setHbarPolicy(ScrollBarPolicy.NEVER);
 
         // Sidebar Box
         VBox content = new VBox();
-        content.getStyleClass().add("sidebar");
+        content.getStyleClass().add(STYLE_SIDEBAR);
         sidebar.setContent(content);
         return sidebar;
     }
@@ -58,41 +87,41 @@ public final class TaskView{
      * @param taskEntity new task entity
      * @return scrollpane sidebar
      */
-    public static ScrollPane buildNewTaskSidebar(Task taskEntity, UiApp app){
+    public static ScrollPane buildNewTaskSidebar(Task taskEntity, UiApp app) {
 
         Validator validator = new Validator();
 
         ScrollPane sidebar = buildSidebarWrapper();
         VBox content = (VBox) sidebar.getContent();
 
-        Text headline = new Text("Neuer Task anlegen");
-        headline.getStyleClass().add("h2");
+        Text headline = new Text(NEW_TASK);
+        headline.getStyleClass().add(STYLE_H2);
         content.getChildren().add(headline);
 
         TextField name = new TextField();
-        name.setPromptText("Projekt Name");
+        name.setPromptText(PROJECT_NAME);
         content.getChildren().add(name);
         name.setText(taskEntity.getName());
 
         TextArea description = new TextArea();
-        description.setPromptText("Projekt Beschreibung");
+        description.setPromptText(PROJECT_DESC);
         content.getChildren().add(description);
         description.setText(taskEntity.getDescription());
 
         DatePicker deadline = new DatePicker();
         content.getChildren().add(deadline);
-        if (taskEntity.getDeadline() != null){
+        if (taskEntity.getDeadline() != null) {
             deadline.setValue(taskEntity.getDeadline().toLocalDateTime().toLocalDate());
         }
 
         VBox submitBox = new VBox();
-        Button submit = new Button("save task");
+        Button submit = new Button(SAVE_TASK);
         submitBox.getChildren().add(submit);
         content.getChildren().add(submitBox);
 
-        //@todo add team value
+        // @todo add team value
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (validator.execute()){
+            if (validator.execute()) {
                 taskEntity.setName(name.getText());
                 taskEntity.setDescription(description.getText());
                 taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
@@ -105,9 +134,10 @@ public final class TaskView{
             validator.reset();
         });
 
-        validator.addRule(new Validator.Rule(name, Validator::TextNotEmpty, "Project name can't be empty."));
-        validator.addRule(new Validator.Rule(description, Validator::TextNotEmpty, "Project description can't be empty."));
-        validator.addRule(new Validator.Rule(deadline, node -> ((DatePicker) node).getValue() != null, "Deadline needs to be defined"));
+        validator.addRule(new Validator.Rule(name, Validator::TextNotEmpty, MSG_PROJECT_NAME_EMPTY));
+        validator.addRule(new Validator.Rule(description, Validator::TextNotEmpty, MSG_PROJECT_DESC_EMPTY));
+        validator.addRule(
+                new Validator.Rule(deadline, node -> ((DatePicker) node).getValue() != null, MSG_DEADLINE_NOT_DEFINED));
         submitBox.getChildren().add(validator.getMessageField());
 
         return sidebar;
@@ -118,32 +148,32 @@ public final class TaskView{
      *
      * @return the full sidebar Node
      */
-    public static ScrollPane buildSidebar(Task taskEntity, UiApp app){
+    public static ScrollPane buildSidebar(Task taskEntity, UiApp app) {
         ScrollPane sidebar = buildSidebarWrapper();
         VBox content = (VBox) sidebar.getContent();
 
         // Tags
         HBox tags = new HBox();
-        tags.getStyleClass().add("sidebar__tags");
+        tags.getStyleClass().add(STYLE_SIDEBAR_TAGS);
         content.getChildren().add(tags);
 
         // Individual Tags
-        tags.getChildren().add(CommonNodes.Tag("blocked", "#E14B4B"));
+        tags.getChildren().add(CommonNodes.Tag(BLOCKED, COL_RED));
 
         // Title
         Text title = new Text(taskEntity.getName());
-        title.getStyleClass().add("sidebar__title");
+        title.getStyleClass().add(STYLE_SIDEBAR_TITLE);
         title.setWrappingWidth(400);
         content.getChildren().add(title);
 
         // Date & Team -- Wrapper
         HBox meta = new HBox();
-        meta.getStyleClass().add("sidebar__meta");
+        meta.getStyleClass().add(STYLE_SIDEBAR_META);
         meta.setAlignment(Pos.CENTER_LEFT);
         content.getChildren().add(meta);
 
         // Date-icon
-        meta.getChildren().add(CommonNodes.Image("/images/calendar.png", 30, 150));
+        meta.getChildren().add(CommonNodes.Image(IMG_CALENDAR, 30, 150));
 
         // Date-Text
         meta.getChildren().add(CommonNodes.Date(taskEntity.getDeadline()));
@@ -151,11 +181,11 @@ public final class TaskView{
         // Team
         HBox team = new HBox();
         team.setAlignment(Pos.CENTER_RIGHT);
-        team.getStyleClass().add("sidebar__team");
+        team.getStyleClass().add(STYLE_SIDEBAR_TEAM);
         meta.getChildren().add(team);
 
         for (int i = 0; i < 3; i++) {
-            team.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
+            team.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 150));
         }
 
         // Description
@@ -163,8 +193,8 @@ public final class TaskView{
         description.setWrappingWidth(400);
         content.getChildren().add(description);
 
-        Button editButton = new Button("bearbeiten");
-        editButton.getStyleClass().addAll("button", "button--small", "button--secondary");
+        Button editButton = new Button(EDIT);
+        editButton.getStyleClass().addAll(STYLE_BUTTON, STYLE_BUTTON_SMALL, STYLE_BUTTON_SECONDARY);
         content.getChildren().add(editButton);
         editButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             long stage = taskEntity.getProjectStage();
@@ -178,14 +208,14 @@ public final class TaskView{
         // Comments
         Validator validator = new Validator();
         VBox comments = new VBox();
-        comments.getStyleClass().add("comments");
+        comments.getStyleClass().add(STYLE_COMMENTS);
         content.getChildren().add(comments);
 
         List<TaskComment> tasksComments = new TaskModel(taskEntity).getComments();
         for (TaskComment commentEntity : tasksComments) {
             HBox comment = new HBox();
-            comment.getStyleClass().add("comments__item");
-            comment.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
+            comment.getStyleClass().add(STYLE_COMMENTS_ITEM);
+            comment.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 150));
             Text commentText = new Text(commentEntity.getContent());
             commentText.setWrappingWidth(350);
             comment.getChildren().add(commentText);
@@ -194,23 +224,23 @@ public final class TaskView{
 
         // TextArea
         TextArea input = new TextArea();
-		input.setMaxWidth(375);
+        input.setMaxWidth(375);
         input.setWrapText(true);
-        input.getStyleClass().add("comments__input");
-        input.setPromptText("write a comment...");
+        input.getStyleClass().add(STYLE_COMMENTS_INPUT);
+        input.setPromptText(WRITE_COMMENT);
         comments.getChildren().add(input);
 
         // Button
         VBox submitBox = new VBox();
         Button button = new Button();
-        button.setText("send");
-        button.getStyleClass().addAll("button", "button--small");
+        button.setText(SUBMIT);
+        button.getStyleClass().addAll(STYLE_BUTTON, STYLE_BUTTON_SMALL);
         submitBox.getChildren().add(button);
         comments.getChildren().add(submitBox);
         button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (validator.execute()){
+            if (validator.execute()) {
                 long id = DeveloperManager.getCurrentDeveloper().getContainer().getId();
-                TaskCommentModel comment = new TaskCommentModel(input.getText(),id, taskEntity.getId());
+                TaskCommentModel comment = new TaskCommentModel(input.getText(), id, taskEntity.getId());
                 comment.save();
                 long stage = taskEntity.getProjectStage();
                 long project = new ProjectStageModel(stage).getContainer().getProject();
@@ -220,7 +250,7 @@ public final class TaskView{
         });
 
         // Validations
-        validator.addRule(new Validator.Rule(input, Validator::TextNotEmpty, "The new comment can't be empty."));
+        validator.addRule(new Validator.Rule(input, Validator::TextNotEmpty, MSG_COMMENT_EMPTY));
         submitBox.getChildren().add(validator.getMessageField());
 
         return sidebar;
@@ -232,13 +262,13 @@ public final class TaskView{
      * @return the full listing Node
      * @todo 27.03.2019 finish dynamic content
      */
-    public static HBox getTaskNode(Task taskEntity){
+    public static HBox getTaskNode(Task taskEntity) {
         HBox task = new HBox();
         task.setAlignment(Pos.CENTER_LEFT);
-        task.getStyleClass().add("task-listing");
+        task.getStyleClass().add(STYLE_TASK_LISTING);
 
         // Status icon
-        task.getChildren().add(CommonNodes.Image("/images/check-square.png", 30, 150));
+        task.getChildren().add(CommonNodes.Image(IMG_CHECK_SQUARE, 30, 150));
 
         // Title
         task.getChildren().add(new Text(taskEntity.getName()));
@@ -253,20 +283,20 @@ public final class TaskView{
         HBox team = new HBox();
         team.setAlignment(Pos.CENTER);
         team.setPrefWidth(180);
-        team.getStyleClass().add("task-listing__assigned");
+        team.getStyleClass().add(STYLE_TASK_LISTING_ASSIGNED);
         meta.getChildren().add(team);
         for (int i = 0; i < 3; i++) {
-            team.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
+            team.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 150));
         }
 
         // Tags
         HBox tags = new HBox();
         tags.setAlignment(Pos.CENTER);
         team.setPrefWidth(280);
-        tags.getStyleClass().add("task-listing__tags");
+        tags.getStyleClass().add(STYLE_TASK_LISTING_TAGS);
         meta.getChildren().add(tags);
         for (int i = 0; i < 2; i++) {
-            tags.getChildren().add(CommonNodes.Tag("blocked", "#5A4BE1"));
+            tags.getChildren().add(CommonNodes.Tag(BLOCKED, COL_RED));
         }
 
         // Date

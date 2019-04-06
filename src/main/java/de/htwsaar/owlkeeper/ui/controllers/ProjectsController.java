@@ -13,7 +13,7 @@ import javafx.scene.Parent;
 import java.util.HashMap;
 import java.util.List;
 
-public class ProjectsController extends Controller{
+public class ProjectsController extends Controller {
     @FXML
     public Parent topbar;
 
@@ -38,7 +38,7 @@ public class ProjectsController extends Controller{
     @FXML
     public ProjectsListingController projectListController;
 
-    public void boot(HashMap<String, Object> state){
+    public void boot(HashMap<String, Object> state) {
         UiApp app = this.getApp();
 
         // Meta
