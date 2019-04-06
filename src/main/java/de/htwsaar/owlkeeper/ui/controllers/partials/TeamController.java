@@ -23,6 +23,7 @@ public class TeamController extends SidebarController<Object> {
     private static final String STYLE_TEAM_UNITS = "team__units";
     private static final String STYLE_TEAM_UNIT = "team-unit";
     private static final String STYLE_TEAM_UNIT_MEMBER = "team-unit__member";
+    private static final String STYLE_TEAM_UNIT_LEADER = "team-unit__member--leader";
 
     @FXML
     public HBox team;
@@ -71,7 +72,7 @@ public class TeamController extends SidebarController<Object> {
         unit.getChildren().add(new Text(LEADER));
 
         HBox leader = new HBox();
-        leader.getStyleClass().add(STYLE_TEAM_UNIT_MEMBER);
+        leader.getStyleClass().addAll(STYLE_TEAM_UNIT_MEMBER, STYLE_TEAM_UNIT_LEADER);
         leader.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 30));
         leader.getChildren().add(new Text(leadDev.getName()));
         unit.getChildren().add(leader);
