@@ -15,10 +15,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -43,7 +47,7 @@ public final class TaskView{
         ScrollPane sidebar = new ScrollPane();
         sidebar.setFitToHeight(true);
         sidebar.setMinWidth(450);
-		sidebar.setHbarPolicy(ScrollBarPolicy.NEVER);
+        sidebar.setHbarPolicy(ScrollBarPolicy.NEVER);
 
         // Sidebar Box
         VBox content = new VBox();
@@ -65,23 +69,35 @@ public final class TaskView{
         ScrollPane sidebar = buildSidebarWrapper();
         VBox content = (VBox) sidebar.getContent();
 
-        Text headline = new Text("Neuer Task anlegen");
+        Text headline = new Text("Task anlegen oder bearbeiten");
         headline.getStyleClass().add("h2");
         content.getChildren().add(headline);
 
+        VBox nameBox = new VBox();
+        nameBox.getStyleClass().add("form-item");
+        nameBox.getChildren().add(new Text("Projekt Name:"));
         TextField name = new TextField();
-        name.setPromptText("Projekt Name");
-        content.getChildren().add(name);
+        nameBox.getChildren().add(name);
+        content.getChildren().add(nameBox);
         name.setText(taskEntity.getName());
 
+        VBox descriptionBox = new VBox();
+        descriptionBox.getStyleClass().add("form-item");
+        descriptionBox.getChildren().add(new Text("Projekt description:"));
         TextArea description = new TextArea();
-        description.setPromptText("Projekt Beschreibung");
-        content.getChildren().add(description);
+        description.setMaxWidth(400);
+        description.setWrapText(true);
+        descriptionBox.getChildren().add(description);
+        content.getChildren().add(descriptionBox);
         description.setText(taskEntity.getDescription());
 
-        DatePicker deadline = new DatePicker();
-        content.getChildren().add(deadline);
-        if (taskEntity.getDeadline() != null){
+        VBox dateBox = new VBox();
+        dateBox.getStyleClass().add("form-item");
+        dateBox.getChildren().add(new Text("Deadline:"));
+        DatePicker deadline = new DatePicker(new Timestamp(System.currentTimeMillis()).toLocalDateTime().toLocalDate());
+        dateBox.getChildren().add(deadline);
+        content.getChildren().add(dateBox);
+        if (taskEntity.getDeadline() != null) {
             deadline.setValue(taskEntity.getDeadline().toLocalDateTime().toLocalDate());
         }
 
@@ -92,7 +108,7 @@ public final class TaskView{
 
         //@todo add team value
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (validator.execute()){
+            if (validator.execute()) {
                 taskEntity.setName(name.getText());
                 taskEntity.setDescription(description.getText());
                 taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
@@ -123,12 +139,12 @@ public final class TaskView{
         VBox content = (VBox) sidebar.getContent();
 
         // Tags
-        HBox tags = new HBox();
-        tags.getStyleClass().add("sidebar__tags");
-        content.getChildren().add(tags);
+//        HBox tags = new HBox();
+//        tags.getStyleClass().add("sidebar__tags");
+//        content.getChildren().add(tags);
 
         // Individual Tags
-        tags.getChildren().add(CommonNodes.Tag("blocked", "#E14B4B"));
+//        tags.getChildren().add(CommonNodes.Tag("blocked", "#E14B4B"));
 
         // Title
         Text title = new Text(taskEntity.getName());
@@ -143,7 +159,7 @@ public final class TaskView{
         content.getChildren().add(meta);
 
         // Date-icon
-        meta.getChildren().add(CommonNodes.Image("/images/calendar.png", 30, 150));
+        meta.getChildren().add(CommonNodes.Image("/images/calendar.png", 22, 22));
 
         // Date-Text
         meta.getChildren().add(CommonNodes.Date(taskEntity.getDeadline()));
@@ -153,9 +169,10 @@ public final class TaskView{
         team.setAlignment(Pos.CENTER_RIGHT);
         team.getStyleClass().add("sidebar__team");
         meta.getChildren().add(team);
+        meta.setHgrow(team, Priority.ALWAYS);
 
         for (int i = 0; i < 3; i++) {
-            team.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
+            team.getChildren().add(CommonNodes.Image("/images/user.png", 25, 25));
         }
 
         // Description
@@ -185,7 +202,7 @@ public final class TaskView{
         for (TaskComment commentEntity : tasksComments) {
             HBox comment = new HBox();
             comment.getStyleClass().add("comments__item");
-            comment.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
+            comment.getChildren().add(CommonNodes.Image("/images/user.png", 25, 25));
             Text commentText = new Text(commentEntity.getContent());
             commentText.setWrappingWidth(350);
             comment.getChildren().add(commentText);
@@ -194,7 +211,7 @@ public final class TaskView{
 
         // TextArea
         TextArea input = new TextArea();
-		input.setMaxWidth(375);
+        input.setMaxWidth(375);
         input.setWrapText(true);
         input.getStyleClass().add("comments__input");
         input.setPromptText("write a comment...");
@@ -208,9 +225,9 @@ public final class TaskView{
         submitBox.getChildren().add(button);
         comments.getChildren().add(submitBox);
         button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (validator.execute()){
+            if (validator.execute()) {
                 long id = DeveloperManager.getCurrentDeveloper().getContainer().getId();
-                TaskCommentModel comment = new TaskCommentModel(input.getText(),id, taskEntity.getId());
+                TaskCommentModel comment = new TaskCommentModel(input.getText(), id, taskEntity.getId());
                 comment.save();
                 long stage = taskEntity.getProjectStage();
                 long project = new ProjectStageModel(stage).getContainer().getProject();
@@ -256,18 +273,18 @@ public final class TaskView{
         team.getStyleClass().add("task-listing__assigned");
         meta.getChildren().add(team);
         for (int i = 0; i < 3; i++) {
-            team.getChildren().add(CommonNodes.Image("/images/users.png", 30, 150));
+            team.getChildren().add(CommonNodes.Image("/images/user.png", 25, 25));
         }
 
         // Tags
-        HBox tags = new HBox();
-        tags.setAlignment(Pos.CENTER);
-        team.setPrefWidth(280);
-        tags.getStyleClass().add("task-listing__tags");
-        meta.getChildren().add(tags);
-        for (int i = 0; i < 2; i++) {
-            tags.getChildren().add(CommonNodes.Tag("blocked", "#5A4BE1"));
-        }
+//        HBox tags = new HBox();
+//        tags.setAlignment(Pos.CENTER);
+//        team.setPrefWidth(280);
+//        tags.getStyleClass().add("task-listing__tags");
+//        meta.getChildren().add(tags);
+//        for (int i = 0; i < 2; i++) {
+//            tags.getChildren().add(CommonNodes.Tag("blocked", "#5A4BE1"));
+//        }
 
         // Date
         Text date = CommonNodes.Date(taskEntity.getDeadline());

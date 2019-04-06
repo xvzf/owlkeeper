@@ -1,5 +1,7 @@
 package de.htwsaar.owlkeeper.ui.pages;
 
+import javafx.scene.image.ImageView;
+
 import java.util.HashMap;
 
 /**
@@ -58,4 +60,16 @@ public abstract class Page{
      * @return page-title
      */
     public abstract String getName();
+
+    /**
+     * Returns the Pages icon-noce object
+     * @return javafx node
+     */
+    public abstract ImageView getIcon();
+
+    /**
+     * Returns the force return state
+     * @return true Returns true if the page should always force a rerender
+     */
+    public abstract boolean getForce();
 }

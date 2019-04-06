@@ -42,7 +42,7 @@ public class IterationBarController extends Controller {
 			left.setAlignment(Pos.CENTER_LEFT);
 			HBox leftInner = new HBox();
 			leftInner.setAlignment(Pos.CENTER_LEFT);
-			leftInner.getChildren().add(CommonNodes.Image("/images/arrow-left.png", 30, 150));
+			leftInner.getChildren().add(CommonNodes.Image("/images/arrow-left.png", 20, 20));
 			Text leftText = new Text(leftStage.getName());
 			leftText.getStyleClass().add("h2");
 			leftInner.getChildren().add(leftText);
@@ -65,7 +65,7 @@ public class IterationBarController extends Controller {
 			Text rightText = new Text(rightStage.getName());
 			rightText.getStyleClass().add("h2");
 			rightInner.getChildren().add(rightText);
-			rightInner.getChildren().add(CommonNodes.Image("/images/arrow-right.png", 30, 150));
+			rightInner.getChildren().add(CommonNodes.Image("/images/arrow-right.png", 20, 20));
 			rightInner.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
                 app.route("page-iteration", TaskListState.getQueryMap(project.getId(), rightStage.getId(), null, false));
             });
