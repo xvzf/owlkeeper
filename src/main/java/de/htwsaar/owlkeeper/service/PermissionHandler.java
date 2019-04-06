@@ -8,10 +8,13 @@ import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 
 import java.util.function.Predicate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class PermissionHandler {
     private static final String NO_CURRENT_USER_SET = "No current user has been set. Call DeveloperManager.login() first!";
     private static final String USER_OF_GROUP_NO_PRIVILEGES_FOR_ACTION = "User %s of group %s does not have sufficient privileges to execute action %s";
+    private static Logger logger = LogManager.getLogger(PermissionHandler.class);
 
     private static PermissionHandler handler;
     private static DeveloperModel user;
@@ -64,6 +67,10 @@ public class PermissionHandler {
      */
     public static boolean checkPermission(final Predicate<Developer> predicate)
             throws InsufficientPermissionsException {
+
+        logger.info("Usergroup: " + userGroup);
+        logger.info(user.getContainer());
+
         if (userGroup.equals("admin"))
             return true;
         if (predicate.test(user.getContainer())) {
