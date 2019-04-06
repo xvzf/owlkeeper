@@ -29,6 +29,10 @@ public abstract class AbstractModel<R extends HasID, E> {
     private Function<R, ExtensionCallback<Integer, E, InsufficientPermissionsException>> saveCallbackFactory;
     private R container;
 
+    private static final String LOGGER_INFO_FORMAT_LOAD = "Loaded %s from index %s";
+    private static final String LOGGER_INFO_FORMAT_REMOVE = "Removed %s from index %s";
+    private static final String LOGGER_INFO_FORMAT_SAVE = "Saved %s to index %s";
+
     /**
      * Constructor
      *
@@ -81,7 +85,7 @@ public abstract class AbstractModel<R extends HasID, E> {
     public void getFromDB(long id) {
         ExtensionCallback<R, E, RuntimeException> loadCallback = loadCallbackFactory.apply(id);
         setContainer(DBConnection.getJdbi().withExtension(DAOClass, loadCallback));
-        logger.info("Loaded " + toString() + " from index " + id);
+        logger.info(String.format(LOGGER_INFO_FORMAT_LOAD, toString(), id));
     }
 
     /**
@@ -117,7 +121,7 @@ public abstract class AbstractModel<R extends HasID, E> {
 
         // Refresh every time
         getFromDB(newId);
-        logger.info("Saved " + toString() + " to index " + newId);
+        logger.info(String.format(LOGGER_INFO_FORMAT_SAVE, toString(), newId));
     }
 
     /**
@@ -130,7 +134,7 @@ public abstract class AbstractModel<R extends HasID, E> {
     public int removeFromDB() throws InsufficientPermissionsException {
         ExtensionCallback<Integer, E, InsufficientPermissionsException> removeCallback = removeCallbackFactory.apply(getContainer().getId());
         int removedId = DBConnection.getJdbi().withExtension(DAOClass, removeCallback);
-        logger.info("Removed " + toString() + " from index " + removedId);
+        logger.info(String.format(LOGGER_INFO_FORMAT_REMOVE, toString(), removedId));
         return removedId;
     }
 

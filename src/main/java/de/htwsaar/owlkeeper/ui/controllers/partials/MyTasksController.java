@@ -6,6 +6,7 @@ import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.helper.TaskView;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -16,6 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyTasksController extends SidebarController<Task> {
+    private static final String OPEN_TASKS = "Open tasks";
+    private static final String CLOSED_TASKS = "Closed tasks";
+    private static final String STYLE_TASK_LIST = "task-list";
+    private static final String STYLE_TASK_LIST_ITEMS = "task-list__items";
+    private static final String STYLE_H2 = "h2";
 
     @FXML
     public VBox tasks;
@@ -37,10 +43,10 @@ public class MyTasksController extends SidebarController<Task> {
                 }
             }
             if (!openTasks.isEmpty()) {
-                this.tasks.getChildren().add(this.getTaskList(app, "Open tasks", openTasks));
+                this.tasks.getChildren().add(this.getTaskList(app, OPEN_TASKS, openTasks));
             }
             if (!closedTasks.isEmpty()) {
-                this.tasks.getChildren().add(this.getTaskList(app, "Closed tasks", closedTasks));
+                this.tasks.getChildren().add(this.getTaskList(app, CLOSED_TASKS, closedTasks));
             }
         }
     }
@@ -52,14 +58,14 @@ public class MyTasksController extends SidebarController<Task> {
      */
     private VBox getTaskList(UiApp app, String titleText, List<Task> taskList) {
         VBox taskListing = new VBox();
-        taskListing.getStyleClass().add("task-list");
+        taskListing.getStyleClass().add(STYLE_TASK_LIST);
 
         Text title = new Text(titleText);
-        title.getStyleClass().add("h2");
+        title.getStyleClass().add(STYLE_H2);
         taskListing.getChildren().add(title);
 
         VBox tasks = new VBox();
-        tasks.getStyleClass().add("task-list__items");
+        tasks.getStyleClass().add(STYLE_TASK_LIST_ITEMS);
         taskListing.getChildren().add(tasks);
 
         taskList.forEach(task -> tasks.getChildren().add(this.getTask(app, task)));
@@ -72,8 +78,9 @@ public class MyTasksController extends SidebarController<Task> {
      * @return the task Node
      */
     private HBox getTask(UiApp app, Task taskEntity) {
-        HBox task = TaskView.getTaskNode(taskEntity);
-        task.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+        HBox task = TaskView.getTaskNode(app, taskEntity);
+        Node title = task.getChildren().get(1); // Get Title Text Node
+        title.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             long stage = taskEntity.getProjectStage();
             long project = new ProjectStageModel(stage).getContainer().getProject();
             Task focus = (Task) this.getUiScene().getState().getQuery().get("focus");

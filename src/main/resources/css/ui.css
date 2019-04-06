@@ -54,7 +54,7 @@ TextArea:focused .content {
     -fx-background-color: #252525;
     -fx-padding: 25px 30px;
     -fx-spacing: 40;
-    -fx-min-width: 250;
+    -fx-min-width: 200;
 }
 
 .navigation {
@@ -80,7 +80,7 @@ TextArea:focused .content {
 }
 
 .navigation-item {
-    -fx-spacing: 20;
+    -fx-spacing: 15;
     -fx-cursor: hand;
 }
 
@@ -110,7 +110,7 @@ TextArea:focused .content {
     -fx-padding: 10 0 10 15;
     -fx-border-width: 0 0 0 1;
     -fx-border-color: #707070;
-    -fx-translate-x: 15;
+    -fx-translate-x: 10;
     -fx-spacing: 10;
 }
 
@@ -171,6 +171,10 @@ TextArea:focused .content {
     -fx-border-color: #ECECEC;
     -fx-padding: 20 0;
     -fx-spacing: 20;
+}
+
+.task-list__icon,
+.task-list__title {
     -fx-cursor: hand;
 }
 
@@ -179,7 +183,7 @@ TextArea:focused .content {
 }
 
 .task-listing__assigned {
-    -fx-spacing: 20;
+    -fx-spacing: 10;
 }
 
 .task-listing__tags {
@@ -231,7 +235,8 @@ TextArea:focused .content {
 }
 
 .sidebar__meta {
-    -fx-spacing: 15;
+    -fx-spacing: 10;
+    -fx-padding: 0 10 0 0;
 }
 
 .comments {
@@ -291,6 +296,10 @@ TextArea:focused .content {
     -fx-spacing: 10;
 }
 
+.team-unit__member--leader{
+    -fx-padding: 0 10 10 0;
+}
+
 .project {
     -fx-spacing: 20;
 }
@@ -327,6 +336,10 @@ TextArea:focused .content {
 }
 
 .project-form__item {
+    -fx-spacing: 5;
+}
+
+.form-item{
     -fx-spacing: 5;
 }
 

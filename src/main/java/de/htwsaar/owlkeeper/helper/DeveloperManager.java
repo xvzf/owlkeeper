@@ -6,7 +6,7 @@ import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 
 /**
- *
+ * A Manager for login a developer
  */
 public class DeveloperManager {
 

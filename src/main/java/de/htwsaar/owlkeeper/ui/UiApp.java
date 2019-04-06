@@ -1,11 +1,10 @@
 package de.htwsaar.owlkeeper.ui;
 
+import java.util.HashMap;
+
 import de.htwsaar.owlkeeper.ui.state.BaseState;
 import de.htwsaar.owlkeeper.ui.state.State;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Main Application instance for the applications gui this gets instanced
@@ -35,8 +34,9 @@ public class UiApp extends ViewApplication {
     public void route(String key, HashMap<String, Object> data, boolean force) {
         UiScene scene = scenes.get(key);
         State state = scene.getState();
-        // only handle the new query if the target scene does not have this query prepared already
-        if (force || !BaseState.compareQueries(state.getQuery(), data)){
+        // only handle the new query if the target scene does not have this query
+        // prepared already
+        if (force || !BaseState.compareQueries(state.getQuery(), data)) {
             scene.getState().handleQuery(data);
             scene.getController().boot(scene.getState().collectState());
         }
@@ -50,7 +50,7 @@ public class UiApp extends ViewApplication {
      * @param key name of the new scene
      * @param data data object passed to the scenes state
      */
-    public void route(String key, HashMap<String, Object> data){
+    public void route(String key, HashMap<String, Object> data) {
         this.route(key, data, false);
     }
 

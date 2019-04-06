@@ -8,21 +8,28 @@ import javafx.scene.text.Text;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
+public final class CommonNodes {
+    private static final String STYLE_BACKGROUND_COLOR = "-fx-background-color: ";
+    private static final String STYLE_DATE = "date";
+    private static final String STYLE_DATE_ERROR = "date--error";
+    private static final String STYLE_DATE_WARNING = "date--warning";
+    private static final String STYLE_DATE_SUCCESS = "date--success";
+    private static final String STYLE_HR = "hr";
+    private static final String STYLE_HR_LIGHT = "hr--light";
+    private static final String STYLE_TAG = "tag";
 
-public final class CommonNodes{
-
-    private CommonNodes(){
+    private CommonNodes() {
     }
 
     /**
      * Builds an ImageView Node
      *
-     * @param uri    path to the image
-     * @param width  fit width
+     * @param uri path to the image
+     * @param width fit width
      * @param height fit height
      * @return ImageView Node object
      */
-    public static ImageView Image(String uri, int width, int height){
+    public static ImageView Image(String uri, int width, int height) {
         ImageView image = new ImageView(uri);
         image.setFitWidth(width);
         image.setFitHeight(height);
@@ -38,27 +45,27 @@ public final class CommonNodes{
      * @return Date represented as a Label Node Object
      * @todo 28.02.2019 make date-color dynamic maybe switch string to timestamp
      */
-    public static Text Date(Timestamp date){
+    public static Text Date(Timestamp date) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         Text dateString = new Text(new SimpleDateFormat("dd.MM.yyyy").format(date));
-        dateString.getStyleClass().add("date");
+        dateString.getStyleClass().add(STYLE_DATE);
+        // TODO: hardcoded switch
         switch (0) {
-            case 2:
-                dateString.getStyleClass().add("date--error");
-                break;
-            case 1:
-                dateString.getStyleClass().add("date--warning");
-                break;
-            default:
-                dateString.getStyleClass().add("date--success");
-                break;
+        case 2:
+            dateString.getStyleClass().add(STYLE_DATE_ERROR);
+            break;
+        case 1:
+            dateString.getStyleClass().add(STYLE_DATE_WARNING);
+            break;
+        default:
+            dateString.getStyleClass().add(STYLE_DATE_SUCCESS);
+            break;
         }
 
-        if (date.getTime() > (now.getTime() - 1000 * 60 * 60 * 24) && date.getTime() < now.getTime()){
-            dateString.getStyleClass().add("date--warning");
-        }
-        else if (date.getTime() < now.getTime()){
-            dateString.getStyleClass().add("date--error");
+        if (date.getTime() > (now.getTime() - 1000 * 60 * 60 * 24) && date.getTime() < now.getTime()) {
+            dateString.getStyleClass().add(STYLE_DATE_WARNING);
+        } else if (date.getTime() < now.getTime()) {
+            dateString.getStyleClass().add(STYLE_DATE_ERROR);
         }
 
         return dateString;
@@ -71,14 +78,14 @@ public final class CommonNodes{
      * @param light true if the line is light
      * @return Rectangle Node Object
      */
-    public static Rectangle Hr(int width, boolean light){
+    public static Rectangle Hr(int width, boolean light) {
         Rectangle hr = new Rectangle();
         hr.setWidth(width);
         hr.setHeight(1);
         ;
-        hr.getStyleClass().add("hr");
+        hr.getStyleClass().add(STYLE_HR);
         if (light) {
-            hr.getStyleClass().add("hr--light");
+            hr.getStyleClass().add(STYLE_HR_LIGHT);
         }
         return hr;
     }
@@ -89,22 +96,22 @@ public final class CommonNodes{
      * @param text the tags text
      * @return Label Node Object
      */
-    public static Label Tag(String text){
+    public static Label Tag(String text) {
         Label tag = new Label(text);
-        tag.getStyleClass().add("tag");
+        tag.getStyleClass().add(STYLE_TAG);
         return tag;
     }
 
     /**
      * Builds a Tag element with a custom color as a Label Node
      *
-     * @param text  the tags text
+     * @param text the tags text
      * @param color the tags color value as hex
      * @return Label Node Object
      */
-    public static Label Tag(String text, String color){
+    public static Label Tag(String text, String color) {
         Label tag = CommonNodes.Tag(text);
-        tag.setStyle("-fx-background-color: " + color);
+        tag.setStyle(STYLE_BACKGROUND_COLOR + color);
         return tag;
     }
 }

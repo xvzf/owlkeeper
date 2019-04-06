@@ -5,7 +5,7 @@ import de.htwsaar.owlkeeper.ui.UiScene;
 
 import java.util.HashMap;
 
-public abstract class Controller{
+public abstract class Controller {
 
     private UiApp uiApp;
     private UiScene uiScene;
@@ -15,7 +15,7 @@ public abstract class Controller{
      *
      * @param app Main UiApp reference
      */
-    public void setApp(UiApp app){
+    public void setApp(UiApp app) {
         this.uiApp = app;
     }
 
@@ -24,7 +24,7 @@ public abstract class Controller{
      *
      * @param scene Main UiScene scene
      */
-    public void setUiScene(UiScene scene){
+    public void setUiScene(UiScene scene) {
         this.uiScene = scene;
     }
 
@@ -33,7 +33,7 @@ public abstract class Controller{
      *
      * @return Main UiApp reference
      */
-    public UiApp getApp(){
+    public UiApp getApp() {
         return this.uiApp;
     }
 
@@ -42,14 +42,14 @@ public abstract class Controller{
      *
      * @return Main UiScene reference
      */
-    public UiScene getUiScene(){
+    public UiScene getUiScene() {
         return this.uiScene;
     }
 
     /**
      * Main entry point for the Controller
      */
-    public void init(){
+    public void init() {
         HashMap<String, Object> state = this.getUiScene().getState().collectState();
         if (state != null) {
             this.boot(state);
@@ -59,5 +59,6 @@ public abstract class Controller{
     /**
      * Main entry point for the controller via routing
      */
-    public void boot(HashMap<String, Object> state){}
+    public void boot(HashMap<String, Object> state) {
+    }
 }

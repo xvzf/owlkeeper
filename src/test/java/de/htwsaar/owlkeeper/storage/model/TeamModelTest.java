@@ -37,6 +37,7 @@ class TeamModelTest {
     void testSaveLoadRemove() {
         TeamModel pm = new TeamModel(T_NAME_1, T_LEADER_1);
         pm.save();
+        pm.save();
         long id = pm.getContainer().getId();
 
         Team p = pm.getContainer();
@@ -75,6 +76,5 @@ class TeamModelTest {
         TeamModel tm = new TeamModel(T_ID_2);
         List<Developer> developers = tm.getDevelopers();
         assertEquals(3, developers.size());
-
     }
 }

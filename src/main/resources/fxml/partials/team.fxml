@@ -9,13 +9,13 @@
 
 <HBox fx:id="root" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.TeamController">
    <children>
-       <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
-          <content>
-              <VBox fx:id="team" styleClass="main" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
-            <!-- Gets filled by the controller -->
-        </VBox>
-          </content>
-       </ScrollPane>
+      <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
+         <content>
+            <HBox fx:id="team" styleClass="main" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+              <!-- Gets filled by the controller -->
+            </HBox>
+         </content>
+      </ScrollPane>
    </children>
-    <!-- Sidebar gets injected through the controller -->
+   <!-- Sidebar gets injected through the controller -->
 </HBox>
