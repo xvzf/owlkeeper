@@ -62,6 +62,7 @@ public class TaskListState extends BaseState {
         query.put("focus", focus);
         query.put("newtask", newtask);
         query.put("edittask", edittask);
+        query.put("_i", QUERY_COUNT);
         return query;
     }
 
