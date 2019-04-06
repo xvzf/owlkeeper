@@ -26,22 +26,16 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-
 /**
  * Collection of helpers for the Task-View
  */
 public final class TaskView {
-    private static final String BLOCKED = "blocked";
     private static final String EDIT = "Edit";
-    private static final String NEW_TASK = "Edit or create Task";
-    private static final String PROJECT_DESC = "Project Description";
-    private static final String PROJECT_NAME = "Project Name";
-    private static final String SAVE_TASK = "Save task";
+    private static final String NEW_TASK = "Edit task";
+    private static final String TASK_DEADLINE = "Task deadline";
+    private static final String TASK_DESC = "Task description";
+    private static final String TASK_NAME = "Task name";
+    private static final String SAVE_TASK = "Save";
     private static final String SUBMIT = "Submit";
     private static final String WRITE_COMMENT = "Write a comment…";
     private static final String IMG_CALENDAR = "/images/calendar.png";
@@ -61,16 +55,13 @@ public final class TaskView {
     private static final String STYLE_H2 = "h2";
     private static final String STYLE_SIDEBAR = "sidebar";
     private static final String STYLE_SIDEBAR_META = "sidebar__meta";
-    private static final String STYLE_SIDEBAR_TAGS = "sidebar__tags";
     private static final String STYLE_SIDEBAR_TEAM = "sidebar__team";
     private static final String STYLE_SIDEBAR_TITLE = "sidebar__title";
     private static final String STYLE_TASK_LISTING = "task-listing";
     private static final String STYLE_TASK_LIST_ICON = "task-list__icon";
     private static final String STYLE_TASK_LIST_TITLE = "task-list__title";
     private static final String STYLE_TASK_LISTING_ASSIGNED = "task-listing__assigned";
-    private static final String STYLE_TASK_LISTING_TAGS = "task-listing__tags";
     private static final String STYLE_FORM_ITEM = "form-item";
-    private static final String COL_RED = "#E14B4B";
 
     private TaskView() {
     }
@@ -112,16 +103,16 @@ public final class TaskView {
         content.getChildren().add(headline);
 
         VBox nameBox = new VBox();
-        nameBox.getStyleClass().add("form-item");
-        nameBox.getChildren().add(new Text(PROJECT_NAME));
+        nameBox.getStyleClass().add(STYLE_FORM_ITEM);
+        nameBox.getChildren().add(new Text(TASK_NAME));
         TextField name = new TextField();
         nameBox.getChildren().add(name);
         content.getChildren().add(nameBox);
         name.setText(taskEntity.getName());
 
         VBox descriptionBox = new VBox();
-        descriptionBox.getStyleClass().add("form-item");
-        descriptionBox.getChildren().add(new Text("Projekt description:"));
+        descriptionBox.getStyleClass().add(STYLE_FORM_ITEM);
+        descriptionBox.getChildren().add(new Text(TASK_DESC));
         TextArea description = new TextArea();
         description.setMaxWidth(400);
         description.setWrapText(true);
@@ -131,7 +122,7 @@ public final class TaskView {
 
         VBox dateBox = new VBox();
         dateBox.getStyleClass().add(STYLE_FORM_ITEM);
-        dateBox.getChildren().add(new Text(PROJECT_DESC));
+        dateBox.getChildren().add(new Text(TASK_DEADLINE));
         DatePicker deadline = new DatePicker(new Timestamp(System.currentTimeMillis()).toLocalDateTime().toLocalDate());
         dateBox.getChildren().add(deadline);
         content.getChildren().add(dateBox);
@@ -179,14 +170,6 @@ public final class TaskView {
         ScrollPane sidebar = buildSidebarWrapper();
         VBox content = (VBox) sidebar.getContent();
 
-        // Tags
-        HBox tags = new HBox();
-//        tags.getStyleClass().add(STYLE_SIDEBAR_TAGS);
-//        content.getChildren().add(tags);
-
-        // Individual Tags
-//        tags.getChildren().add(CommonNodes.Tag(BLOCKED, COL_RED));
-
         // Title
         Text title = new Text(taskEntity.getName());
         title.getStyleClass().add(STYLE_SIDEBAR_TITLE);
@@ -210,7 +193,7 @@ public final class TaskView {
         team.setAlignment(Pos.CENTER_RIGHT);
         team.getStyleClass().add(STYLE_SIDEBAR_TEAM);
         meta.getChildren().add(team);
-        meta.setHgrow(team, Priority.ALWAYS);
+        HBox.setHgrow(team, Priority.ALWAYS);
 
         for (int i = 0; i < 3; i++) {
             team.getChildren().add(CommonNodes.Image(IMG_USER, 25, 25));
@@ -290,7 +273,7 @@ public final class TaskView {
      * @return the full listing Node
      * @todo 27.03.2019 finish dynamic content
      */
-    public static HBox getTaskNode(UiApp app, Task taskEntity){
+    public static HBox getTaskNode(UiApp app, Task taskEntity) {
         HBox task = new HBox();
         task.setAlignment(Pos.CENTER_LEFT);
         task.getStyleClass().add(STYLE_TASK_LISTING);
@@ -305,10 +288,9 @@ public final class TaskView {
             image.addEventHandler(MouseEvent.MOUSE_EXITED, event -> image.setImage(new Image(IMG_CHECK_SQUARE)));
         }
         image.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (taskEntity.getFulfilled() == null){
+            if (taskEntity.getFulfilled() == null) {
                 taskEntity.setFulfilled(new Timestamp(System.currentTimeMillis()));
-            }
-            else{
+            } else {
                 taskEntity.setFulfilled(null);
             }
             TaskModel model = new TaskModel(taskEntity);
@@ -339,16 +321,6 @@ public final class TaskView {
         for (int i = 0; i < 3; i++) {
             team.getChildren().add(CommonNodes.Image(IMG_USER, 25, 25));
         }
-
-        // Tags
-//        HBox tags = new HBox();
-//        tags.setAlignment(Pos.CENTER);
-//        team.setPrefWidth(280);
-//        tags.getStyleClass().add(STYLE_TASK_LISTING_TAGS);
-//        meta.getChildren().add(tags);
-//        for (int i = 0; i < 2; i++) {
-//            tags.getChildren().add(CommonNodes.Tag(BLOCKED, COL_RED));
-//        }
 
         // Date
         Text date = CommonNodes.Date(taskEntity.getDeadline());
