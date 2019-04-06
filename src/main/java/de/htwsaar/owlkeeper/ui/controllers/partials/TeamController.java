@@ -12,12 +12,10 @@ import de.htwsaar.owlkeeper.storage.model.TeamModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
-import de.htwsaar.owlkeeper.ui.helper.TaskView;
 import de.htwsaar.owlkeeper.ui.helper.Validator;
-import de.htwsaar.owlkeeper.ui.pages.DataCheckbox;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import de.htwsaar.owlkeeper.ui.helper.DataCheckbox;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -46,9 +44,6 @@ public class TeamController extends Controller{
     public void setContent(List<Team> teams, List<Developer> developers){
         this.team.getChildren().clear();
 
-
-//        this.addSidebar(teams, this.getApp());
-
         // Teams and Developers
         HBox wrapper = new HBox();
         wrapper.getStyleClass().add(STYLE_WRAPPER);
@@ -60,9 +55,15 @@ public class TeamController extends Controller{
 
         this.team.getChildren().add(CommonNodes.Hr(600, true));
 
-        this.team.getChildren().add(this.buildNewDevForm(this.getApp(), teams));
-        this.team.getChildren().add(this.buildNewTeamForm(this.getApp(), developers));
-        this.team.getChildren().add(this.buildDevTeamForms(this.getApp(), developers, teams));
+
+        VBox forms = new VBox();
+        forms.getStyleClass().add("project__stage-wrapper");
+        forms.getChildren().add(this.buildNewDevForm(this.getApp(), teams));
+        forms.getChildren().add(CommonNodes.Hr(600, true));
+        forms.getChildren().add(this.buildNewTeamForm(this.getApp(), developers));
+        forms.getChildren().add(CommonNodes.Hr(600, true));
+        forms.getChildren().add(this.buildDevTeamForms(this.getApp(), developers, teams));
+        this.team.getChildren().add(forms);
     }
 
     /**
@@ -213,9 +214,11 @@ public class TeamController extends Controller{
         form.getChildren().add(passwordBox);
 
         // Submit button
+        VBox submitWrapper = new VBox();
         Button submit = new Button("save developer");
         submit.getStyleClass().add("button");
-        form.getChildren().add(submit);
+        submitWrapper.getChildren().addAll(submit, validator.getMessageField());
+        form.getChildren().add(submitWrapper);
 
 
         // Team Select
@@ -260,12 +263,11 @@ public class TeamController extends Controller{
     private VBox buildNewTeamForm(UiApp app, List<Developer> developers){
         Validator validator = new Validator();
         VBox box = new VBox();
+        box.getStyleClass().add(STYLE_FORM);
 
         Text headline = new Text("New Team");
         headline.getStyleClass().add(STYLE_H2);
         box.getChildren().add(headline);
-
-        box.getChildren().add(validator.getMessageField());
 
         // Team Name
         VBox nameBox = new VBox();
@@ -284,9 +286,11 @@ public class TeamController extends Controller{
         box.getChildren().add(leaderBox);
 
         // Submit button
+        VBox submitWrapper = new VBox();
         Button submit = new Button("save team");
         submit.getStyleClass().add("button");
-        box.getChildren().add(submit);
+        submitWrapper.getChildren().addAll(submit, validator.getMessageField());
+        box.getChildren().add(submitWrapper);
 
 //         Submit event
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
@@ -312,6 +316,7 @@ public class TeamController extends Controller{
 
     private VBox buildDevTeamForms(UiApp app, List<Developer> developers, List<Team> teams){
         VBox form = new VBox();
+        form.getStyleClass().add(STYLE_FORM);
 
         // Headline
         Text headline = new Text("Add/Remove developer to/from a team");
@@ -320,6 +325,8 @@ public class TeamController extends Controller{
 
         // Form Inputs
         HBox box = new HBox();
+        box.setAlignment(Pos.CENTER_LEFT);
+        box.getStyleClass().add(STYLE_FORM_ITEM);
         form.getChildren().add(box);
         ChoiceBox<CommonNodes.EntityWrapper<Developer>> developer = CommonNodes.ChoiceBox(developers, dev -> dev.getName() + " <" + dev.getEmail() + ">");
         ChoiceBox<CommonNodes.EntityWrapper<Team>> team = CommonNodes.ChoiceBox(teams, Team::getName);
@@ -337,10 +344,9 @@ public class TeamController extends Controller{
             boolean r = remove.isSelected();
 
             TeamModel tModel = new TeamModel(t);
-            if (r && tModel.getDevelopers().contains(d)){
+            if (r && tModel.getDevelopers().contains(d)) {
                 tModel.removeDeveloper(d);
-            }
-            else if(!tModel.getDevelopers().contains(d)){
+            } else if (!tModel.getDevelopers().contains(d)) {
                 tModel.addDeveloper(d);
             }
             app.route("page-team", new HashMap<>(), true);

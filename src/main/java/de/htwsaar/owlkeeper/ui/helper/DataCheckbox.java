@@ -1,4 +1,4 @@
-package de.htwsaar.owlkeeper.ui.pages;
+package de.htwsaar.owlkeeper.ui.helper;
 
 import javafx.scene.control.CheckBox;
 
