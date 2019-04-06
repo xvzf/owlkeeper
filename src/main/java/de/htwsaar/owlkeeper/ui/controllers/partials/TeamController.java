@@ -52,10 +52,10 @@ public class TeamController extends Controller{
         // Teams and Developers
         HBox wrapper = new HBox();
         wrapper.getStyleClass().add(STYLE_WRAPPER);
-        wrapper.getChildren().add(this.buildUserList(developers));
         for (Team team : teams) {
             wrapper.getChildren().add(this.buildTeam(team));
         }
+        wrapper.getChildren().add(this.buildUserList(developers));
         this.team.getChildren().add(wrapper);
 
         this.team.getChildren().add(CommonNodes.Hr(600, true));
@@ -271,7 +271,7 @@ public class TeamController extends Controller{
 
         @Override
         public String toString(){
-            return dev.getEmail();
+            return dev.getName() + " <" + dev.getEmail() + ">";
         }
 
         public Developer getDev(){

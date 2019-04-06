@@ -80,7 +80,7 @@ public final class TaskView {
      *
      * @return scrollpane sidebar
      */
-    public static ScrollPane buildSidebarWrapper() {
+    private static ScrollPane buildSidebarWrapper() {
         // Sidebar Pane
         ScrollPane sidebar = new ScrollPane();
         sidebar.setFitToHeight(true);
