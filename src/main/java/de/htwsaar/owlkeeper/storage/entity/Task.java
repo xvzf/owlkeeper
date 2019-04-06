@@ -1,12 +1,6 @@
 package de.htwsaar.owlkeeper.storage.entity;
 
-import de.htwsaar.owlkeeper.helper.Permissions;
-import de.htwsaar.owlkeeper.storage.DBConnection;
-import de.htwsaar.owlkeeper.storage.dao.AccessControlDao;
-
 import java.sql.Timestamp;
-
-import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
 
 public class Task extends HasID {
     long id;
@@ -63,7 +57,6 @@ public class Task extends HasID {
     }
 
     public void setFulfilled(Timestamp fulfilled) {
-        checkPermission(user -> DBConnection.getJdbi().withExtension(AccessControlDao.class, dao -> dao.isAssignedToTask(user.getId(), this.id)));
         this.fulfilled = fulfilled;
     }
 
@@ -80,7 +73,6 @@ public class Task extends HasID {
     }
 
     public void setTeam(long team) {
-        checkPermission(Permissions.ASSIGN_TEAM_TO_TASK.get());
         this.team = team;
     }
 

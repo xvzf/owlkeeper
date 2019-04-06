@@ -53,11 +53,10 @@ public abstract class AbstractModel<R extends HasID, E> {
      *                              inserted or updated into the db
      *                              Example: c -> (dao -> (c.isSaved() ? dao.update(c) : dao.insert(c)))
      */
-    public AbstractModel(Logger logger,
-                         Class<E> DAOClass,
-                         Function<Long, ExtensionCallback<R, E, RuntimeException>> loadCallbackFactory,
-                         Function<Long, ExtensionCallback<Integer, E, InsufficientPermissionsException>> removeCallbackFactory,
-                         Function<R, ExtensionCallback<Integer, E, InsufficientPermissionsException>> saveCallbackFactory) {
+    public AbstractModel(Logger logger, Class<E> DAOClass,
+            Function<Long, ExtensionCallback<R, E, RuntimeException>> loadCallbackFactory,
+            Function<Long, ExtensionCallback<Integer, E, InsufficientPermissionsException>> removeCallbackFactory,
+            Function<R, ExtensionCallback<Integer, E, InsufficientPermissionsException>> saveCallbackFactory) {
         this.logger = logger;
         this.DAOClass = DAOClass;
         this.loadCallbackFactory = loadCallbackFactory;
@@ -70,12 +69,10 @@ public abstract class AbstractModel<R extends HasID, E> {
      *
      * @param container the container
      */
-    public AbstractModel(R container,
-                         Logger logger,
-                         Class<E> DAOClass,
-                         Function<Long, ExtensionCallback<R, E, RuntimeException>> loadCallbackFactory,
-                         Function<Long, ExtensionCallback<Integer, E, InsufficientPermissionsException>> removeCallbackFactory,
-                         Function<R, ExtensionCallback<Integer, E, InsufficientPermissionsException>> saveCallbackFactory) {
+    public AbstractModel(R container, Logger logger, Class<E> DAOClass,
+            Function<Long, ExtensionCallback<R, E, RuntimeException>> loadCallbackFactory,
+            Function<Long, ExtensionCallback<Integer, E, InsufficientPermissionsException>> removeCallbackFactory,
+            Function<R, ExtensionCallback<Integer, E, InsufficientPermissionsException>> saveCallbackFactory) {
         this(logger, DAOClass, loadCallbackFactory, removeCallbackFactory, saveCallbackFactory);
         setContainer(container);
     }
@@ -113,9 +110,13 @@ public abstract class AbstractModel<R extends HasID, E> {
 
     /**
      * Saves changes to the DB
+     *
+     * @throws InsufficientPermissionsException if the registered user does not have to necessary permissions to run the
+     * saveCallback described by the {@link #saveCallbackFactory}. For example to create or change a database entry.
      */
     public void save() throws InsufficientPermissionsException {
-        ExtensionCallback<Integer, E, InsufficientPermissionsException> saveCallback = saveCallbackFactory.apply(container);
+        ExtensionCallback<Integer, E, InsufficientPermissionsException> saveCallback = saveCallbackFactory
+                .apply(container);
         int newId = DBConnection.getJdbi().withExtension(DAOClass, saveCallback);
 
         // Refresh every time
@@ -124,9 +125,11 @@ public abstract class AbstractModel<R extends HasID, E> {
     }
 
     /**
-     * Removes the container from the database
+     * Removes an entry from the databse
      *
-     * @return the id of the successfully removed object
+     * @return the id the removed entry had in the database.
+     * @throws InsufficientPermissionsException if the registered user does not have the necessary permissions to run the removeCallback
+     *                                          described by the {@link #removeCallbackFactory}.
      */
     public int removeFromDB() throws InsufficientPermissionsException {
         ExtensionCallback<Integer, E, InsufficientPermissionsException> removeCallback = removeCallbackFactory.apply(getContainer().getId());

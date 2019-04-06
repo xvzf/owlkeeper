@@ -16,20 +16,23 @@ class DeveloperModelTest {
 
     private final String D_NAME_1 = "Robert'); DROP TABLE Developers;--";
     private final String D_EMAIL_1 = "root@example.org";
+    private final String D_PW_HASH = "123456";
 
     private final long D_ID_2 = 3;
 
     @Test
     void testConstructor() {
-        DeveloperModel dm = new DeveloperModel(D_NAME_1, D_EMAIL_1);
+        DeveloperModel dm = new DeveloperModel(D_NAME_1, D_EMAIL_1, D_PW_HASH);
         Developer d = dm.getContainer();
         assertEquals(D_NAME_1, d.getName());
         assertEquals(D_EMAIL_1, d.getEmail());
+        assertEquals(D_PW_HASH, d.getPwhash());
     }
 
     @Test
     void testSaveLoad() {
-        DeveloperModel dm = new DeveloperModel(D_NAME_1,D_EMAIL_1);
+        DeveloperModel dm = new DeveloperModel(D_NAME_1, D_EMAIL_1, D_PW_HASH);
+        dm.save();
         dm.save();
         long id = dm.getContainer().getId();
 
@@ -38,6 +41,7 @@ class DeveloperModelTest {
         // check against the old values, because .save() will reload the Project from the DB
         assertEquals(D_NAME_1, d.getName());
         assertEquals(D_EMAIL_1, d.getEmail());
+        assertEquals(D_PW_HASH, d.getPwhash());
 
         // check against another loaded Project instance with same id
         DeveloperModel dmloaded = new DeveloperModel(id);

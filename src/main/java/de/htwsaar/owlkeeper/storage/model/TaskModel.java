@@ -24,10 +24,8 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
         checkPermission(Permissions.DELETE_TASK.get());
         return dao.deleteTask(id);
     });
-    private static Function<Task, ExtensionCallback<Integer, TaskDao, InsufficientPermissionsException>> saveCallbackFactory1 =
-            p -> (dao -> {
-                return (p.getId() != 0 ? dao.updateTask(p) : dao.insertTask(p));
-            });
+    private static Function<Task, ExtensionCallback<Integer, TaskDao, InsufficientPermissionsException>> saveCallbackFactory1 = p -> (dao -> (p
+            .getId() != 0 ? dao.updateTask(p) : dao.insertTask(p)));
 
 
     /**
@@ -41,7 +39,8 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
         // To create a Task, the creating user should already be in a team assigned to the project.
         // This can be accomplished by manually adding the team to the project_team_relation
         checkPermission(user -> DBConnection.getJdbi().withExtension(ProjectDao.class, projectDao -> projectDao.getProjectsOfUser(user.getId())
-                .contains(DBConnection.getJdbi().withExtension(ProjectStageDao.class, stageDao -> stageDao.getProject(getContainer().getProjectStage())))));
+                .contains(DBConnection.getJdbi()
+                        .withExtension(ProjectStageDao.class, stageDao -> stageDao.getProject(projectstage)))));
 
         this.getContainer().setName(name);
         this.getContainer().setDeadline(deadline);
@@ -106,5 +105,16 @@ public class TaskModel extends AbstractModel<Task, TaskDao> {
         long id = this.getContainer().getId();
         List<TaskComment> TCList = DBConnection.getJdbi().withExtension(TaskCommentDao.class, (dao -> dao.getCommentsForTask(id)));
         return TCList;
+    }
+
+    public void setFulfilled(Timestamp fulfilled) {
+        checkPermission(user -> DBConnection.getJdbi().withExtension(AccessControlDao.class,
+                dao -> dao.isAssignedToTask(user.getId(), getContainer().getId())));
+        getContainer().setFulfilled(fulfilled);
+    }
+
+    public void setTeam(long team) {
+        checkPermission(Permissions.ASSIGN_TEAM_TO_TASK.get());
+        getContainer().setTeam(team);
     }
 }

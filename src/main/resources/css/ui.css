@@ -298,6 +298,10 @@ TextArea:focused .content {
     -fx-spacing: 10;
 }
 
+.team-unit__member Text {
+    -fx-translate-y: 1;
+}
+
 .team-unit__member--leader{
     -fx-padding: 0 10 10 0;
 }

@@ -12,12 +12,10 @@ import org.jdbi.v3.core.extension.ExtensionCallback;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import java.lang.String;
-import java.security.*;
 
 import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
 
@@ -39,16 +37,17 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
 
     /**
      * Developer Model, creates a new developer
-     *
-     * @param name  Name
+     *  @param name  Name
      * @param email Email
+     * @param pwhash
      */
-    public DeveloperModel(String name, String email) {
+    public DeveloperModel(String name, String email, String pwhash) {
         super(logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
         setContainer(new Developer());
         Developer d = getContainer();
         d.setName(name);
         d.setEmail(email);
+        d.setPwhash(pwhash);
     }
 
     /**

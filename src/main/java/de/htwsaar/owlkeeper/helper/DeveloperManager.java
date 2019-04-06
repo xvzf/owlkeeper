@@ -2,6 +2,7 @@ package de.htwsaar.owlkeeper.helper;
 
 import de.htwsaar.owlkeeper.helper.exceptions.UserInitializationException;
 import de.htwsaar.owlkeeper.service.PermissionHandler;
+import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 
 /**
@@ -42,7 +43,7 @@ public class DeveloperManager {
     public static boolean checkLogin(String emailString, String passwordString) {
         DeveloperModel model = new DeveloperModel(emailString);
         // User does not exist
-        if (model.getContainer() == null){
+        if (model.getContainer() == null) {
             return false;
         }
         try {
@@ -50,9 +51,20 @@ public class DeveloperManager {
             String pwHash = DeveloperModel.getHash(passwordString);
             return true;
 //            return pwHash.equals(model.getContainer().getPwhash());
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
+    public static Developer getDeveloper() {
+        return getCurrentDeveloper().getContainer();
+    }
+
+    public static long getCurrentId() {
+        return getDeveloper().getId();
+    }
+
+    public static String getCurrentEmail() {
+        return getDeveloper().getEmail();
+    }
 }
