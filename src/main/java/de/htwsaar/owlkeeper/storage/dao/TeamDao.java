@@ -111,7 +111,7 @@ public interface TeamDao {
      * @return
      */
     @SqlQuery(
-            "insert into developer_team_relation (developer, team) values(developerId, teamId) returning developer;"
+            "insert into developer_team_relation (developer, team) values(?, ?) returning developer;"
     )
     @RegisterBeanMapper(Developer.class)
     long addDeveloper(long developerId, long teamId);
@@ -124,7 +124,7 @@ public interface TeamDao {
      * @return
      */
     @SqlQuery(
-            "delete from developer_team_relation where developer = developerId and team = teamId returning developer;"
+            "delete from developer_team_relation where developer = ? and team = ? returning developer;"
     )
     @RegisterBeanMapper(Developer.class)
     long removeDeveloper(long developerId, long teamId);

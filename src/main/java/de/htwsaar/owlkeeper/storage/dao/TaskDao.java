@@ -163,10 +163,10 @@ public interface TaskDao {
      * @param taskId
      * @return
      */
-    @SqlQuery("select depends from task_dependency where task = taskId;"
+    @SqlQuery("select depends from task_dependency where task = ?;"
     )
     @RegisterBeanMapper(Task.class)
-    List<Integer> getDependencies (long taskId);
+    List<Long> getDependencies (long taskId);
 
     /**
      * inserts a task which the original task depends on
@@ -175,7 +175,7 @@ public interface TaskDao {
      * @param dependsId
      * @return dependsId
      */
-    @SqlQuery("insert into task_dependency (task, depends) values(taskId, dependsId) returning dependsId;"
+    @SqlQuery("insert into task_dependency (task, depends) values(?, ?) returning task;"
     )
     @RegisterBeanMapper(Task.class)
     int setDependency (long taskId, long dependsId);
