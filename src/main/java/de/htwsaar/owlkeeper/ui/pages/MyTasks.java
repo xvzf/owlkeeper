@@ -5,12 +5,12 @@ import javafx.scene.image.ImageView;
 
 public class MyTasks extends Page{
 
-    public MyTasks(){
+    public MyTasks() {
         super("page");
     }
 
     @Override
-    public String getName(){
+    public String getName() {
         return "My Tasks";
     }
 

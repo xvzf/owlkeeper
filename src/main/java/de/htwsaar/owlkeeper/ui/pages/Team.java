@@ -1,15 +1,15 @@
 package de.htwsaar.owlkeeper.ui.pages;
-
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
 import javafx.scene.image.ImageView;
 
 public class Team extends Page{
+
     public Team(){
         super("page-team");
     }
 
     @Override
-    public String getName(){
+    public String getName() {
         return "Team";
     }
 

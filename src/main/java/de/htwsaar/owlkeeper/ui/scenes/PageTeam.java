@@ -8,14 +8,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class PageTeam extends UiScene{
+public class PageTeam extends UiScene {
     @Override
-    public String getName(){
+    public String getName() {
         return "page-team";
     }
 
     @Override
-    public ViewApplication.SceneBuilder getBuilder(){
+    public ViewApplication.SceneBuilder getBuilder() {
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/page-team.fxml"));
             Parent root = loader.load();
@@ -24,7 +24,7 @@ public class PageTeam extends UiScene{
         };
     }
 
-    public State initState(){
+    public State initState() {
         return new TeamListState();
     }
 }

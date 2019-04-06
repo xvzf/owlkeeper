@@ -18,69 +18,70 @@ import javafx.scene.Parent;
 
 public class PageIterationController extends Controller {
 
-	@FXML
-	public Parent topbar;
+    @FXML
+    public Parent topbar;
 
-	@FXML
-	public TopBarController topbarController;
+    @FXML
+    public TopBarController topbarController;
 
-	@FXML
-	public Parent navigation;
+    @FXML
+    public Parent navigation;
 
-	@FXML
-	public NavigationMainController navigationController;
+    @FXML
+    public NavigationMainController navigationController;
 
-	@FXML
-	public Parent projects;
+    @FXML
+    public Parent projects;
 
-	@FXML
-	public NavigationProjectsController projectsController;
+    @FXML
+    public NavigationProjectsController projectsController;
 
-	@FXML
-	public Parent iteration;
+    @FXML
+    public Parent iteration;
 
-	@FXML
-	public IterationBarController iterationController;
+    @FXML
+    public IterationBarController iterationController;
 
-	@FXML
-	public Parent tasks;
+    @FXML
+    public Parent tasks;
 
-	@FXML
-	public ProjectTasksController tasksController;
+    @FXML
+    public ProjectTasksController tasksController;
 
-	public void boot(HashMap<String, Object> state) {
-		this.tasksController.setUiScene(this.getUiScene());
+    public void boot(HashMap<String, Object> state) {
+        this.tasksController.setUiScene(this.getUiScene());
 
-		UiApp app = this.getApp();
-		List<ProjectStage> stages = (List<ProjectStage>) state.get("stages");
-		Project project = (Project) state.get("project");
-		HashMap<ProjectStage, List<Task>> tasksMap = (HashMap<ProjectStage, List<Task>>) state.get("tasks");
+        UiApp app = this.getApp();
+        List<ProjectStage> stages = (List<ProjectStage>) state.get("stages");
+        Project project = (Project) state.get("project");
+        HashMap<ProjectStage, List<Task>> tasksMap = (HashMap<ProjectStage, List<Task>>) state.get("tasks");
 
-		ProjectStage stage = null;
-		List<Task> tasks = null;
-		Task focus = (Task) state.get("focus");
+        ProjectStage stage = null;
+        List<Task> tasks = null;
+        Task focus = (Task) state.get("focus");
 
-		if (!stages.isEmpty()) {
-			if (state.get("stage") == null) {
-				stage = stages.get(0);
-			} else {
-				for (ProjectStage checkStage : stages) {
-					if (checkStage.getId() == (long) state.get("stage")) {
-						stage = checkStage;
-						break;
-					}
-				}
-			}
-			tasks = tasksMap.get(stage);
-		}
+        if (!stages.isEmpty()) {
+            if (state.get("stage") == null) {
+                stage = stages.get(0);
+            } else {
+                for (ProjectStage checkStage : stages) {
+                    if (checkStage.getId() == (long) state.get("stage")) {
+                        stage = checkStage;
+                        break;
+                    }
+                }
+            }
+            tasks = tasksMap.get(stage);
+        }
 
-		// Meta
-		this.navigationController.setContent(app, (List<Page>) state.get("pages"));
-		this.projectsController.setContent(app, (HashMap<Long, Project>) state.get("projects"));
+        // Meta
+        this.navigationController.setContent(app, (List<Page>) state.get("pages"));
+        this.projectsController.setContent(app, (HashMap<Long, Project>) state.get("projects"));
 
         // Main
         this.topbarController.setTitle(project.getName());
         this.iterationController.initialize(app, project, stage, stages);
-        this.tasksController.setContent(app, tasks, project, stage, focus, (boolean) state.get("newtask"), (Task) state.get("edittask"));
+        this.tasksController.setContent(app, tasks, project, stage, focus, (boolean) state.get("newtask"),
+                (Task) state.get("edittask"));
     }
 }

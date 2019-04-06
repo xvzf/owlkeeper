@@ -6,14 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class InstallLogin extends UiScene{
+public class InstallLogin extends UiScene {
     @Override
-    public String getName(){
+    public String getName() {
         return "install-login";
     }
 
     @Override
-    public ViewApplication.SceneBuilder getBuilder(){
+    public ViewApplication.SceneBuilder getBuilder() {
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/install-login.fxml"));
             Parent root = loader.load();
