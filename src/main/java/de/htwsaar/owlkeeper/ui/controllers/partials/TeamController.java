@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
 public class TeamController extends SidebarController<Object> {
     private static final String LEADER = "Leader:";
     private static final String MEMBERS = "Members:";
-    private static final String IMG_USERS = "/images/users.png";
+    private static final String IMG_USER = "/images/user.png";
     private static final String STYLE_H2 = "h2";
     private static final String STYLE_TEAM = "team";
     private static final String STYLE_TEAM_UNITS = "team__units";
@@ -73,16 +73,19 @@ public class TeamController extends SidebarController<Object> {
 
         HBox leader = new HBox();
         leader.getStyleClass().addAll(STYLE_TEAM_UNIT_MEMBER, STYLE_TEAM_UNIT_LEADER);
-        leader.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 30));
+        leader.getChildren().add(CommonNodes.Image(IMG_USER, 22, 22));
         leader.getChildren().add(new Text(leadDev.getName()));
         unit.getChildren().add(leader);
 
         unit.getChildren().add(new Text(MEMBERS));
 
         for (Developer dev : developers) {
+            if (dev.equals(leadDev)){
+                continue;
+            }
             HBox member = new HBox();
             member.getStyleClass().add(STYLE_TEAM_UNIT_MEMBER);
-            member.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 30));
+            member.getChildren().add(CommonNodes.Image(IMG_USER, 22, 22));
             member.getChildren().add(new Text(dev.getName()));
             unit.getChildren().add(member);
         }
