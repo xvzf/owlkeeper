@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -128,19 +129,15 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * @return the hash
      */
     private String getHash(String pw) {
-        MessageDigest digest;
+        MessageDigest digest = null;
         try {
             digest = MessageDigest.getInstance("MD5");
         } catch (java.security.NoSuchAlgorithmException e) {
-            return "Nicht gefunden!";   //TODO Something better than that
+            e.printStackTrace();
+            System.exit(-1);
         }
         byte[] hash;
-        try {
-            hash = digest.digest(pw.getBytes("UTF_8"));
-        }catch(java.io.UnsupportedEncodingException e){
-            return "FEHLER";            //TODO something better
-        }
+        hash = digest.digest(pw.getBytes(StandardCharsets.UTF_8));
         return Arrays.toString(hash);
-
     }
 }
