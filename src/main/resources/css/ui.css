@@ -383,9 +383,10 @@ TextArea:focused .content {
     -fx-spacing: 10;
 }
 
-.developer-form{
+.developer-form {
     -fx-spacing: 20;
-=======
+}
+
 .login{
     -fx-background-color: #EFEFEF;
     -fx-alignment: center;
@@ -400,5 +401,4 @@ TextArea:focused .content {
     -fx-padding: 10 30 30 30;
     -fx-pref-width: 400;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 30, 0, 0, 10);
->>>>>>> master
 }
