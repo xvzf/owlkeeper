@@ -83,7 +83,8 @@ public class LoginController extends Controller{
         }, VALIDATION_ERROR));
 
 
-        // Testinput
+        // Prefill Credentials
+        // TODO: 06.04.2019 remove if needed
         email.setText("devel1@owlkeeper.de");
         password.setText("password-1");
     }
@@ -98,6 +99,7 @@ public class LoginController extends Controller{
         DeveloperManager.loginDeveloper(email);
 
         // Load full UI
+        // TODO: 06.04.2019 add credentials check for each of these views
         UiApp.stageScene(new Page());
         UiApp.stageScene(new PageIteration());
         UiApp.stageScene(new PageTeam());
