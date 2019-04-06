@@ -32,6 +32,7 @@ class TaskCommentModelTest {
     void testSaveLoadRemove() {
         TaskCommentModel pm = new TaskCommentModel(TC_CONTENT_1, TC_DEVELOPER_1, TC_TASK_1);
         pm.save();
+        pm.save();
         long id = pm.getContainer().getId();
 
         TaskComment p = pm.getContainer();
