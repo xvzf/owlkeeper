@@ -14,8 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class NavigationMainController extends Controller {
-    private static final String IMG_USERS = "/images/users.png";
-    private static final String IMG_HOME = "/images/home.png";
     private static final String STYLE_NAV_ITEM = "navigation-item";
     private static final String STYLE_NAV_ITEM_ACTIVE = "navigation-item--active";
     private static final String STYLE_NAV_ITEM_TEXT = "navigation-item__text";
@@ -26,18 +24,11 @@ public class NavigationMainController extends Controller {
     public void setContent(UiApp app, List<Page> pages) {
         this.root.getChildren().clear();
         for (Page page : pages) {
-            switch (page.getName()) {
-            case "Team":
-                this.root.getChildren().add(this.buildItem(app, page, IMG_USERS, false));
-                break;
-            default:
-                this.root.getChildren().add(this.buildItem(app, page, IMG_HOME, false));
-                break;
-            }
+            this.root.getChildren().add(this.buildItem(app, page, false));
         }
     }
 
-    private HBox buildItem(UiApp app, Page page, String icon, boolean active) {
+    private HBox buildItem(UiApp app, Page page, boolean active) {
 
         // Define Box
         HBox box = new HBox();
@@ -48,7 +39,7 @@ public class NavigationMainController extends Controller {
         }
 
         // Add Icon;
-        box.getChildren().add(CommonNodes.Image(icon, 30, 30));
+        box.getChildren().add(page.getIcon());
 
         // Add Text
         Text t = new Text(page.getName());
@@ -56,7 +47,7 @@ public class NavigationMainController extends Controller {
         box.getChildren().add(t);
 
         box.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            app.route(page.getTemplate(), page.getQuery());
+            app.route(page.getTemplate(), page.getQuery(), page.getForce());
         });
 
         return box;

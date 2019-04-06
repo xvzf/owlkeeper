@@ -6,6 +6,7 @@ import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.helper.TaskView;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -77,8 +78,9 @@ public class MyTasksController extends SidebarController<Task> {
      * @return the task Node
      */
     private HBox getTask(UiApp app, Task taskEntity) {
-        HBox task = TaskView.getTaskNode(taskEntity);
-        task.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+        HBox task = TaskView.getTaskNode(app, taskEntity);
+        Node title = task.getChildren().get(1); // Get Title Text Node
+        title.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             long stage = taskEntity.getProjectStage();
             long project = new ProjectStageModel(stage).getContainer().getProject();
             Task focus = (Task) this.getUiScene().getState().getQuery().get("focus");

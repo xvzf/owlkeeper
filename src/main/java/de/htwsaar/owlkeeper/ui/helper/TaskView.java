@@ -18,10 +18,19 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 /**
  * Collection of helpers for the Task-View
@@ -29,7 +38,7 @@ import javafx.scene.text.Text;
 public final class TaskView {
     private static final String BLOCKED = "blocked";
     private static final String EDIT = "Edit";
-    private static final String NEW_TASK = "New task";
+    private static final String NEW_TASK = "Edit or create Task";
     private static final String PROJECT_DESC = "Project Description";
     private static final String PROJECT_NAME = "Project Name";
     private static final String SAVE_TASK = "Save task";
@@ -37,7 +46,8 @@ public final class TaskView {
     private static final String WRITE_COMMENT = "Write a comment…";
     private static final String IMG_CALENDAR = "/images/calendar.png";
     private static final String IMG_CHECK_SQUARE = "/images/check-square.png";
-    private static final String IMG_USERS = "/images/users.png";
+    private static final String IMG_CHECK_SQUARE_CHECKED = "/images/check-square-checked.png";
+    private static final String IMG_USER = "/images/user.png";
     private static final String MSG_DEADLINE_NOT_DEFINED = "Deadline needs to be defined";
     private static final String MSG_COMMENT_EMPTY = "Comments can't be empty.";
     private static final String MSG_PROJECT_NAME_EMPTY = "Project name can't be empty.";
@@ -55,8 +65,11 @@ public final class TaskView {
     private static final String STYLE_SIDEBAR_TEAM = "sidebar__team";
     private static final String STYLE_SIDEBAR_TITLE = "sidebar__title";
     private static final String STYLE_TASK_LISTING = "task-listing";
+    private static final String STYLE_TASK_LIST_ICON = "task-list__icon";
+    private static final String STYLE_TASK_LIST_TITLE = "task-list__title";
     private static final String STYLE_TASK_LISTING_ASSIGNED = "task-listing__assigned";
     private static final String STYLE_TASK_LISTING_TAGS = "task-listing__tags";
+    private static final String STYLE_FORM_ITEM = "form-item";
     private static final String COL_RED = "#E14B4B";
 
     private TaskView() {
@@ -98,18 +111,32 @@ public final class TaskView {
         headline.getStyleClass().add(STYLE_H2);
         content.getChildren().add(headline);
 
+        VBox nameBox = new VBox();
+        nameBox.getStyleClass().add("form-item");
+        nameBox.getChildren().add(new Text(PROJECT_NAME));
         TextField name = new TextField();
-        name.setPromptText(PROJECT_NAME);
-        content.getChildren().add(name);
+        nameBox.getChildren().add(name);
+        content.getChildren().add(nameBox);
         name.setText(taskEntity.getName());
 
+        VBox descriptionBox = new VBox();
+        descriptionBox.getStyleClass().add("form-item");
+        descriptionBox.getChildren().add(new Text("Projekt description:"));
         TextArea description = new TextArea();
-        description.setPromptText(PROJECT_DESC);
-        content.getChildren().add(description);
+        description.setMaxWidth(400);
+        description.setWrapText(true);
+        descriptionBox.getChildren().add(description);
+        content.getChildren().add(descriptionBox);
         description.setText(taskEntity.getDescription());
 
-        DatePicker deadline = new DatePicker();
-        content.getChildren().add(deadline);
+        VBox dateBox = new VBox();
+        dateBox.getStyleClass().add(STYLE_FORM_ITEM);
+        dateBox.getChildren().add(new Text(PROJECT_DESC));
+        DatePicker deadline = new DatePicker(new Timestamp(System.currentTimeMillis()).toLocalDateTime().toLocalDate());
+        dateBox.getChildren().add(deadline);
+        content.getChildren().add(dateBox);
+        description.setText(taskEntity.getDescription());
+
         if (taskEntity.getDeadline() != null) {
             deadline.setValue(taskEntity.getDeadline().toLocalDateTime().toLocalDate());
         }
@@ -154,11 +181,11 @@ public final class TaskView {
 
         // Tags
         HBox tags = new HBox();
-        tags.getStyleClass().add(STYLE_SIDEBAR_TAGS);
-        content.getChildren().add(tags);
+//        tags.getStyleClass().add(STYLE_SIDEBAR_TAGS);
+//        content.getChildren().add(tags);
 
         // Individual Tags
-        tags.getChildren().add(CommonNodes.Tag(BLOCKED, COL_RED));
+//        tags.getChildren().add(CommonNodes.Tag(BLOCKED, COL_RED));
 
         // Title
         Text title = new Text(taskEntity.getName());
@@ -173,7 +200,7 @@ public final class TaskView {
         content.getChildren().add(meta);
 
         // Date-icon
-        meta.getChildren().add(CommonNodes.Image(IMG_CALENDAR, 30, 150));
+        meta.getChildren().add(CommonNodes.Image(IMG_CALENDAR, 22, 22));
 
         // Date-Text
         meta.getChildren().add(CommonNodes.Date(taskEntity.getDeadline()));
@@ -183,9 +210,10 @@ public final class TaskView {
         team.setAlignment(Pos.CENTER_RIGHT);
         team.getStyleClass().add(STYLE_SIDEBAR_TEAM);
         meta.getChildren().add(team);
+        meta.setHgrow(team, Priority.ALWAYS);
 
         for (int i = 0; i < 3; i++) {
-            team.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 150));
+            team.getChildren().add(CommonNodes.Image(IMG_USER, 25, 25));
         }
 
         // Description
@@ -215,7 +243,7 @@ public final class TaskView {
         for (TaskComment commentEntity : tasksComments) {
             HBox comment = new HBox();
             comment.getStyleClass().add(STYLE_COMMENTS_ITEM);
-            comment.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 150));
+            comment.getChildren().add(CommonNodes.Image(IMG_USER, 25, 25));
             Text commentText = new Text(commentEntity.getContent());
             commentText.setWrappingWidth(350);
             comment.getChildren().add(commentText);
@@ -262,16 +290,39 @@ public final class TaskView {
      * @return the full listing Node
      * @todo 27.03.2019 finish dynamic content
      */
-    public static HBox getTaskNode(Task taskEntity) {
+    public static HBox getTaskNode(UiApp app, Task taskEntity){
         HBox task = new HBox();
         task.setAlignment(Pos.CENTER_LEFT);
         task.getStyleClass().add(STYLE_TASK_LISTING);
 
         // Status icon
-        task.getChildren().add(CommonNodes.Image(IMG_CHECK_SQUARE, 30, 150));
+        ImageView image = CommonNodes.Image(IMG_CHECK_SQUARE, 26, 25);
+        image.getStyleClass().add(STYLE_TASK_LIST_ICON);
+        if (taskEntity.getFulfilled() != null) {
+            image.setImage(new Image(IMG_CHECK_SQUARE_CHECKED));
+        } else {
+            image.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> image.setImage(new Image(IMG_CHECK_SQUARE_CHECKED)));
+            image.addEventHandler(MouseEvent.MOUSE_EXITED, event -> image.setImage(new Image(IMG_CHECK_SQUARE)));
+        }
+        image.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (taskEntity.getFulfilled() == null){
+                taskEntity.setFulfilled(new Timestamp(System.currentTimeMillis()));
+            }
+            else{
+                taskEntity.setFulfilled(null);
+            }
+            TaskModel model = new TaskModel(taskEntity);
+            model.save();
+            long stage = taskEntity.getProjectStage();
+            long project = new ProjectStageModel(stage).getContainer().getProject();
+            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false), true);
+        });
+        task.getChildren().add(image);
 
         // Title
-        task.getChildren().add(new Text(taskEntity.getName()));
+        Text title = new Text(taskEntity.getName());
+        title.getStyleClass().add(STYLE_TASK_LIST_TITLE);
+        task.getChildren().add(title);
 
         // Meta
         HBox meta = new HBox();
@@ -286,18 +337,18 @@ public final class TaskView {
         team.getStyleClass().add(STYLE_TASK_LISTING_ASSIGNED);
         meta.getChildren().add(team);
         for (int i = 0; i < 3; i++) {
-            team.getChildren().add(CommonNodes.Image(IMG_USERS, 30, 150));
+            team.getChildren().add(CommonNodes.Image(IMG_USER, 25, 25));
         }
 
         // Tags
-        HBox tags = new HBox();
-        tags.setAlignment(Pos.CENTER);
-        team.setPrefWidth(280);
-        tags.getStyleClass().add(STYLE_TASK_LISTING_TAGS);
-        meta.getChildren().add(tags);
-        for (int i = 0; i < 2; i++) {
-            tags.getChildren().add(CommonNodes.Tag(BLOCKED, COL_RED));
-        }
+//        HBox tags = new HBox();
+//        tags.setAlignment(Pos.CENTER);
+//        team.setPrefWidth(280);
+//        tags.getStyleClass().add(STYLE_TASK_LISTING_TAGS);
+//        meta.getChildren().add(tags);
+//        for (int i = 0; i < 2; i++) {
+//            tags.getChildren().add(CommonNodes.Tag(BLOCKED, COL_RED));
+//        }
 
         // Date
         Text date = CommonNodes.Date(taskEntity.getDeadline());

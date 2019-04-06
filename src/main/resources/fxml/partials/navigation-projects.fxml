@@ -9,7 +9,7 @@
           <children>
               <HBox alignment="CENTER_LEFT" styleClass="navigation-item">
                  <children>
-                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                             <Image url="@/images/layers.png" />
                         </image>

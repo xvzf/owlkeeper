@@ -39,14 +39,13 @@ public class IterationBarController extends Controller {
 
         int index = stageList.indexOf(stage);
 
-        if (index > 0) {
+		if (index > 0) {
             ProjectStage leftStage = stageList.get(index - 1);
             left.getStyleClass().add(STYLE_ITERATION_BAR_COL);
             left.setAlignment(Pos.CENTER_LEFT);
-
             HBox leftInner = new HBox();
             leftInner.setAlignment(Pos.CENTER_LEFT);
-            leftInner.getChildren().add(CommonNodes.Image(IMG_ARROW_LEFT, 30, 150));
+            leftInner.getChildren().add(CommonNodes.Image(IMG_ARROW_LEFT, 20, 20));
             Text leftText = new Text(leftStage.getName());
             leftText.getStyleClass().add(STYLE_H2);
             leftInner.getChildren().add(leftText);
@@ -66,7 +65,6 @@ public class IterationBarController extends Controller {
             right.setAlignment(Pos.CENTER_RIGHT);
             HBox rightInner = new HBox();
             rightInner.setAlignment(Pos.CENTER_RIGHT);
-            rightInner.getChildren().add(CommonNodes.Image(IMG_ARROW_RIGHT, 30, 150));
             Text rightText = new Text(rightStage.getName());
             rightText.getStyleClass().add(STYLE_H2);
             rightInner.getChildren().add(rightText);
@@ -74,6 +72,7 @@ public class IterationBarController extends Controller {
                 app.route("page-iteration",
                         TaskListState.getQueryMap(project.getId(), rightStage.getId(), null, false));
             });
+            rightInner.getChildren().add(CommonNodes.Image(IMG_ARROW_RIGHT, 20, 20));
             right.getChildren().add(rightInner);
         }
 
