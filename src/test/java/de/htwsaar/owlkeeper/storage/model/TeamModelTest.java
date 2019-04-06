@@ -85,9 +85,29 @@ class TeamModelTest {
         }
 
     @Test
-    void testGetDevelopers(){
+    void testGetDevelopers() {
         TeamModel tm = new TeamModel(T_ID_2);
         List<Developer> developers = tm.getDevelopers();
         assertEquals(3, developers.size());
+    }
+
+    @Test
+    void testAddDeveloper() {
+        TeamModel tm = new TeamModel(T_ID_2);
+        Developer dev = new DeveloperModel(4).getContainer();
+        tm.addDeveloper(dev);
+        List<Developer> developers = tm.getDevelopers();
+        assertEquals(true, developers.contains(dev));
+        tm.removeDeveloper(dev);
+    }
+
+    @Test
+    void testDeleteDeveloper() {
+        TeamModel tm = new TeamModel(T_ID_2);
+        Developer dev = new DeveloperModel(1).getContainer();
+        tm.removeDeveloper(dev);
+        List<Developer> developers = tm.getDevelopers();
+        assertEquals(false, developers.contains(dev));
+        tm.addDeveloper(dev);
     }
 }
