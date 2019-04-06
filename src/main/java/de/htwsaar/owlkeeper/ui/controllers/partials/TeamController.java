@@ -239,7 +239,7 @@ public class TeamController extends Controller {
         // Submit button
         VBox submitWrapper = new VBox();
         Button submit = new Button(SAVE_DEV);
-        submit.getStyleClass().add(STYLE_BUTTON);
+        submit.getStyleClass().addAll(STYLE_BUTTON, STYLE_BUTTON_SMALL);
         submitWrapper.getChildren().addAll(submit, validator.getMessageField());
         form.getChildren().add(submitWrapper);
 
@@ -311,7 +311,7 @@ public class TeamController extends Controller {
         // Submit button
         VBox submitWrapper = new VBox();
         Button submit = new Button(SAVE_TEAM);
-        submit.getStyleClass().add(STYLE_BUTTON);
+        submit.getStyleClass().addAll(STYLE_BUTTON, STYLE_BUTTON_SMALL);
         submitWrapper.getChildren().addAll(submit, validator.getMessageField());
         box.getChildren().add(submitWrapper);
 
