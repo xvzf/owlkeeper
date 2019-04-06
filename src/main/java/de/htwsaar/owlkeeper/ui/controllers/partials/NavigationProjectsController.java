@@ -11,7 +11,9 @@ import javafx.scene.text.Text;
 
 import java.util.HashMap;
 
-public class NavigationProjectsController extends Controller{
+public class NavigationProjectsController extends Controller {
+    private static final String PROJECTS = "Projects";
+    private static final String STYLE_NAV_ITEM_TEXT = "navigation-item__text";
 
     @FXML
     private VBox root;
@@ -19,13 +21,13 @@ public class NavigationProjectsController extends Controller{
     @FXML
     private VBox main;
 
-    public void setContent(UiApp app, HashMap<Long, Project> projects){
+    public void setContent(UiApp app, HashMap<Long, Project> projects) {
         main.getChildren().clear();
         this.root.getChildren().clear();
 
         // Add headline
-        Text headline = new Text("Projects");
-        headline.getStyleClass().add("navigation-item__text");
+        Text headline = new Text(PROJECTS);
+        headline.getStyleClass().add(STYLE_NAV_ITEM_TEXT);
         headline.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             app.route("projects", new HashMap<>());
         });
@@ -37,9 +39,9 @@ public class NavigationProjectsController extends Controller{
         });
     }
 
-    private Text getProject(UiApp app, Project p){
+    private Text getProject(UiApp app, Project p) {
         Text t = new Text(p.getName());
-        t.getStyleClass().add("navigation-item__text");
+        t.getStyleClass().add(STYLE_NAV_ITEM_TEXT);
         t.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             app.route("page-iteration", TaskListState.getQueryMap(p.getId(), -1, null, false));
         });

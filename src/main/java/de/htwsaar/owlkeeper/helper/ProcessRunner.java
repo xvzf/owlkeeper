@@ -34,12 +34,10 @@ public class ProcessRunner {
         }
 
         Process p = pb.start();
-        Scanner s = new Scanner(p.getInputStream()).useDelimiter(REGEX_END_OF_INPUT);
-        try {
+        try (Scanner s = new Scanner(p.getInputStream()).useDelimiter(REGEX_END_OF_INPUT)) {
             logger.info(LOGGER_OUTPUT_TEXT + s.next());
         } catch (NoSuchElementException e) {
             logger.info(LOGGER_OUTPUT_TEXT + LOGGER_OUTPUT_EMPTY_STREAM);
         }
-        s.close();
     }
 }

@@ -35,7 +35,8 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
                 checkPermission(Permissions.CREATE_PROJECT_STAGE.get());
                 checkPermission(user -> // Check that the user is assigned to the project.
                         DBConnection.getJdbi().withExtension(ProjectDao.class,
-                                projectDao -> projectDao.getProjectsOfUser(user.getId())).contains(dao.getProject(p.getId())));
+                                projectDao -> projectDao.getProjectsOfUser(user.getId()))
+                                .contains(new ProjectModel(p.getProject()).getContainer()));
                 return (p.getId() != 0 ? dao.updateProjectStage(p) : dao.insertProjectStage(p));
             });
 

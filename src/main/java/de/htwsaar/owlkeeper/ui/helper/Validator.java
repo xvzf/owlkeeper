@@ -11,12 +11,13 @@ import java.util.function.Predicate;
 /**
  * Helper Class used to validate GUI-Forms
  */
-public class Validator{
+public class Validator {
+    private static final String STYLE_FORM_ERROR = "form-error";
 
     /**
      * Validation rule
      */
-    public static class Rule{
+    public static class Rule {
         private Node node;
         private Predicate<Node> predicate;
         private String message;
@@ -24,11 +25,11 @@ public class Validator{
         /**
          * construcotr
          *
-         * @param node      JavaFx to apply the rule to
+         * @param node JavaFx to apply the rule to
          * @param predicate predicate which needs to return true for the rule to pass
-         * @param message   error message if the predicate returns false
+         * @param message error message if the predicate returns false
          */
-        public Rule(Node node, Predicate<Node> predicate, String message){
+        public Rule(Node node, Predicate<Node> predicate, String message) {
             this.message = message;
             this.node = node;
             this.predicate = predicate;
@@ -39,11 +40,10 @@ public class Validator{
          *
          * @return returns the predicates return value
          */
-        private boolean apply(){
+        private boolean apply() {
             return this.predicate.test(this.node);
         }
     }
-
 
     private ArrayList<Rule> rules;
     private ArrayList<String> messages;
@@ -52,7 +52,7 @@ public class Validator{
     /**
      * Constructor
      */
-    public Validator(){
+    public Validator() {
         this.messageField = buildMessageField();
         this.rules = new ArrayList<>();
         this.reset();
@@ -61,7 +61,7 @@ public class Validator{
     /**
      * Resets the Validator fields
      */
-    public void reset(){
+    public void reset() {
         this.messages = new ArrayList<>();
     }
 
@@ -70,7 +70,7 @@ public class Validator{
      *
      * @param rule rule instance
      */
-    public void addRule(Rule rule){
+    public void addRule(Rule rule) {
         this.rules.add(rule);
     }
 
@@ -79,7 +79,7 @@ public class Validator{
      *
      * @return true if validation was successful
      */
-    public boolean execute(){
+    public boolean execute() {
         boolean success = true;
         this.getMessageField().getChildren().clear();
         for (Rule rule : this.rules) {
@@ -100,17 +100,17 @@ public class Validator{
      *
      * @return error messages
      */
-    public ArrayList<String> getMessages(){
+    public ArrayList<String> getMessages() {
         return this.messages;
     }
 
     /**
-     * Returns a VBox field, where the error messages are rendered
-     * after a failed valdiation
+     * Returns a VBox field, where the error messages are rendered after a failed
+     * valdiation
      *
      * @return vbox node object
      */
-    public VBox getMessageField(){
+    public VBox getMessageField() {
         return this.messageField;
     }
 
@@ -119,9 +119,9 @@ public class Validator{
      *
      * @return javafx node object
      */
-    private static VBox buildMessageField(){
+    private static VBox buildMessageField() {
         VBox box = new VBox();
-        box.getStyleClass().add("form-error");
+        box.getStyleClass().add(STYLE_FORM_ERROR);
         return box;
     }
 
@@ -131,7 +131,7 @@ public class Validator{
      * @param node object to check
      * @return returns true if the input is not empty
      */
-    public static boolean TextNotEmpty(Node node){
+    public static boolean TextNotEmpty(Node node) {
         String text = ((TextInputControl) node).getText();
         return text != null && !text.isEmpty();
     }

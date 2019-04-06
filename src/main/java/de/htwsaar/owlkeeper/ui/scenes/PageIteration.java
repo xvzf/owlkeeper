@@ -8,14 +8,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class PageIteration extends UiScene{
+public class PageIteration extends UiScene {
     @Override
-    public String getName(){
+    public String getName() {
         return "page-iteration";
     }
 
     @Override
-    public ViewApplication.SceneBuilder getBuilder(){
+    public ViewApplication.SceneBuilder getBuilder() {
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/page-iteration.fxml"));
             Parent root = loader.load();
@@ -24,7 +24,7 @@ public class PageIteration extends UiScene{
         };
     }
 
-    public State initState(){
+    public State initState() {
         return new TaskListState();
     }
 }

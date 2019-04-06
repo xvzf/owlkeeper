@@ -45,6 +45,7 @@ class TaskModelTest {
     void testSaveLoadRemove() {
         TaskModel pm = new TaskModel(T_NAME_1,T_DEADLINE_1,T_DESCRIPTION_1,T_FULFILLED_1,T_PROJECT_STAGE_1,T_TEAM_1);
         pm.save();
+        pm.save();
         long id = pm.getContainer().getId();
         Task p = pm.getContainer();
 

@@ -8,14 +8,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class Projects extends UiScene{
+public class Projects extends UiScene {
     @Override
-    public String getName(){
+    public String getName() {
         return "projects";
     }
 
     @Override
-    public ViewApplication.SceneBuilder getBuilder(){
+    public ViewApplication.SceneBuilder getBuilder() {
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/projects.fxml"));
             Parent root = loader.load();
@@ -24,7 +24,7 @@ public class Projects extends UiScene{
         };
     }
 
-    public State initState(){
+    public State initState() {
         return new ProjectsState();
     }
 }

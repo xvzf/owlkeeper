@@ -39,6 +39,7 @@ class ProjectStageModelTest {
     void testSaveLoadRemove() {
         ProjectStageModel pm = new ProjectStageModel(PS_NAME_1, PS_PROJECT_1, PS_INDEX_1);
         pm.save();
+        pm.save();
         long id = pm.getContainer().getId();
 
         ProjectStage p = pm.getContainer();

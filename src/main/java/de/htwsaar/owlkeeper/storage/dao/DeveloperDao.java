@@ -1,14 +1,14 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
-import de.htwsaar.owlkeeper.storage.entity.Developer;
-import de.htwsaar.owlkeeper.storage.entity.Team;
+import java.util.List;
+
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
-import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 
-import javax.xml.bind.annotation.XmlInlineBinaryData;
 import java.util.List;
+import de.htwsaar.owlkeeper.storage.entity.Developer;
+import de.htwsaar.owlkeeper.storage.entity.Team;
 
 public interface DeveloperDao {
 
@@ -60,7 +60,7 @@ public interface DeveloperDao {
      */
     @SqlQuery("update developer set "
             + "name = :name"
-            + ", email = :email"
+            + ", email = :email "
             + "where id = :id returning id;"
     )
     int updateDeveloper(@BindBean Developer d);

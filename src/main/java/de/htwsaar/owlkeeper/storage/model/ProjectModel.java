@@ -30,8 +30,12 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
             p -> (dao -> {
                 // To be allowed to make changes to the details: Be ProjectOwner and be assigned to this project.
                 checkPermission(Permissions.CREATE_PROJECT.get());
-                checkPermission(user -> dao.getProjectsOfUser(user.getId()).contains(p));
-                return (p.getId() != 0 ? dao.updateProject(p) : dao.insertProject(p));
+                if (p.getId() != 0) {
+                    checkPermission(user -> dao.getProjectsOfUser(user.getId()).contains(p));
+                    return dao.updateProject(p);
+                } else {
+                    return dao.insertProject(p);
+                }
             });
 
 
@@ -72,8 +76,9 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
      * Retrieves List with all Project Stages for a Project
      *
      * @return ps List with all Stages
+     * @throws InsufficientPermissionsException when the user is not assgined to the project he is trying to see the stages of.
      */
-    public List<ProjectStage> getStages() {
+    public List<ProjectStage> getStages() throws InsufficientPermissionsException {
         checkPermission(user -> isAssignedToProject(user.getId())); // Only get stages for projects that a user is assigned to
         long id = getContainer().getId();
         List<ProjectStage> ps = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getStagesForProject(id)));
