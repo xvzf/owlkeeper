@@ -11,9 +11,9 @@
    <children>
       <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
          <content>
-            <HBox fx:id="team" styleClass="main" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+            <VBox fx:id="team" styleClass="main">
               <!-- Gets filled by the controller -->
-            </HBox>
+            </VBox>
          </content>
       </ScrollPane>
    </children>
