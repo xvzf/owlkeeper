@@ -6,7 +6,7 @@ jobs:
 
     docker:
       - image: circleci/openjdk:8-jdk-browsers
-      - image: circleci/postgres:latest
+      - image: circleci/postgres:11
         environment:
           POSTGRES_USER: owlkeeper
           POSTGRES_PASSWORD: owlkeeper
