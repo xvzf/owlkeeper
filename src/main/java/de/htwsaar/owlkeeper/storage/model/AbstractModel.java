@@ -106,7 +106,6 @@ public abstract class AbstractModel<R extends HasID, E> {
      * @param container the new container
      */
     public void setContainer(R container) {
-        //TODO Container has been changed. checkPermission(something) call?
         this.container = container;
 
     }
