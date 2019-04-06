@@ -40,9 +40,9 @@ public interface ProjectStageDao {
      * @param p
      * @return
      */
-    @SqlQuery("update project_stage set "
-            + "created = :created"
-            + "name = :name"
+    @SqlQuery("update project_stage set"
+            + "  created = :created"
+            + ", name = :name"
             + ", project = :project"
             + ", index = :index "
             + "where id = :id returning id;"

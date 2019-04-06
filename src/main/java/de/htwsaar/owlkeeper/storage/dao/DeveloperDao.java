@@ -60,7 +60,7 @@ public interface DeveloperDao {
      */
     @SqlQuery("update developer set "
             + "name = :name"
-            + ", email = :email"
+            + ", email = :email "
             + "where id = :id returning id;"
     )
     int updateDeveloper(@BindBean Developer d);
