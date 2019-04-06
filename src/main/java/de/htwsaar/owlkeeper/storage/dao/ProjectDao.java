@@ -60,7 +60,6 @@ public interface ProjectDao {
      */
     @SqlQuery("update project set "
             + "name = :name"
-            + ", role = :role"
             + ", description = :description"
             + ", type = :type"
             + " where id = :id returning id;"
@@ -106,4 +105,10 @@ public interface ProjectDao {
             "WHERE dtr.developer = ?;")
     @RegisterBeanMapper(Project.class)
     List<Project> getProjectsOfUser(long id);
+
+    /**
+     * Explicitly assigns a team to a project
+     */
+    @SqlQuery("insert into team_project_relation (project, team) " + "values (?,?) on conflict do nothing returning id;")
+    int assignTeamToProject(long projectId, long teamId);
 }

@@ -76,8 +76,9 @@ public class ProjectModel extends AbstractModel<Project, ProjectDao> {
      * Retrieves List with all Project Stages for a Project
      *
      * @return ps List with all Stages
+     * @throws InsufficientPermissionsException when the user is not assgined to the project he is trying to see the stages of.
      */
-    public List<ProjectStage> getStages() {
+    public List<ProjectStage> getStages() throws InsufficientPermissionsException {
         checkPermission(user -> isAssignedToProject(user.getId())); // Only get stages for projects that a user is assigned to
         long id = getContainer().getId();
         List<ProjectStage> ps = DBConnection.getJdbi().withExtension(ProjectDao.class, (dao -> dao.getStagesForProject(id)));
