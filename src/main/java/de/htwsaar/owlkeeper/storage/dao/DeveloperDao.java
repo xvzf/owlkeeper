@@ -6,6 +6,7 @@ import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 
+import java.util.List;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 
@@ -59,7 +60,7 @@ public interface DeveloperDao {
      */
     @SqlQuery("update developer set "
             + "name = :name"
-            + ", email = :email"
+            + ", email = :email "
             + "where id = :id returning id;"
     )
     int updateDeveloper(@BindBean Developer d);
