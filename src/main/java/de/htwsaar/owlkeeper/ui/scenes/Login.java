@@ -6,15 +6,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class Login extends UiScene{
+public class Login extends UiScene {
 
     @Override
-    public String getName(){
+    public String getName() {
         return "login";
     }
 
     @Override
-    public ViewApplication.SceneBuilder getBuilder(){
+    public ViewApplication.SceneBuilder getBuilder() {
         return application -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = loader.load();

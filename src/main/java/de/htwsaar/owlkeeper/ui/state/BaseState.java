@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class BaseState extends State{
+public class BaseState extends State {
 
     private List<Page> pages;
     private HashMap<Long, Project> projects;
@@ -21,12 +21,12 @@ public class BaseState extends State{
      * @param id the projects id
      * @return the full project entity
      */
-    Project getProject(Long id){
+    Project getProject(Long id) {
         return this.projects.get(id);
     }
 
     @Override
-    public void handleQuery(HashMap<String, Object> query){
+    public void handleQuery(HashMap<String, Object> query) {
         this.query = mergeQueries(this.getDefaultQuery(), query);
         this.pages = this.getNavigationList();
         this.projects = new HashMap<>();
@@ -37,7 +37,7 @@ public class BaseState extends State{
     /**
      * Builds a List of navigation items
      */
-    private List<Page> getNavigationList(){
+    private List<Page> getNavigationList() {
         List<Page> list = new ArrayList<>();
         list.add(new MyTasks());
         list.add(new Team());
@@ -45,7 +45,7 @@ public class BaseState extends State{
     }
 
     @Override
-    public HashMap<String, Object> collectState(){
+    public HashMap<String, Object> collectState() {
         HashMap<String, Object> output = new HashMap<>();
         output.put("pages", this.pages);
         output.put("projects", this.projects);
@@ -53,7 +53,7 @@ public class BaseState extends State{
     }
 
     @Override
-    public HashMap<String, Object> getDefaultQuery(){
+    public HashMap<String, Object> getDefaultQuery() {
         return new HashMap<>();
     }
 }

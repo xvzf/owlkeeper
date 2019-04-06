@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Scene state management
  */
-public abstract class State{
+public abstract class State {
 
     HashMap<String, Object> query;
 
@@ -26,15 +26,17 @@ public abstract class State{
 
     /**
      * Returns a the default query for this state object
+     * 
      * @return default state object
      */
     public abstract HashMap<String, Object> getDefaultQuery();
 
     /**
      * Returns the current state query
+     * 
      * @return state query
      */
-    public HashMap<String, Object> getQuery(){
+    public HashMap<String, Object> getQuery() {
         return this.query;
     }
 
@@ -42,10 +44,11 @@ public abstract class State{
      * Merges two queries into one new one
      *
      * @param defaultQuery defaulty query object
-     * @param query        given query object
+     * @param query given query object
      * @return merged query object
      */
-    public static HashMap<String, Object> mergeQueries(HashMap<String, Object> defaultQuery, HashMap<String, Object> query){
+    public static HashMap<String, Object> mergeQueries(HashMap<String, Object> defaultQuery,
+            HashMap<String, Object> query) {
         HashMap<String, Object> newQuery = new HashMap<String, Object>();
         defaultQuery.forEach(newQuery::put);
         query.forEach(newQuery::put);
@@ -59,7 +62,7 @@ public abstract class State{
      * @param b query b
      * @return true if the queries are identical
      */
-    public static boolean compareQueries(HashMap<String, Object> a, HashMap<String, Object> b){
+    public static boolean compareQueries(HashMap<String, Object> a, HashMap<String, Object> b) {
         if (a == null || b == null || a.size() != b.size()) {
             return false;
         }

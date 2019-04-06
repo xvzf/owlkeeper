@@ -1,13 +1,13 @@
 package de.htwsaar.owlkeeper.ui.pages;
 
-public class MyTasks extends Page{
+public class MyTasks extends Page {
 
-    public MyTasks(){
+    public MyTasks() {
         super("page");
     }
 
     @Override
-    public String getName(){
+    public String getName() {
         return "My Tasks";
     }
 }

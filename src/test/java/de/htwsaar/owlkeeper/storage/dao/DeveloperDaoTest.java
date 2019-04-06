@@ -1,15 +1,15 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
-import de.htwsaar.owlkeeper.helper.DeveloperManager;
-import de.htwsaar.owlkeeper.storage.DBConnection;
-import de.htwsaar.owlkeeper.storage.entity.Developer;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
+import de.htwsaar.owlkeeper.storage.DBConnection;
+import de.htwsaar.owlkeeper.storage.entity.Developer;
 
 /**
  * Needs to run against test database !!!
