@@ -384,6 +384,7 @@ TextArea:focused .content {
 
 .developer-form {
     -fx-spacing: 20;
+    -fx-pref-width: 400;
 }
 
 .login{

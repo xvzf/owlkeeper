@@ -1,6 +1,8 @@
 package de.htwsaar.owlkeeper.ui.controllers.partials;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.htwsaar.owlkeeper.storage.entity.Developer;
@@ -10,8 +12,11 @@ import de.htwsaar.owlkeeper.storage.model.TeamModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
+import de.htwsaar.owlkeeper.ui.helper.TaskView;
 import de.htwsaar.owlkeeper.ui.helper.Validator;
 import de.htwsaar.owlkeeper.ui.pages.DataCheckbox;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -22,7 +27,7 @@ import javafx.scene.text.Text;
 public class TeamController extends Controller{
     private static final String LEADER = "Leader:";
     private static final String MEMBERS = "Members:";
-    private static final String DEVELOPERS = "All developers";
+    private static final String DEVELOPERS = "Teamless developers";
     private static final String IMG_USER = "/images/user.png";
     private static final String STYLE_WRAPPER = "team__wrapper";
     private static final String STYLE_H2 = "h2";
@@ -38,8 +43,11 @@ public class TeamController extends Controller{
     @FXML
     public VBox team;
 
-    public void setContent(List<Team> teams, List<Developer> developers) {
+    public void setContent(List<Team> teams, List<Developer> developers){
         this.team.getChildren().clear();
+
+
+//        this.addSidebar(teams, this.getApp());
 
         // Teams and Developers
         HBox wrapper = new HBox();
@@ -52,11 +60,117 @@ public class TeamController extends Controller{
 
         this.team.getChildren().add(CommonNodes.Hr(600, true));
 
-        // Form
         this.team.getChildren().add(this.buildNewDevForm(this.getApp(), teams));
+        this.team.getChildren().add(this.buildNewTeamForm(this.getApp(), developers));
     }
 
-    private VBox buildNewDevForm(UiApp app, List<Team> teams) {
+    /**
+     * Builds a list of all developers
+     *
+     * @param developers list of developers
+     * @return Dev View VBox Node Object
+     */
+    private VBox buildUserList(List<Developer> developers){
+        int count = 0;
+        VBox box = new VBox();
+
+        Text title = new Text(DEVELOPERS);
+        title.getStyleClass().add(STYLE_H2);
+
+        VBox listing = new VBox();
+        listing.getStyleClass().add(STYLE_DEV_LISTING);
+        for (Developer dev : developers) {
+            if (new DeveloperModel(dev).getTeams().size() == 0) {
+                listing.getChildren().add(this.getDeveloperBox(dev));
+                count++;
+            }
+        }
+
+        // Only render content if at least one developer does not have a team
+        if (count > 0){
+            box.getChildren().add(title);
+            box.getChildren().add(listing);
+        }
+
+        return box;
+    }
+
+
+    /**
+     * Builds the Team View Node
+     *
+     * @return Team View VBox Node Object
+     */
+    private VBox buildTeam(Team teamEntity){
+        VBox team = new VBox();
+        team.getStyleClass().add(STYLE_TEAM);
+
+        Text title = new Text(teamEntity.getName());
+        title.getStyleClass().add(STYLE_H2);
+        team.getChildren().add(title);
+
+        HBox units = new HBox();
+        units.getStyleClass().add(STYLE_TEAM_UNITS);
+        team.getChildren().add(units);
+
+        units.getChildren().add(this.buildUnit(teamEntity));
+
+        return team;
+    }
+
+    /**
+     * Builds the Team Unite Node
+     *
+     * @return Team Unit VBox Node Object
+     */
+    private VBox buildUnit(Team teamEntity){
+        List<Developer> developers = new TeamModel(teamEntity).getDevelopers();
+        Developer leadDev = new DeveloperModel(teamEntity.getLeader()).getContainer();
+
+        VBox unit = new VBox();
+        unit.getStyleClass().add(STYLE_TEAM_UNIT);
+        unit.getChildren().add(new Text(LEADER));
+
+        HBox leader = new HBox();
+        leader.getStyleClass().addAll(STYLE_TEAM_UNIT_MEMBER, STYLE_TEAM_UNIT_LEADER);
+        leader.getChildren().add(CommonNodes.Image(IMG_USER, 22, 22));
+        leader.getChildren().add(new Text(leadDev.getName()));
+        unit.getChildren().add(leader);
+
+        unit.getChildren().add(new Text(MEMBERS));
+
+        for (Developer dev : developers) {
+            if (dev.equals(leadDev)) {
+                continue;
+            }
+            unit.getChildren().add(this.getDeveloperBox(dev));
+        }
+
+        return unit;
+    }
+
+    /**
+     * Gets a single developer HBox
+     *
+     * @param dev developer entity object
+     * @return developer HBox Node object
+     */
+    private HBox getDeveloperBox(Developer dev){
+        HBox member = new HBox();
+        member.getStyleClass().add(STYLE_TEAM_UNIT_MEMBER);
+        member.getChildren().add(CommonNodes.Image(IMG_USER, 22, 22));
+        member.getChildren().add(new Text(dev.getName()));
+        return member;
+    }
+
+    /**
+     * Builds the New Developer form
+     *
+     * @param app   main application
+     * @param teams List of all teams
+     * @return new form node object
+     */
+    private VBox buildNewDevForm(UiApp app, List<Team> teams){
         Validator validator = new Validator();
         VBox box = new VBox();
         box.getStyleClass().add("developer-form");
@@ -110,7 +224,7 @@ public class TeamController extends Controller{
         wrapper.getChildren().add(teamSelect);
 
         ArrayList<DataCheckbox<Team>> checkboxes = new ArrayList<>();
-        for (Team team: teams){
+        for (Team team : teams) {
             DataCheckbox<Team> checkbox = new DataCheckbox<>(team, team.getName());
             checkboxes.add(checkbox);
             teamSelect.getChildren().add(checkbox);
@@ -118,7 +232,7 @@ public class TeamController extends Controller{
 
         // Submit event
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (validator.execute()){
+            if (validator.execute()) {
                 Developer dev = new Developer();
                 dev.setName(name.getText());
                 dev.setEmail(email.getText());
@@ -128,6 +242,7 @@ public class TeamController extends Controller{
                 checkboxes.forEach(teamDataCheckbox -> {
                     new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
                 });
+                app.route("page-team", new HashMap<>(), true);
             }
             validator.reset();
         });
@@ -138,96 +253,88 @@ public class TeamController extends Controller{
         validator.addRule(new Validator.Rule(password, Validator::TextNotEmpty, "Password can't be empty."));
         box.getChildren().add(validator.getMessageField());
 
-
         return box;
     }
 
+
     /**
-     * Builds a list of all developers
-     *
-     * @param developers list of developers
-     * @return Dev View VBox Node Object
+     * Wraps a Developer entity to return only the email
+     * in the toString method
      */
-    private VBox buildUserList(List<Developer> developers) {
+    private class DeveloperWrapper{
+
+        private Developer dev;
+
+        public DeveloperWrapper(Developer dev){
+            this.dev = dev;
+        }
+
+        @Override
+        public String toString(){
+            return dev.getEmail();
+        }
+
+        public Developer getDev(){
+            return this.dev;
+        }
+    }
+
+    private VBox buildNewTeamForm(UiApp app, List<Developer> developers){
+        Validator validator = new Validator();
         VBox box = new VBox();
 
-        Text title = new Text(DEVELOPERS);
-        title.getStyleClass().add(STYLE_H2);
-        box.getChildren().add(title);
+        Text headline = new Text("New Team");
+        headline.getStyleClass().add(STYLE_H2);
+        box.getChildren().add(headline);
 
-        VBox listing = new VBox();
-        listing.getStyleClass().add(STYLE_DEV_LISTING);
-        for (Developer dev : developers){
-            listing.getChildren().add(this.getDeveloperBox(dev));
-        }
-        box.getChildren().add(listing);
-        return box;
-    }
+        box.getChildren().add(validator.getMessageField());
 
+        // Team Name
+        VBox nameBox = new VBox();
+        nameBox.getStyleClass().add(STYLE_FORM_ITEM);
+        nameBox.getChildren().add(new Text("Name"));
+        TextField name = new TextField();
+        nameBox.getChildren().add(name);
+        box.getChildren().add(nameBox);
 
-    /**
-     * Builds the Team View Node
-     *
-     * @return Team View VBox Node Object
-     */
-    private VBox buildTeam(Team teamEntity) {
-        VBox team = new VBox();
-        team.getStyleClass().add(STYLE_TEAM);
+        // Team Leader
+        VBox leaderBox = new VBox();
+        leaderBox.getStyleClass().add(STYLE_FORM_ITEM);
+        leaderBox.getChildren().add(new Text("Leader"));
+        ChoiceBox<DeveloperWrapper> leader = new ChoiceBox<>();
+        ObservableList list = FXCollections.observableArrayList();
+        developers.forEach(developer -> list.add(new DeveloperWrapper(developer)));
+        leader.setItems(list);
+        leader.getSelectionModel().select(0);
+        leaderBox.getChildren().add(leader);
+        box.getChildren().add(leaderBox);
 
-        Text title = new Text(teamEntity.getName());
-        title.getStyleClass().add(STYLE_H2);
-        team.getChildren().add(title);
+        // Submit button
+        Button submit = new Button("save team");
+        submit.getStyleClass().add("button");
+        box.getChildren().add(submit);
 
-        HBox units = new HBox();
-        units.getStyleClass().add(STYLE_TEAM_UNITS);
-        team.getChildren().add(units);
-
-        units.getChildren().add(this.buildUnit(teamEntity));
-
-        return team;
-    }
-
-    /**
-     * Builds the Team Unite Node
-     *
-     * @return Team Unit VBox Node Object
-     */
-    private VBox buildUnit(Team teamEntity) {
-        List<Developer> developers = new TeamModel(teamEntity).getDevelopers();
-        Developer leadDev = new DeveloperModel(teamEntity.getLeader()).getContainer();
-
-        VBox unit = new VBox();
-        unit.getStyleClass().add(STYLE_TEAM_UNIT);
-        unit.getChildren().add(new Text(LEADER));
-
-        HBox leader = new HBox();
-        leader.getStyleClass().addAll(STYLE_TEAM_UNIT_MEMBER, STYLE_TEAM_UNIT_LEADER);
-        leader.getChildren().add(CommonNodes.Image(IMG_USER, 22, 22));
-        leader.getChildren().add(new Text(leadDev.getName()));
-        unit.getChildren().add(leader);
-
-        unit.getChildren().add(new Text(MEMBERS));
-
-        for (Developer dev : developers) {
-            if (dev.equals(leadDev)){
-                continue;
+//         Submit event
+        submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            if (validator.execute()) {
+                Developer leadDev = leader.getValue().getDev();
+                Team team = new Team();
+                team.setName(name.getText());
+                team.setLeader(leadDev.getId());
+                team.setCreated(new Timestamp(System.currentTimeMillis()));
+                TeamModel model = new TeamModel(team);
+                // TODO: 06.04.2019 see issue #113 why this is currently not possible
+                // model.addDeveloper(leadDev);
+                model.save();
+                app.route("page-team", new HashMap<>(), true);
             }
-            unit.getChildren().add(this.getDeveloperBox(dev));
-        }
+            validator.reset();
+        });
 
-        return unit;
-    }
+        // Validations
+        validator.addRule(new Validator.Rule(name, Validator::TextNotEmpty, "Name can't be empty"));
 
-    /**
-     * Gets a single developer HBox
-     * @param dev developer entity object
-     * @return developer HBox Node object
-     */
-    private HBox getDeveloperBox(Developer dev){
-        HBox member = new HBox();
-        member.getStyleClass().add(STYLE_TEAM_UNIT_MEMBER);
-        member.getChildren().add(CommonNodes.Image(IMG_USER, 22, 22));
-        member.getChildren().add(new Text(dev.getName()));
-        return member;
+
+        return box;
     }
 }

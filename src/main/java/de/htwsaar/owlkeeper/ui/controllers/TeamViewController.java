@@ -39,8 +39,8 @@ public class TeamViewController extends Controller {
     public TeamController teamsController;
 
     public void boot(HashMap<String, Object> state) {
-
         UiApp app = this.getApp();
+        this.teamsController.setApp(app);
 
         // Meta
         this.navigationController.setContent(app, (List<Page>) state.get("pages"));
