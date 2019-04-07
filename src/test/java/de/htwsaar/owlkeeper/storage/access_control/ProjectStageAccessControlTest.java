@@ -34,7 +34,7 @@ public class ProjectStageAccessControlTest {
     @Test
     void testCreateStageDenied2() {
         ProjectStageModel stage = new ProjectStageModel("Stage 3", 2, 2);
-        DeveloperManager.loginDeveloper("devel2@owlkeeper.de"); // User has creation rights but isn't assigned.
+        DeveloperManager.loginDeveloper("devel5@owlkeeper.de"); // User has creation rights but isn't assigned.
         assertThrows(InsufficientPermissionsException.class, stage::save);
     }
 
@@ -49,7 +49,7 @@ public class ProjectStageAccessControlTest {
     @Test
     void testDeleteStageDenied2() {
         ProjectStageModel stage = new ProjectStageModel(3);
-        DeveloperManager.loginDeveloper("devel2@owlkeeper.de"); // User has creation rights but isn't assigned.
+        DeveloperManager.loginDeveloper("devel5@owlkeeper.de"); // User has creation rights but isn't assigned.
         assertThrows(InsufficientPermissionsException.class, stage::removeFromDB);
     }
 }
