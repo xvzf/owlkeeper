@@ -44,7 +44,7 @@ do $users$ begin
         id serial primary key
         , created timestamp default now()
         , name text not null
-        , description text -- @TODO needed?
+        , description text
     );
 
     -- developer <-> group relationship

@@ -8,8 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import java.util.HashMap;
-
 public class Login extends UiScene {
 
     @Override
