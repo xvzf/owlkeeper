@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class MyTasksController extends SidebarController<Task> {
@@ -67,6 +68,13 @@ public class MyTasksController extends SidebarController<Task> {
         VBox tasks = new VBox();
         tasks.getStyleClass().add(STYLE_TASK_LIST_ITEMS);
         taskListing.getChildren().add(tasks);
+
+        taskList.sort(new Comparator<Task>() {
+            @Override
+            public int compare(Task t1, Task t2) {
+                return t1.getDeadline().compareTo(t2.getDeadline());
+            }
+        });
 
         taskList.forEach(task -> tasks.getChildren().add(this.getTask(app, task)));
         return taskListing;

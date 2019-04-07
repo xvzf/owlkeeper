@@ -1,0 +1,416 @@
+
+Text {
+    -fx-line-spacing: 10;
+    -fx-text-fill: #707070;
+    -fx-fill: #707070;
+}
+
+DataCheckbox,
+CheckBox {
+    -fx-font-size: 14;
+    -fx-text-fill: #707070;
+}
+
+DataCheckbox .box,
+CheckBox .box {
+    -fx-background-color: #FEFEFE;
+    -fx-border-color: #CECECE;
+}
+
+TextArea,
+TextField,
+PasswordField {
+    -fx-background-color: #FEFEFE;
+    -fx-border-color: #CECECE;
+    -fx-padding: 15 15;
+    -fx-fill: #707070;
+    -fx-text-fill: #707070;
+}
+
+TextArea {
+    -fx-background-color: #fff, #fff;
+}
+
+TextArea Text {
+    -fx-line-spacing: 0;
+}
+
+TextArea .content {
+    -fx-background-color: #fff;
+    -fx-padding: 0;
+}
+
+TextArea:focused .content {
+    -fx-background-color: #fff;
+}
+
+
+.root {
+    -fx-font-size: 16;
+    -fx-font-family: "Ubuntu", sans-serif;
+    -fx-focus-color: transparent;
+}
+
+.h2 {
+    -fx-font-size: 20;
+}
+
+.navbar {
+    -fx-background-color: #252525;
+    -fx-padding: 25px 30px;
+    -fx-spacing: 40;
+    -fx-min-width: 200;
+}
+
+.navigation {
+    -fx-spacing: 15;
+}
+
+.topbar {
+    -fx-background-color: #59BEF2;
+    -fx-padding: 0 25;
+
+    &__column {
+        -fx-spacing: 20;
+    }
+
+    .h2 {
+        -fx-fill: #FFFFFF;
+    }
+}
+
+
+.split {
+    -fx-box-border: transparent;
+    -fx-border-width: 0;
+}
+
+
+.navigation-item {
+    -fx-spacing: 15;
+    -fx-cursor: hand;
+
+    &__text {
+        -fx-fill: #9A9A9A;
+        -fx-cursor: hand;
+    }
+
+    &--active {
+        .navigation-item {
+            &__text {
+                -fx-fill: #FFFFFF;
+            }
+        }
+    }
+}
+
+.hr {
+    -fx-stroke-width: 0;
+    -fx-fill: #707070;
+
+    &--light {
+        -fx-fill: #ECECEC;
+    }
+}
+
+
+.drop-nav {
+    -fx-spacing: 10;
+
+    &__items {
+        -fx-padding: 10 0 10 15;
+        -fx-border-width: 0 0 0 1;
+        -fx-border-color: #707070;
+        -fx-translate-x: 10;
+        -fx-spacing: 10;
+    }
+}
+
+
+.button {
+    -fx-background-color: #59BEF2;
+    -fx-padding: 9 25 10 25;
+    -fx-border-color: transparent transparent #4998C1 transparent;
+    -fx-border-width: 2;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16;
+    -fx-cursor: hand;
+
+    &--small {
+        -fx-font-size: 16;
+        -fx-padding: 5 15;
+    }
+
+    &--secondary {
+        -fx-background-color: #aaa;
+        -fx-border-color: transparent transparent #888 transparent;
+    }
+}
+
+
+.background {
+    -fx-background-color: #EFEFEF;
+}
+
+.search {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 5;
+    -fx-spacing: 10;
+
+    TextField {
+        -fx-border-color: transparent;
+        -fx-fill: transparent;
+        -fx-border-width: 0;
+        -fx-padding: 0;
+    }
+}
+
+
+.main {
+    -fx-padding: 50 45;
+    -fx-background-color: #FFFFFF;
+    -fx-spacing: 60;
+}
+
+.task-list {
+    &__icon,
+    &__title {
+        -fx-cursor: hand;
+    }
+}
+
+.task-listing {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #ECECEC;
+    -fx-padding: 20 0;
+    -fx-spacing: 20;
+
+    HBox {
+        -fx-spacing: 20;
+    }
+
+    &__assigned {
+        -fx-spacing: 10;
+    }
+
+    &__tags {
+        -fx-spacing: 5;
+    }
+}
+
+
+.date {
+    -fx-font-weight: bold;
+    -fx-fill: #979797;
+
+    &--success {
+        -fx-fill: #5FC86A;
+    }
+
+    &--warnimg {
+        -fx-fill: #F29A28;
+    }
+
+    &--error {
+        -fx-fill: #E14B4B;
+    }
+}
+
+
+.tag {
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 3 10;
+    -fx-font-size: 12;
+    -fx-background-radius: 3;
+    -fx-background-color: #707070;
+}
+
+.sidebar {
+    -fx-background-color: #FFFFFF;
+    -fx-spacing: 30;
+    -fx-padding: 35 25;
+
+    &__tags {
+        -fx-spacing: 10;
+    }
+
+    &__title {
+        -fx-fill: #000000;
+        -fx-font-size: 20;
+    }
+
+    &__team {
+        -fx-spacing: 10;
+    }
+
+    &__meta {
+        -fx-spacing: 10;
+        -fx-padding: 0 10 0 0;
+    }
+}
+
+
+.comments {
+    -fx-spacing: 25;
+
+    &__item {
+        -fx-spacing: 20;
+
+        Text {
+            -fx-font-size: 14;
+        }
+    }
+
+    &__input {
+        -fx-font-size: 13;
+        -fx-padding: 10;
+        -fx-min-height: 120;
+    }
+
+}
+
+
+.iteration-bar {
+    -fx-padding: 0 25;
+
+    &__column {
+        /*-fx-spacing: 10;*/
+        /*-fx-cursor: hand;*/
+        HBox {
+            -fx-spacing: 10;
+            -fx-cursor: hand;
+        }
+    }
+
+    .h2 {
+        -fx-font-size: 18;
+    }
+}
+
+
+.team {
+    -fx-spacing: 15;
+
+    &__wrapper {
+        -fx-spacing: 60;
+    }
+
+    &__units {
+        -fx-padding: 10 0 0 0;
+        -fx-spacing: 30;
+    }
+}
+
+
+.team-unit {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+
+    &__member {
+        -fx-padding: 0 10 0 0;
+        -fx-spacing: 10;
+
+        Text {
+            -fx-translate-y: 1;
+        }
+
+        &--leader {
+            -fx-padding: 0 10 10 0;
+        }
+    }
+}
+
+.project {
+    -fx-spacing: 20;
+
+    &__header {
+        -fx-spacing: 15;
+        -fx-pref-width: 500;
+    }
+
+    &__stage-wrapper {
+        -fx-spacing: 50;
+    }
+
+    &__stage-listing {
+        -fx-spacing: 10;
+    }
+
+    &__stage {
+        -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
+        -fx-background-color: #FFFFFF;
+        -fx-padding: 10;
+        -fx-pref-width: 200;
+        -fx-cursor: hand;
+    }
+
+    &__stage-form {
+        -fx-spacing: 10;
+    }
+}
+
+.project-form {
+    -fx-spacing: 20;
+    -fx-padding: 10 0 0 0;
+    -fx-max-width: 600;
+
+    &__item {
+        -fx-spacing: 5;
+    }
+}
+
+
+.form {
+    -fx-spacing: 20;
+}
+
+.form-item {
+    -fx-spacing: 5;
+
+    Text,
+    Label {
+        -fx-text-fill: #707070;
+    }
+}
+
+.form-error {
+    -fx-padding: 10 0 0 0;
+    -fx-spacing: 5;
+
+    Text {
+        -fx-fill: #ff3a35;
+    }
+}
+
+.check-group {
+    -fx-spacing: 10;
+}
+
+.developer-listing {
+    -fx-padding: 20 0 0 0;
+    -fx-spacing: 10;
+}
+
+.developer-form {
+    -fx-spacing: 20;
+    -fx-pref-width: 400;
+}
+
+.login {
+    @extend .root;
+    -fx-background-color: #EFEFEF;
+    -fx-alignment: center;
+
+    &__content {
+        -fx-spacing: 20;
+    }
+}
+
+.login-panel {
+    -fx-background-color: #fff;
+    -fx-padding: 10 30 30 30;
+    -fx-pref-width: 400;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 30, 0, 0, 10);
+}
