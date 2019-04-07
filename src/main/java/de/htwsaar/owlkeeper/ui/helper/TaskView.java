@@ -4,20 +4,16 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import de.htwsaar.owlkeeper.helper.DeveloperManager;
+import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.TaskComment;
-import de.htwsaar.owlkeeper.storage.model.ProjectStageModel;
-import de.htwsaar.owlkeeper.storage.model.TaskCommentModel;
-import de.htwsaar.owlkeeper.storage.model.TaskModel;
+import de.htwsaar.owlkeeper.storage.entity.Team;
+import de.htwsaar.owlkeeper.storage.model.*;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -132,18 +128,33 @@ public final class TaskView {
             deadline.setValue(taskEntity.getDeadline().toLocalDateTime().toLocalDate());
         }
 
+        VBox teamBox = new VBox();
+        teamBox.getStyleClass().add(STYLE_FORM_ITEM);
+        teamBox.getChildren().add(new Text("Team"));
+        ChoiceBox<CommonNodes.EntityWrapper<Team>> team = CommonNodes.ChoiceBox(TeamModel.getTeams(), t -> t.getName());
+        teamBox.getChildren().add(team);
+        content.getChildren().add(teamBox);
+
+        long currentTeam = taskEntity.getTeam();
+        if (currentTeam != 0){
+            team.getItems().forEach((e)->{
+                if (e.getItem().getId() == currentTeam){
+                    team.getSelectionModel().select(e);
+                }
+            });
+        }
+
         VBox submitBox = new VBox();
         Button submit = new Button(SAVE_TASK);
         submitBox.getChildren().add(submit);
         content.getChildren().add(submitBox);
 
-        // @todo add team value
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (validator.execute()) {
                 taskEntity.setName(name.getText());
                 taskEntity.setDescription(description.getText());
                 taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
-                taskEntity.setTeam(1);
+                taskEntity.setTeam(team.getValue().getItem().getId());
                 new TaskModel(taskEntity).save();
                 long stage = taskEntity.getProjectStage();
                 long project = new ProjectStageModel(stage).getContainer().getProject();
@@ -195,8 +206,11 @@ public final class TaskView {
         meta.getChildren().add(team);
         HBox.setHgrow(team, Priority.ALWAYS);
 
-        for (int i = 0; i < 3; i++) {
-            team.getChildren().add(CommonNodes.Image(IMG_USER, 25, 25));
+        for (Developer dev : new TeamModel(taskEntity.getTeam()).getDevelopers()) {
+            ImageView img = CommonNodes.Image(IMG_USER, 25, 25);
+            Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">" );
+            Tooltip.install(img, t);
+            team.getChildren().add(img);
         }
 
         // Description
@@ -226,7 +240,11 @@ public final class TaskView {
         for (TaskComment commentEntity : tasksComments) {
             HBox comment = new HBox();
             comment.getStyleClass().add(STYLE_COMMENTS_ITEM);
-            comment.getChildren().add(CommonNodes.Image(IMG_USER, 25, 25));
+            ImageView img = CommonNodes.Image(IMG_USER, 25, 25);
+            Developer dev = new DeveloperModel(commentEntity.getDeveloper()).getContainer();
+            Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">");
+            Tooltip.install(img, t);;
+            comment.getChildren().add(img);
             Text commentText = new Text(commentEntity.getContent());
             commentText.setWrappingWidth(500);
             comment.getChildren().add(commentText);
@@ -313,13 +331,17 @@ public final class TaskView {
         task.getChildren().add(meta);
 
         // Team
+        TeamModel teamModel = new TeamModel(taskEntity.getTeam());
         HBox team = new HBox();
         team.setAlignment(Pos.CENTER);
         team.setPrefWidth(180);
         team.getStyleClass().add(STYLE_TASK_LISTING_ASSIGNED);
         meta.getChildren().add(team);
-        for (int i = 0; i < 3; i++) {
-            team.getChildren().add(CommonNodes.Image(IMG_USER, 25, 25));
+        for (Developer dev : teamModel.getDevelopers()) {
+            ImageView img = CommonNodes.Image(IMG_USER, 25, 25);
+            Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">");
+            Tooltip.install(img,t);
+            team.getChildren().add(img);
         }
 
         // Date

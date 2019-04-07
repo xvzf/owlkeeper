@@ -7,6 +7,7 @@ import de.htwsaar.owlkeeper.helper.exceptions.UserInitializationException;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public class PermissionHandler {
@@ -15,7 +16,7 @@ public class PermissionHandler {
 
     private static PermissionHandler handler;
     private static DeveloperModel user;
-    private static String userGroup;
+    private static List<String> userGroups;
 
     public static PermissionHandler getPermissionHandler() {
         return handler;
@@ -26,7 +27,7 @@ public class PermissionHandler {
         user = DeveloperManager.getCurrentDeveloper();
         if (user == null)
             throw new UserInitializationException(NO_CURRENT_USER_SET);
-        userGroup = user.getGroup();
+        userGroups = user.getGroup();
         return handler;
     }
 
@@ -41,13 +42,13 @@ public class PermissionHandler {
      *             requested permission.
      */
     public static boolean checkPermission(final int action) throws InsufficientPermissionsException {
-        if (userGroup.equals("admin"))
+        if (userGroups.contains("admin"))
             return true;
-        if (checkAction(userGroup, action)) {
+        if (checkAction(userGroups, action)) {
             return true;
         } else {
             throw new InsufficientPermissionsException(String.format(USER_OF_GROUP_NO_PRIVILEGES_FOR_ACTION,
-                    user.getContainer().getEmail(), userGroup, action));
+                    user.getContainer().getEmail(), userGroups, action));
         }
     }
 
@@ -64,25 +65,25 @@ public class PermissionHandler {
      */
     public static boolean checkPermission(final Predicate<Developer> predicate)
             throws InsufficientPermissionsException {
-        if (userGroup.equals("admin"))
+        if (userGroups.contains("admin"))
             return true;
         if (predicate.test(user.getContainer())) {
             return true;
         } else {
             throw new InsufficientPermissionsException(String.format(USER_OF_GROUP_NO_PRIVILEGES_FOR_ACTION,
-                    user.getContainer().getEmail(), userGroup, ""));
+                    user.getContainer().getEmail(), userGroups, ""));
         }
     }
 
     /**
      * Checks, if the given group has the permission.
      *
-     * @param group the group to check
+     * @param groups the group to check
      * @param action the action to check
      * @return true if the group has the permissions, false if not.
      */
-    private static boolean checkAction(final String group, final int action) {
-        int permissions = Permissions.permissionOf(group);
+    private static boolean checkAction(final List<String> groups, final int action) {
+        int permissions = groups.stream().map(Permissions::permissionOf).reduce(0, (x,y) -> x | y);
         permissions >>>= (int) (Math.log(action) / Math.log(2));
         return permissions % 2 == 1;
     }

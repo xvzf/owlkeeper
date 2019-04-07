@@ -14,6 +14,7 @@ import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
 import de.htwsaar.owlkeeper.ui.helper.Validator;
 import de.htwsaar.owlkeeper.ui.helper.DataCheckbox;
+import de.htwsaar.owlkeeper.ui.state.BaseState;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -259,11 +260,14 @@ public class TeamController extends Controller {
         // Submit event
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (validator.execute()) {
+                BaseState.QUERY_COUNT++;
                 Developer dev = new Developer();
                 dev.setName(name.getText());
                 dev.setEmail(email.getText());
                 dev.setPwhash(password.getText());
-                new DeveloperModel(dev).save();
+                DeveloperModel devModel = new DeveloperModel(dev);
+                devModel.save();
+                // TODO: 07.04.2019 make new developers admin as long as the access controll feature is not implemented
                 Developer savedDev = new DeveloperModel(dev.getEmail()).getContainer();
                 checkboxes.forEach(teamDataCheckbox -> {
                     new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
@@ -318,6 +322,7 @@ public class TeamController extends Controller {
         // Submit event
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (validator.execute()) {
+                BaseState.QUERY_COUNT++;
                 Developer leadDev = leader.getValue().getItem();
                 Team team = new Team();
                 team.setName(name.getText());
