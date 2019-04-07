@@ -61,6 +61,6 @@ class DeveloperModelTest {
     @Test
     void testGetTasks() {
         DeveloperModel dm = new DeveloperModel(D_ID_2);
-        assertEquals(2, dm.getTasks().size());
+        assertEquals(6, dm.getTasks().size());
     }
 }
