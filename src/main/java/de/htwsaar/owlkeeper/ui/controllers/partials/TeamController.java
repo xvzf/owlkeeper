@@ -273,7 +273,7 @@ public class TeamController extends Controller {
                     dev.setPwhash(DeveloperModel.getHash(password.getText()));
                     DeveloperModel devModel = new DeveloperModel(dev);
                     devModel.save();
-                    devModel.addToGroup("admin");
+                    devModel.addToGroup("admin"); // TODO: 07.04.2019 change this after access-control is fully implemented
                     Developer savedDev = new DeveloperModel(dev.getEmail()).getContainer();
                     checkboxes.forEach(teamDataCheckbox -> {
                         new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
