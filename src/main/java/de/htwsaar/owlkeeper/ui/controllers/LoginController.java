@@ -81,12 +81,6 @@ public class LoginController extends Controller{
             }
             return false;
         }, VALIDATION_ERROR));
-
-
-        // Prefill Credentials
-        // TODO: 06.04.2019 remove if needed
-        email.setText("devel1@owlkeeper.de");
-        password.setText("password-1");
     }
 
     /**
