@@ -20,74 +20,69 @@ begin
   insert into "group" (name, description) values ('task', 'Create tasks in projects the user is belonging to');
 
   -- Dummy developers
-  insert into developer (name, email, pw_hash) values ('Albert Altmann', 'AA@owlkeeper.de', '8d8f2628cfce1853efc0d027be4f6ce4'); -- pw: password-1
-  insert into developer (name, email, pw_hash) values ('Benjamin Becker', 'BB@owlkeeper.de', '67b942f3e524ec767aa11e247ac01036'); -- pw: password-2
-  insert into developer (name, email, pw_hash) values ('Christian Conradt', 'CC@owlkeeper.de', '4aee0e4712257a91f834006fccf16394'); -- pw: password-3
-  insert into developer (name, email, pw_hash) values ('David Degenhardt', 'DD@owlkeeper.de', '19fba5a514718a1ff009945297c65ffb'); -- pw: password-4
-  insert into developer (name, email, pw_hash) values ('Emil Euler', 'EE@owlkeeper.de', '69a966c10c28bc4a1f54939c72aeaa69'); -- pw: password-5
-  insert into developer (name, email, pw_hash) values ('Fabian Frei', 'FF@owlkeeper.de', '4a2be5b9451851ded1bb67742ed13d89'); -- pw: password-6
+  insert into developer (name, email, pw_hash) values ('Albert Altmann', 'aa@owlkeeper.de', '8d8f2628cfce1853efc0d027be4f6ce4'); -- pw: password-1
+  insert into developer (name, email, pw_hash) values ('Benjamin Becker', 'bb@owlkeeper.de', '67b942f3e524ec767aa11e247ac01036'); -- pw: password-2
+  insert into developer (name, email, pw_hash) values ('Christian Conradt', 'cc@owlkeeper.de', '4aee0e4712257a91f834006fccf16394'); -- pw: password-3
+  insert into developer (name, email, pw_hash) values ('David Degenhardt', 'dd@owlkeeper.de', '19fba5a514718a1ff009945297c65ffb'); -- pw: password-4
+  insert into developer (name, email, pw_hash) values ('Emil Euler', 'ee@owlkeeper.de', '69a966c10c28bc4a1f54939c72aeaa69'); -- pw: password-5
+  insert into developer (name, email, pw_hash) values ('Fabian Frei', 'ff@owlkeeper.de', '4a2be5b9451851ded1bb67742ed13d89'); -- pw: password-6
   -- Dummy groups
   insert into developer_group_relation (developer, "group") values (
-  (select id from developer where email = 'AA@owlkeeper.de')
+  (select id from developer where email = 'aa@owlkeeper.de')
   , (select id from "group" where name = 'admin')
-  ); -- AA@owlkeeper.de -> admin
+  ); -- aa@owlkeeper.de -> admin
 
   insert into developer_group_relation (developer, "group") values (
-  (select id from developer where email = 'BB@owlkeeper.de')
-  , (select id from "group" where name = 'project')
-  ); -- BB@owlkeeper.de -> project
+  (select id from developer where email = 'bb@owlkeeper.de')
+  , (select id from "group" where name = 'admin')
+  ); -- bb@owlkeeper.de -> admin
 
   insert into developer_group_relation (developer, "group") values (
-  (select id from developer where email = 'CC@owlkeeper.de')
-  , (select id from "group" where name = 'task')
-  ); -- CC@owlkeeper.de -> task
+  (select id from developer where email = 'cc@owlkeeper.de')
+  , (select id from "group" where name = 'admin')
+  ); -- cc@owlkeeper.de -> admin
 
   insert into developer_group_relation (developer, "group") values (
-  (select id from developer where email = 'DD@owlkeeper.de')
-  , (select id from "group" where name = 'project')
-  );
+  (select id from developer where email = 'dd@owlkeeper.de')
+  , (select id from "group" where name = 'admin')
+  ); -- dd@owlkeeper.de -> admin
 
   insert into developer_group_relation (developer, "group") values (
-  (select id from developer where email = 'DD@owlkeeper.de')
-  , (select id from "group" where name = 'task')
-  ); -- DD@owlkeeper.de -> project, task
-
-  insert into developer_group_relation (developer, "group") values (
-  (select id from developer where email = 'EE@owlkeeper.de')
-  , (select id from "group" where name = 'project')
-  ); -- EE@owlkeeper.de -> project
+  (select id from developer where email = 'ee@owlkeeper.de')
+  , (select id from "group" where name = 'admin')
+  ); -- ee@owlkeeper.de -> admin
 
   -- Dummy teams
   insert into team (name, leader) values (
   'Team 1',
-  (select id from developer where email = 'AA@owlkeeper.de')
+  (select id from developer where email = 'aa@owlkeeper.de')
                                            );
   insert into team (name, leader) values(
   'Team 2',
-  (select id from developer where email = 'BB@owlkeeper.de')
+  (select id from developer where email = 'bb@owlkeeper.de')
   );
 
 
   -- Team relationships
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 1'),
-  (select id from developer where email = 'AA@owlkeeper.de')
+  (select id from developer where email = 'aa@owlkeeper.de')
   );
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 1'),
-  (select id from developer where email = 'BB@owlkeeper.de')
+  (select id from developer where email = 'bb@owlkeeper.de')
   );
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 1'),
-  (select id from developer where email = 'CC@owlkeeper.de')
+  (select id from developer where email = 'cc@owlkeeper.de')
   );
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 2'),
-  (select id from developer where email = 'DD@owlkeeper.de')
+  (select id from developer where email = 'dd@owlkeeper.de')
   );
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 2'),
-  (select id from developer where email = 'EE@owlkeeper.de')
+  (select id from developer where email = 'ee@owlkeeper.de')
   );
 end $fill$;
 
@@ -249,31 +244,31 @@ end $fill$;
 
   insert into task_comment (content, developer, task) values (
   'Ist sogut wie fertig.'
-  , (select id from developer where email = 'AA@owlkeeper.de')
+  , (select id from developer where email = 'aa@owlkeeper.de')
   , (select id from task where id = 1)
   );
 
   insert into task_comment (content, developer, task) values (
   'Kann etwas länger dauern'
-  , (select id from developer where email = 'DD@owlkeeper.de')
+  , (select id from developer where email = 'dd@owlkeeper.de')
   , (select id from task where id = 2)
    );
 
   insert into task_comment (content, developer, task) values (
   'Brauche Hilfe'
-  , (select id from developer where email = 'CC@owlkeeper.de')
+  , (select id from developer where email = 'cc@owlkeeper.de')
   , (select id from task where id = 2)
   );
 
   insert into task_comment (content, developer, task) values (
   'ist fast fertig'
-  , (select id from developer where email = 'CC@owlkeeper.de')
+  , (select id from developer where email = 'cc@owlkeeper.de')
   , (select id from task where id = 3)
   );
 
   insert into task_comment (content, developer, task) values (
   'kann sein, dass wir nicht rechtzeitig fertig werden'
-  , (select id from developer where email = 'EE@owlkeeper.de')
+  , (select id from developer where email = 'ee@owlkeeper.de')
   , (select id from task where id = 4)
   );
 

@@ -1,5 +1,14 @@
 package de.htwsaar.owlkeeper.storage.model;
 
+import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
+
+import java.util.List;
+import java.util.function.Function;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jdbi.v3.core.extension.ExtensionCallback;
+
 import de.htwsaar.owlkeeper.helper.Permissions;
 import de.htwsaar.owlkeeper.helper.exceptions.InsufficientPermissionsException;
 import de.htwsaar.owlkeeper.storage.DBConnection;
@@ -8,15 +17,6 @@ import de.htwsaar.owlkeeper.storage.dao.ProjectStageDao;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jdbi.v3.core.extension.ExtensionCallback;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-
-import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
 
 public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageDao> {
 

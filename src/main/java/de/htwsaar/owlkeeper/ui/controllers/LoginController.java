@@ -1,18 +1,22 @@
 package de.htwsaar.owlkeeper.ui.controllers;
 
-import de.htwsaar.owlkeeper.storage.entity.Developer;
-import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
-import de.htwsaar.owlkeeper.ui.scenes.*;
+import java.util.HashMap;
+
 import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
 import de.htwsaar.owlkeeper.ui.helper.Validator;
+import de.htwsaar.owlkeeper.ui.scenes.Page;
+import de.htwsaar.owlkeeper.ui.scenes.PageIteration;
+import de.htwsaar.owlkeeper.ui.scenes.PageTeam;
+import de.htwsaar.owlkeeper.ui.scenes.Projects;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-
-import java.util.HashMap;
 
 public class LoginController extends Controller{
 
@@ -93,7 +97,6 @@ public class LoginController extends Controller{
         DeveloperManager.loginDeveloper(email);
 
         // Load full UI
-        // TODO: 06.04.2019 add credentials check for each of these views
         UiApp.stageScene(new Page());
         UiApp.stageScene(new PageIteration());
         UiApp.stageScene(new PageTeam());

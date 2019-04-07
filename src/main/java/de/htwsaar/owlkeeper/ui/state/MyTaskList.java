@@ -1,12 +1,11 @@
 package de.htwsaar.owlkeeper.ui.state;
 
+import java.util.HashMap;
+import java.util.List;
+
 import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Task;
-import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class MyTaskList extends BaseState {
 
