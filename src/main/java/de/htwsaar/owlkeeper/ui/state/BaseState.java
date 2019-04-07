@@ -1,5 +1,7 @@
 package de.htwsaar.owlkeeper.ui.state;
 
+import de.htwsaar.owlkeeper.helper.Permissions;
+import de.htwsaar.owlkeeper.service.PermissionHandler;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.model.ProjectModel;
 import de.htwsaar.owlkeeper.ui.pages.MyTasks;
@@ -45,7 +47,9 @@ public class BaseState extends State {
      */
     private List<Page> getNavigationList() {
         List<Page> list = new ArrayList<>();
-        list.add(new MyTasks());
+        if (PermissionHandler.can(Permissions.VIEW_TASK)) {
+            list.add(new MyTasks());
+        }
         list.add(new Team());
         return list;
     }

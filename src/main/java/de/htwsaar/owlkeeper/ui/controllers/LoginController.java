@@ -1,5 +1,7 @@
 package de.htwsaar.owlkeeper.ui.controllers;
 
+import de.htwsaar.owlkeeper.helper.Permissions;
+import de.htwsaar.owlkeeper.service.PermissionHandler;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
 import de.htwsaar.owlkeeper.ui.scenes.*;
@@ -98,15 +100,21 @@ public class LoginController extends Controller{
         // Login user
         DeveloperManager.loginDeveloper(email);
 
+
+        String startView = "projects";
+        HashMap<String, Object> query = new HashMap<>();
+
         // Load full UI
-        // TODO: 06.04.2019 add credentials check for each of these views
-        UiApp.stageScene(new Page());
-        UiApp.stageScene(new PageIteration());
+        if (PermissionHandler.can(Permissions.VIEW_TASK)){
+            UiApp.stageScene(new Page());
+            UiApp.stageScene(new PageIteration());
+            startView = "page";
+        }
         UiApp.stageScene(new PageTeam());
         UiApp.stageScene(new Projects());
         app.loadScenes();
 
         // Redirect into the application
-        app.route("page", new HashMap<>());
+        app.route(startView, query);
     }
 }

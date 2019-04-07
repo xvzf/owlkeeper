@@ -3,6 +3,8 @@ package de.htwsaar.owlkeeper.ui.controllers.partials;
 import java.util.HashMap;
 import java.util.List;
 
+import de.htwsaar.owlkeeper.helper.Permissions;
+import de.htwsaar.owlkeeper.service.PermissionHandler;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.model.ProjectModel;
@@ -57,7 +59,10 @@ public class ProjectsListingController extends Controller {
             this.listing.getChildren().add(this.getProject(app, project));
         }
         this.listing.getChildren().add(CommonNodes.Hr(600, true));
-        this.listing.getChildren().add(this.newProjectForm(app));
+
+        if (PermissionHandler.can(Permissions.CREATE_PROJECT) && PermissionHandler.can(Permissions.CREATE_PROJECT_STAGE)) {
+            this.listing.getChildren().add(this.newProjectForm(app));
+        }
     }
 
     /**
@@ -178,7 +183,9 @@ public class ProjectsListingController extends Controller {
         stageWrapper.getChildren().add(stagesBox);
 
         // New Stage Form
-        stageWrapper.getChildren().add(this.getNewStageForm(app, project, model));
+        if (PermissionHandler.can(Permissions.CREATE_PROJECT_STAGE)) {
+            stageWrapper.getChildren().add(this.getNewStageForm(app, project, model));
+        }
 
         box.getChildren().add(stageWrapper);
         return box;

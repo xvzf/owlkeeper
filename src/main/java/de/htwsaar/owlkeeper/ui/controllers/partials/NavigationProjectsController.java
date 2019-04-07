@@ -1,5 +1,7 @@
 package de.htwsaar.owlkeeper.ui.controllers.partials;
 
+import de.htwsaar.owlkeeper.helper.Permissions;
+import de.htwsaar.owlkeeper.service.PermissionHandler;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
@@ -47,10 +49,14 @@ public class NavigationProjectsController extends Controller {
             app.route("projects", new HashMap<>());
         });
 
-        // Fill Projects
-        projects.forEach((id, project) -> {
-            root.getChildren().add(this.getProject(app, project));
-        });
+        if (PermissionHandler.can(Permissions.VIEW_TASK)) {
+            // Fill Projects
+            projects.forEach((id, project) -> {
+                root.getChildren().add(this.getProject(app, project));
+            });
+        } else {
+            root.setVisible(false);
+        }
     }
 
     private Text getProject(UiApp app, Project p) {

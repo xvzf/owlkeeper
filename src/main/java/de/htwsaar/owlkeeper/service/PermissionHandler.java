@@ -52,6 +52,33 @@ public class PermissionHandler {
     }
 
     /**
+     * Checks if the currently logged user is allowed to execute the
+     * given permission
+     * @param permission permission enum
+     * @return boolean value
+     */
+    public static boolean can(Permissions permission){
+        try{
+            return checkPermission(permission.get());
+        } catch (InsufficientPermissionsException e){
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the current developer
+     * @param predicate predicate to check developer individual data
+     * @return boolean value
+     */
+    public static boolean fulfills(Predicate<Developer> predicate){
+        try{
+            return checkPermission(predicate);
+        } catch (InsufficientPermissionsException e){
+            return false;
+        }
+    }
+
+    /**
      * Check a dynamic permission described by a SQL Query in
      * {@link de.htwsaar.owlkeeper.storage.dao.AccessControlDao} or any other
      * conditional using the currently logged in developer to check permissions.
