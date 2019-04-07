@@ -71,23 +71,23 @@ begin
   -- Team relationships
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 1'),
-  (select id from developer where email = 'devel1@owlkeeper.de')
+  (select id from developer where email = 'AA@owlkeeper.de')
   );
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 1'),
-  (select id from developer where email = 'devel2@owlkeeper.de')
+  (select id from developer where email = 'BB@owlkeeper.de')
   );
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 1'),
-  (select id from developer where email = 'devel3@owlkeeper.de')
+  (select id from developer where email = CC'@owlkeeper.de')
   );
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 2'),
-  (select id from developer where email = 'devel3@owlkeeper.de')
+  (select id from developer where email = 'DD@owlkeeper.de')
   );
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 2'),
-  (select id from developer where email = 'devel4@owlkeeper.de')
+  (select id from developer where email = 'EE@owlkeeper.de')
   );
 end $fill$;
 
