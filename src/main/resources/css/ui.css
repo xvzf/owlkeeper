@@ -11,11 +11,13 @@ Text {
     -fx-fill: #707070;
 }
 
+DataCheckbox,
 CheckBox {
     -fx-font-size: 14;
     -fx-text-fill: #707070;
 }
 
+DataCheckbox .box,
 CheckBox .box {
     -fx-background-color: #FEFEFE;
     -fx-border-color: #CECECE;
@@ -281,6 +283,10 @@ TextArea:focused .content {
     -fx-spacing: 15;
 }
 
+.team__wrapper{
+    -fx-spacing: 60;
+}
+
 .team__units {
     -fx-padding: 10 0 0 0;
     -fx-spacing: 30;
@@ -302,7 +308,7 @@ TextArea:focused .content {
     -fx-translate-y: 1;
 }
 
-.team-unit__member--leader{
+.team-unit__member--leader {
     -fx-padding: 0 10 10 0;
 }
 
@@ -345,13 +351,14 @@ TextArea:focused .content {
     -fx-spacing: 5;
 }
 
-.form{
+.form {
     -fx-spacing: 20;
 }
 
-.form-item{
+.form-item {
     -fx-spacing: 5;
 }
+
 .form-item Text,
 .form-item Label{
     -fx-text-fill: #707070;
@@ -364,6 +371,20 @@ TextArea:focused .content {
 
 .form-error Text {
     -fx-fill: #ff3a35;
+}
+
+.check-group{
+    -fx-spacing: 10;
+}
+
+.developer-listing {
+    -fx-padding: 20 0 0 0;
+    -fx-spacing: 10;
+}
+
+.developer-form {
+    -fx-spacing: 20;
+    -fx-pref-width: 400;
 }
 
 .login{

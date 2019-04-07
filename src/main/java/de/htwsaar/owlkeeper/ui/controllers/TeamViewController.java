@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.ui.controllers;
 
+import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import de.htwsaar.owlkeeper.ui.UiApp;
@@ -38,8 +39,8 @@ public class TeamViewController extends Controller {
     public TeamController teamsController;
 
     public void boot(HashMap<String, Object> state) {
-
         UiApp app = this.getApp();
+        this.teamsController.setApp(app);
 
         // Meta
         this.navigationController.setContent(app, (List<Page>) state.get("pages"));
@@ -47,6 +48,6 @@ public class TeamViewController extends Controller {
 
         // Main
         this.topbarController.setTitle("Team");
-        this.teamsController.setContent((List<Team>) state.get("teams"));
+        this.teamsController.setContent((List<Team>) state.get("teams"), (List<Developer>) state.get("developers"));
     }
 }
