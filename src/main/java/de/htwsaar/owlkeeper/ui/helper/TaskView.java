@@ -71,7 +71,7 @@ public final class TaskView {
         // Sidebar Pane
         ScrollPane sidebar = new ScrollPane();
         sidebar.setFitToHeight(true);
-        sidebar.setMinWidth(450);
+        sidebar.setMinWidth(600);
         sidebar.setHbarPolicy(ScrollBarPolicy.NEVER);
 
         // Sidebar Box
@@ -110,7 +110,7 @@ public final class TaskView {
         descriptionBox.getStyleClass().add(STYLE_FORM_ITEM);
         descriptionBox.getChildren().add(new Text(TASK_DESC));
         TextArea description = new TextArea();
-        description.setMaxWidth(400);
+        description.setMaxWidth(550);
         description.setWrapText(true);
         descriptionBox.getChildren().add(description);
         content.getChildren().add(descriptionBox);
@@ -136,9 +136,9 @@ public final class TaskView {
         content.getChildren().add(teamBox);
 
         long currentTeam = taskEntity.getTeam();
-        if (currentTeam != 0){
-            team.getItems().forEach((e)->{
-                if (e.getItem().getId() == currentTeam){
+        if (currentTeam != 0) {
+            team.getItems().forEach((e) -> {
+                if (e.getItem().getId() == currentTeam) {
                     team.getSelectionModel().select(e);
                 }
             });
@@ -151,6 +151,7 @@ public final class TaskView {
 
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (validator.execute()) {
+                deadline.setValue(deadline.getConverter().fromString(deadline.getEditor().getText()));
                 taskEntity.setName(name.getText());
                 taskEntity.setDescription(description.getText());
                 taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
@@ -158,7 +159,7 @@ public final class TaskView {
                 new TaskModel(taskEntity).save();
                 long stage = taskEntity.getProjectStage();
                 long project = new ProjectStageModel(stage).getContainer().getProject();
-                app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false), true);
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false), true);
             }
             validator.reset();
         });
@@ -184,7 +185,7 @@ public final class TaskView {
         // Title
         Text title = new Text(taskEntity.getName());
         title.getStyleClass().add(STYLE_SIDEBAR_TITLE);
-        title.setWrappingWidth(400);
+        title.setWrappingWidth(550);
         content.getChildren().add(title);
 
         // Date & Team -- Wrapper
@@ -208,14 +209,14 @@ public final class TaskView {
 
         for (Developer dev : new TeamModel(taskEntity.getTeam()).getDevelopers()) {
             ImageView img = CommonNodes.Image(IMG_USER, 25, 25);
-            Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">" );
+            Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">");
             Tooltip.install(img, t);
             team.getChildren().add(img);
         }
 
         // Description
         Text description = new Text(taskEntity.getDescription());
-        description.setWrappingWidth(400);
+        description.setWrappingWidth(550);
         content.getChildren().add(description);
 
         Button editButton = new Button(EDIT);
@@ -228,7 +229,7 @@ public final class TaskView {
         });
 
         // HairLine (hr)
-        content.getChildren().add(CommonNodes.Hr(375, true));
+        content.getChildren().add(CommonNodes.Hr(525, true));
 
         // Comments
         Validator validator = new Validator();
@@ -243,17 +244,17 @@ public final class TaskView {
             ImageView img = CommonNodes.Image(IMG_USER, 25, 25);
             Developer dev = new DeveloperModel(commentEntity.getDeveloper()).getContainer();
             Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">");
-            Tooltip.install(img, t);;
+            Tooltip.install(img, t);
             comment.getChildren().add(img);
             Text commentText = new Text(commentEntity.getContent());
-            commentText.setWrappingWidth(350);
+            commentText.setWrappingWidth(500);
             comment.getChildren().add(commentText);
             comments.getChildren().add(comment);
         }
 
         // TextArea
         TextArea input = new TextArea();
-        input.setMaxWidth(375);
+        input.setMaxWidth(525);
         input.setWrapText(true);
         input.getStyleClass().add(STYLE_COMMENTS_INPUT);
         input.setPromptText(WRITE_COMMENT);
@@ -339,7 +340,7 @@ public final class TaskView {
         for (Developer dev : teamModel.getDevelopers()) {
             ImageView img = CommonNodes.Image(IMG_USER, 25, 25);
             Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">");
-            Tooltip.install(img,t);
+            Tooltip.install(img, t);
             team.getChildren().add(img);
         }
 

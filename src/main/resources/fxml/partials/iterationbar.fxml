@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 
 
-<HBox fx:id="iterationBar" alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="10.0" maxHeight="75.0" minHeight="75.0" styleClass="iteration-bar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.IterationBarController">
+<HBox fx:id="iterationBar" alignment="CENTER" fillHeight="false" layoutX="10.0" layoutY="10.0" maxHeight="45.0" minHeight="45.0" styleClass="iteration-bar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.htwsaar.owlkeeper.ui.controllers.partials.IterationBarController">
    <children>
       <HBox fx:id="left" prefWidth="150.0" />
       <HBox fx:id="center" prefWidth="150.0" HBox.hgrow="ALWAYS" />
