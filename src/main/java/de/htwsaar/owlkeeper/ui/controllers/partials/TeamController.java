@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
@@ -13,9 +12,10 @@ import de.htwsaar.owlkeeper.storage.model.TeamModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
-import de.htwsaar.owlkeeper.ui.helper.Validator;
 import de.htwsaar.owlkeeper.ui.helper.DataCheckbox;
+import de.htwsaar.owlkeeper.ui.helper.Validator;
 import de.htwsaar.owlkeeper.ui.state.BaseState;
+
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -60,6 +60,8 @@ public class TeamController extends Controller {
 
     private static final String VALIDATION_NAME = "Name can't be empty.";
     private static final String VALIDATION_EMAIL = "Email can't be empty.";
+    private static final String VALIDATION_EMAIL_SYNTAX = "Email doesn't seem to be in a valid format.";
+    private static final String VALIDATION_EMAIL_EXISTS = "Email already exists.";
     private static final String VALIDATION_PASSWORD = "Password can't be empty.";
     private static final String VALIDATION_DEV_TEAM = "This developer is already a member of this team and therefore can't be added again.";
     private static final String VALIDATION_DEV_TEAM_NOT = "This developer is not a member of this team and therefore can't be removed from it.";
@@ -287,6 +289,8 @@ public class TeamController extends Controller {
         // Validations
         validator.addRule(new Validator.Rule(name, Validator::TextNotEmpty, VALIDATION_NAME));
         validator.addRule(new Validator.Rule(email, Validator::TextNotEmpty, VALIDATION_EMAIL));
+        validator.addRule(new Validator.Rule(email, Validator::checkEmailSyntax, VALIDATION_EMAIL_SYNTAX));
+        validator.addRule(new Validator.Rule(email, Validator::checkEmailExists, VALIDATION_EMAIL_EXISTS));
         validator.addRule(new Validator.Rule(password, Validator::TextNotEmpty, VALIDATION_PASSWORD));
         box.getChildren().add(validator.getMessageField());
 
