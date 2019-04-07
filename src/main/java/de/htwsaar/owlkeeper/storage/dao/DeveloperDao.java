@@ -116,8 +116,9 @@ public interface DeveloperDao {
      * @param d developer
      * @return all teams
      */
-    @SqlQuery("select distinct  t.id as id, t.created as created, t.name as name, t.leader as leader " +
-            " from team as t, developer_team_relation as dtr where dtr.developer = :id;")
+    @SqlQuery("select distinct t.* "
+            + "from team as t join developer_team_relation as dtr on t.id = dtr.team "
+            + "where dtr.developer = :id;")
     @RegisterBeanMapper(Team.class)
     List<Team> getTeams(@BindBean Developer d);
 }
