@@ -42,7 +42,7 @@ import java.util.stream.Stream;
  * Keys within the same section must be unique but different section can have the same keys. Arbitrary amounts of whitespace are allowed too but will be overwritten.
  */
 public class ConfigurationManager {
-    public static final String DEFAULT_CONFIG = "/owlkeeper.properties";
+    public static  String DEFAULT_CONFIG = "/owlkeeper.properties";
     private static ConfigurationManager manager;
     private static Logger logger = LogManager.getLogger(ConfigurationManager.class);
     private final String path; // path to the loaded config file.

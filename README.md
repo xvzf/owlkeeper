@@ -7,6 +7,8 @@
 ## Installing dependencies
 Make sure you have make, maven, java 8+, docker, postgresql-client and docker-compose installed and all permissions to use them.
 
+Docker and docker-compose are only needed, if you use a local database. More on this in the starting section.
+
 On Ubuntu 18.04:
 
 `sudo apt update && sudo apt install make maven docker 
@@ -20,12 +22,12 @@ Reboot to start the docker daemon and set user permissions.
 
 
 ## Starting owlkeeper
-Just `make start`.
-Owlkeeper will compile, start a local database server and then start itself.
+To start our demo on the remote server use `make start-demo-remote` (Be aware the remote server is a tad slow.)
 
-If you don't want to use the default db and want to start owlkeeper without it, run `make start-no-db`.
-Be aware, that in this case you might have to change the db section in the file 
-src/main/resources/owlkeeper.properties to your needs.
+If you want to start the demo on a local server, just `make start-demo-locally`.
+Owlkeeper will compile, start a local database server, deploy the demo data and then start itself.
+
+To start it locally without changing the db `make start-locally`
 
 ## Database bootstrap
 We are using docker based database for development and testing.
@@ -42,6 +44,3 @@ In order to run test against the default database with dummy data, run `make tes
 
 ## Compiling
 Run `make compile`
-
-## Weekly report
-Enter your progress of the week into the report in the discord server
