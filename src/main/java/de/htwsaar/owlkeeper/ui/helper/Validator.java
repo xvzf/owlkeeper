@@ -132,8 +132,8 @@ public class Validator {
      * @return returns true if the input is not empty
      */
     public static boolean TextNotEmpty(Node node) {
-        String text = ((TextInputControl) node).getText().trim();
-        return text != null && !text.isEmpty();
+        String text = ((TextInputControl) node).getText();
+        return text != null && !text.trim().isEmpty();
     }
 
 }
