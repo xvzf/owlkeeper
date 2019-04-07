@@ -1,6 +1,7 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -38,6 +39,15 @@ class DeveloperDaoTest {
         assertEquals(1, developer.getId());
         assertEquals("Developer 1", developer.getName());
         assertEquals("devel1@owlkeeper.de", developer.getEmail());
+    }
+
+    @Test
+    void testEditGroup() {
+        List<String> initialGroups = DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> dao.getGroup(3));
+        DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> dao.addToGroup(3,"admin"));
+        assertTrue(DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> dao.getGroup(3)).contains("admin"));
+        DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> dao.removeFromGroup(3,"admin"));
+        assertEquals(initialGroups, DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> dao.getGroup(3)));
     }
 
 }
