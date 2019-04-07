@@ -54,7 +54,7 @@ do $fill$ begin
   insert into developer_group_relation (developer, "group") values (
     (select id from developer where email = 'devel5@owlkeeper.de')
     , (select id from "group" where name = 'project')
-  ); -- devel4@owlkeeper.de -> project, task
+  ); -- devel5@owlkeeper.de -> project
 
   -- Dummy teams
   insert into team (name, leader) values (
