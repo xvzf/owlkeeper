@@ -137,11 +137,7 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * @return all tasks
      */
     public List<Task> getTasks() {
-        ArrayList<Task> tasks = new ArrayList<>();
-        for (Team team : getTeams()) {
-            tasks.addAll(new TeamModel(team).getTasks());
-        }
-        return tasks;
+        return DBConnection.getJdbi().withExtension(DeveloperDao.class, dao->(dao.getTasks(getContainer())));
     }
 
     /**

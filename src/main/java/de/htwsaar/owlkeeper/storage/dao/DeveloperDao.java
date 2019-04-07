@@ -1,6 +1,7 @@
 package de.htwsaar.owlkeeper.storage.dao;
 
 import de.htwsaar.owlkeeper.storage.entity.Developer;
+import de.htwsaar.owlkeeper.storage.entity.Task;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
@@ -121,4 +122,15 @@ public interface DeveloperDao {
             + "where dtr.developer = :id;")
     @RegisterBeanMapper(Team.class)
     List<Team> getTeams(@BindBean Developer d);
+
+    /**
+     * Queries all tasks of a developer
+     *
+     * @param d developer
+     * @return all tasks
+     */
+    @SqlQuery("select distinct ta.* from task as ta, developer_team_relation as dtr" +
+            " where dtr.developer = :id and dtr.team = ta.team")
+    @RegisterBeanMapper(Task.class)
+    List<Task> getTasks(@BindBean Developer d);
 }
