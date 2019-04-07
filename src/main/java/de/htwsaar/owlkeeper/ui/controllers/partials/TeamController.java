@@ -1,5 +1,11 @@
 package de.htwsaar.owlkeeper.ui.controllers.partials;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
@@ -9,6 +15,8 @@ import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
 import de.htwsaar.owlkeeper.ui.helper.DataCheckbox;
 import de.htwsaar.owlkeeper.ui.helper.Validator;
+import de.htwsaar.owlkeeper.ui.state.BaseState;
+
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -37,7 +45,7 @@ public class TeamController extends Controller {
     private static final String SAVE_DEV = "save developer";
     private static final String SAVE_TEAM = "save team";
     private static final String REMOVE = "remove";
-    private static final String EXECUTE = "remove";
+    private static final String EXECUTE = "execute";
     private static final String DEV_TEAM_FORM = "Add/Remove developer to/from a team";
 
     private static final String STYLE_WRAPPER = "team__wrapper";
@@ -264,17 +272,24 @@ public class TeamController extends Controller {
 
         // Submit event
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (validator.execute()) {
-                Developer dev = new Developer();
-                dev.setName(name.getText());
-                dev.setEmail(email.getText());
-                dev.setPwhash(password.getText());
-                new DeveloperModel(dev).save();
-                Developer savedDev = new DeveloperModel(dev.getEmail()).getContainer();
-                checkboxes.forEach(teamDataCheckbox -> {
-                    new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
-                });
-                app.route("page-team", new HashMap<>(), true);
+            try {
+                if (validator.execute()) {
+                    BaseState.QUERY_COUNT++;
+                    Developer dev = new Developer();
+                    dev.setName(name.getText());
+                    dev.setEmail(email.getText());
+                    dev.setPwhash(DeveloperModel.getHash(password.getText()));
+                    DeveloperModel devModel = new DeveloperModel(dev);
+                    devModel.save();
+                    devModel.addToGroup("admin"); // TODO: 07.04.2019 change this after access-control is fully implemented
+                    Developer savedDev = new DeveloperModel(dev.getEmail()).getContainer();
+                    checkboxes.forEach(teamDataCheckbox -> {
+                        new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
+                    });
+                    app.route("page-team", new HashMap<>(), true);
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
             validator.reset();
         });
@@ -326,6 +341,7 @@ public class TeamController extends Controller {
         //         Submit event
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (validator.execute()) {
+                BaseState.QUERY_COUNT++;
                 Developer leadDev = leader.getValue().getItem();
                 Team team = new Team();
                 team.setName(name.getText());
@@ -392,8 +408,9 @@ public class TeamController extends Controller {
             }
 
             // Execute
-            if (validator.execute() && validator.getMessages().size() == 0) {
-                if (r) {
+            if (validator.execute() && validator.getMessages().size() == 0){
+                BaseState.QUERY_COUNT++;
+                if (r){
                     tModel.removeDeveloper(d);
                 } else {
                     tModel.addDeveloper(d);
