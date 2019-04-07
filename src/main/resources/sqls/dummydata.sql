@@ -54,7 +54,7 @@ do $fill$ begin
   insert into developer_group_relation (developer, "group") values (
     (select id from developer where email = 'devel5@owlkeeper.de')
     , (select id from "group" where name = 'project')
-  ); -- devel4@owlkeeper.de -> project, task
+  ); -- devel5@owlkeeper.de -> project
 
   -- Dummy teams
   insert into team (name, leader) values (
@@ -183,6 +183,11 @@ raise notice '[+] Creating dummy project, project stages and tasks';
   insert into task_dependency (task, depends) values (
     (select id from task where description = 'Task 4 description')
     , (select id from task where description = 'Task 3 description')
+  );
+
+  insert into task_dependency (task, depends) values (
+    (select id from task where description = 'Task 6 description')
+    , (select id from task where description = 'Task 5 description')
   );
 
   insert into team_project_relation (team, project) values (
