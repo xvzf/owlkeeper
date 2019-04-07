@@ -1,10 +1,5 @@
 package de.htwsaar.owlkeeper.ui.controllers.partials;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
@@ -12,8 +7,8 @@ import de.htwsaar.owlkeeper.storage.model.TeamModel;
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
-import de.htwsaar.owlkeeper.ui.helper.Validator;
 import de.htwsaar.owlkeeper.ui.helper.DataCheckbox;
+import de.htwsaar.owlkeeper.ui.helper.Validator;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -21,6 +16,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class TeamController extends Controller {
     private static final String IMG_USER = "/images/user.png";
@@ -58,6 +58,8 @@ public class TeamController extends Controller {
 
     private static final String VALIDATION_NAME = "Name can't be empty.";
     private static final String VALIDATION_EMAIL = "Email can't be empty.";
+    private static final String VALIDATION_EMAIL_SYNTAX = "Email doesn't seem to be in a valid format.";
+    private static final String VALIDATION_EMAIL_EXISTS = "Email already exists.";
     private static final String VALIDATION_PASSWORD = "Password can't be empty.";
     private static final String VALIDATION_DEV_TEAM = "This developer is already in this team and therefore can't be added again.";
     private static final String VALIDATION_DEV_TEAM_NOT = "This developer is not in this Team and therefore can't be removed from it.";
@@ -280,6 +282,8 @@ public class TeamController extends Controller {
         // Validations
         validator.addRule(new Validator.Rule(name, Validator::TextNotEmpty, VALIDATION_NAME));
         validator.addRule(new Validator.Rule(email, Validator::TextNotEmpty, VALIDATION_EMAIL));
+        validator.addRule(new Validator.Rule(email, Validator::checkEmailSyntax, VALIDATION_EMAIL_SYNTAX));
+        validator.addRule(new Validator.Rule(email, Validator::checkEmailExists, VALIDATION_EMAIL_EXISTS));
         validator.addRule(new Validator.Rule(password, Validator::TextNotEmpty, VALIDATION_PASSWORD));
         box.getChildren().add(validator.getMessageField());
 
@@ -307,7 +311,8 @@ public class TeamController extends Controller {
         VBox leaderBox = new VBox();
         leaderBox.getStyleClass().add(STYLE_FORM_ITEM);
         leaderBox.getChildren().add(new Text(LEADER));
-        ChoiceBox<CommonNodes.EntityWrapper<Developer>> leader = CommonNodes.ChoiceBox(developers, dev -> dev.getName() + " <" + dev.getEmail() + ">");
+        ChoiceBox<CommonNodes.EntityWrapper<Developer>> leader = CommonNodes
+                .ChoiceBox(developers, dev -> dev.getName() + " <" + dev.getEmail() + ">");
         leaderBox.getChildren().add(leader);
         box.getChildren().add(leaderBox);
 
@@ -318,7 +323,7 @@ public class TeamController extends Controller {
         submitWrapper.getChildren().addAll(submit, validator.getMessageField());
         box.getChildren().add(submitWrapper);
 
-//         Submit event
+        //         Submit event
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (validator.execute()) {
                 Developer leadDev = leader.getValue().getItem();
@@ -356,7 +361,8 @@ public class TeamController extends Controller {
         box.setAlignment(Pos.CENTER_LEFT);
         box.getStyleClass().add(STYLE_FORM_ITEM);
         form.getChildren().add(box);
-        ChoiceBox<CommonNodes.EntityWrapper<Developer>> developer = CommonNodes.ChoiceBox(developers, dev -> dev.getName() + " <" + dev.getEmail() + ">");
+        ChoiceBox<CommonNodes.EntityWrapper<Developer>> developer = CommonNodes
+                .ChoiceBox(developers, dev -> dev.getName() + " <" + dev.getEmail() + ">");
         ChoiceBox<CommonNodes.EntityWrapper<Team>> team = CommonNodes.ChoiceBox(teams, Team::getName);
         CheckBox remove = new CheckBox(REMOVE);
         box.getChildren().addAll(developer, team, remove);
@@ -374,7 +380,7 @@ public class TeamController extends Controller {
             // Validation
             TeamModel tModel = new TeamModel(t);
             if (r) {
-                if (t.getLeader() == d.getId()){
+                if (t.getLeader() == d.getId()) {
                     validator.getMessages().add(VALIDATION_DEV_LEADER);
                 } else if (!tModel.getDevelopers().contains(d)) {
                     validator.getMessages().add(VALIDATION_DEV_TEAM_NOT);
@@ -386,10 +392,10 @@ public class TeamController extends Controller {
             }
 
             // Execute
-            if (validator.execute() && validator.getMessages().size() == 0){
-                if (r){
+            if (validator.execute() && validator.getMessages().size() == 0) {
+                if (r) {
                     tModel.removeDeveloper(d);
-                } else{
+                } else {
                     tModel.addDeveloper(d);
                 }
                 app.route("page-team", new HashMap<>(), true);
