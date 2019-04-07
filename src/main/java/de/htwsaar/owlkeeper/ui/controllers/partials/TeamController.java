@@ -276,7 +276,9 @@ public class TeamController extends Controller {
                     devModel.addToGroup("admin"); // TODO: 07.04.2019 change this after access-control is fully implemented
                     Developer savedDev = new DeveloperModel(dev.getEmail()).getContainer();
                     checkboxes.forEach(teamDataCheckbox -> {
-                        new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
+                        if (teamDataCheckbox.isSelected()){
+                            new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
+                        }
                     });
                     app.route("page-team", new HashMap<>(), true);
                 }
