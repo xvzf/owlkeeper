@@ -136,9 +136,9 @@ public final class TaskView {
         content.getChildren().add(teamBox);
 
         long currentTeam = taskEntity.getTeam();
-        if (currentTeam != 0){
-            team.getItems().forEach((e)->{
-                if (e.getItem().getId() == currentTeam){
+        if (currentTeam != 0) {
+            team.getItems().forEach((e) -> {
+                if (e.getItem().getId() == currentTeam) {
                     team.getSelectionModel().select(e);
                 }
             });
@@ -151,6 +151,7 @@ public final class TaskView {
 
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (validator.execute()) {
+                deadline.setValue(deadline.getConverter().fromString(deadline.getEditor().getText()));
                 taskEntity.setName(name.getText());
                 taskEntity.setDescription(description.getText());
                 taskEntity.setDeadline(Timestamp.valueOf(deadline.getValue().atStartOfDay()));
@@ -208,7 +209,7 @@ public final class TaskView {
 
         for (Developer dev : new TeamModel(taskEntity.getTeam()).getDevelopers()) {
             ImageView img = CommonNodes.Image(IMG_USER, 25, 25);
-            Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">" );
+            Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">");
             Tooltip.install(img, t);
             team.getChildren().add(img);
         }
@@ -243,7 +244,7 @@ public final class TaskView {
             ImageView img = CommonNodes.Image(IMG_USER, 25, 25);
             Developer dev = new DeveloperModel(commentEntity.getDeveloper()).getContainer();
             Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">");
-            Tooltip.install(img, t);;
+            Tooltip.install(img, t);
             comment.getChildren().add(img);
             Text commentText = new Text(commentEntity.getContent());
             commentText.setWrappingWidth(500);
@@ -340,7 +341,7 @@ public final class TaskView {
         for (Developer dev : teamModel.getDevelopers()) {
             ImageView img = CommonNodes.Image(IMG_USER, 25, 25);
             Tooltip t = new Tooltip(dev.getName() + " <" + dev.getEmail() + ">");
-            Tooltip.install(img,t);
+            Tooltip.install(img, t);
             team.getChildren().add(img);
         }
 
