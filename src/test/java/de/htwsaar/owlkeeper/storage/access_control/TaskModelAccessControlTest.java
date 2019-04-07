@@ -16,7 +16,7 @@ public class TaskModelAccessControlTest {
     void testCreateTaskAllowed() {
         DeveloperManager.loginDeveloper("devel2@owlkeeper.de");
         try {
-            TaskModel task = new TaskModel("ACTask", new Timestamp(0), "Some description", null, 1, 0);
+            new TaskModel("ACTask", new Timestamp(0), "Some description", null, 1, 0);
         } catch (InsufficientPermissionsException e) {
             fail(e);
         }

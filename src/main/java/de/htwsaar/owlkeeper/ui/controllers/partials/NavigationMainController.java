@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
-import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
 import de.htwsaar.owlkeeper.ui.pages.Page;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;

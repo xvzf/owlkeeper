@@ -142,7 +142,7 @@ public final class CommonNodes {
      */
     public static <T> ChoiceBox<EntityWrapper<T>> ChoiceBox(List<T> items, Function<T, String> function) {
         ChoiceBox<EntityWrapper<T>> choiceBox = new ChoiceBox<>();
-        ObservableList list = FXCollections.observableArrayList();
+        ObservableList<EntityWrapper<T>> list = FXCollections.observableArrayList();
         items.forEach(item -> list.add(new EntityWrapper<T>(item, function)));
         choiceBox.setItems(list);
         choiceBox.getSelectionModel().select(0);
