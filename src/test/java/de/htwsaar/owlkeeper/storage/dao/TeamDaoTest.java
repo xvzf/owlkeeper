@@ -8,6 +8,7 @@ import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,8 +80,13 @@ class TeamDaoTest {
     @Test
     void testGetTasks() {
         List<Task> tasks = DBConnection.getJdbi().withExtension(TeamDao.class, dao -> (dao.getTasks(2)));
-        assertEquals(1, tasks.size());
-        assertEquals("Task 3 description", tasks.get(0).getDescription());
+        List<Long> ids = tasks.stream().map(Task::getId).collect(Collectors.toList());
+        List<Long> expected = new ArrayList<>();
+        expected.add(1L);
+        expected.add(5L);
+        expected.add(6L);
+        assertEquals(3, tasks.size());
+        assertTrue(ids.containsAll(expected));
     }
 
 }

@@ -3,6 +3,7 @@ package de.htwsaar.owlkeeper.storage.dao;
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.entity.Task;
+import de.htwsaar.owlkeeper.storage.entity.Team;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
@@ -69,6 +70,15 @@ public interface ProjectStageDao {
     @SqlQuery("select * from task as t where t.project_stage = ? order by created, id;")
     @RegisterBeanMapper(Task.class)
     List<Task> getTasks(long id);
+
+    /**
+     * Retrieves all Teams involved in Tasks of the ProjectStage
+     * @param stageId the id of the project stage
+     * @return a list of teams
+     */
+    @SqlQuery("select distinct team.* from task join team on team.id = task.team where task.project_stage = ?;")
+    @RegisterBeanMapper(Team.class)
+    List<Team> getTeams(long stageId);
 
     /**
      * Returns the project that a stage is in.

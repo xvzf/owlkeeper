@@ -12,6 +12,12 @@ import java.util.List;
 
 public class BaseState extends State {
 
+    /**
+     * This variable is incremented every time
+     * a task is updated to prevent missing rerenders
+     */
+    public static int QUERY_COUNT = 0;
+
     private List<Page> pages;
     private HashMap<Long, Project> projects;
 
@@ -49,6 +55,7 @@ public class BaseState extends State {
         HashMap<String, Object> output = new HashMap<>();
         output.put("pages", this.pages);
         output.put("projects", this.projects);
+        output.put("_i", QUERY_COUNT);
         return output;
     }
 

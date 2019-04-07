@@ -70,7 +70,7 @@ do $developers$ begin
     id serial primary key
     , created timestamp default now()
     , name text not null unique
-    , leader integer references developer (id)
+    , leader integer not null references developer (id)
   );
 
   -- Relation; Developers can be part of multiple teams
@@ -117,12 +117,12 @@ do $projects$ begin
 
   -- Relation; Teams can be part of multiple projects
   create table if not exists team_project_relation (
-                                                       id      serial primary key
-    ,created                                                   timestamp default now(),
-                                                       team    integer not null references team (id) on update cascade,
-                                                       project integer not null references project (id) on delete cascade
+    id serial primary key
+    , created timestamp default now()
+    , team integer not null references team (id) on update cascade
+    , project integer not null references project (id) on delete cascade
     -- Constraints
-    ,constraint team_project_map_unique unique (team, project)
+    , constraint team_project_map_unique unique (team, project)
   );
 end $projects$;
 
@@ -163,7 +163,7 @@ do $tasks$ begin
     found := count(*) from task_dependency where (task = new.task and depends = new.depends)
                                                  or (task = new.depends and depends = new.task);
 
-    if found > 0 then
+    if (found > 0) then
       raise exception 'duplicate entry or circular dependency';
     end if;
 
@@ -184,18 +184,28 @@ do $tasks$ begin
   );
 
   -- Function for team_project_relation trigger
-  create or replace function match_team_project_relation() returns trigger as $trigger$
+  create or replace function match_team_project_relation_by_task() returns trigger as $trigger$
+  declare
+    project_id int;
+    found int;
   begin
-    if (NEW.team is not null) then -- Don't enter null values into the tables
-        if (TG_OP = 'INSERT') then
-            insert into team_project_relation(team,project) values (NEW.team, (SELECT ps.project
-                    FROM project_stage as ps JOIN task as t ON t.project_stage = ps.id
-                    WHERE t = NEW limit 1)) on conflict do nothing;
-        elsif (TG_OP = 'DELETE') then
-            delete from team_project_relation where team = OLD.team and project = (SELECT ps.project
-                    FROM project_stage as ps JOIN task as t ON t.project_stage = ps.id
-                    WHERE t = OLD);
-        end if;
+    if (TG_OP = 'INSERT') then
+      project_id := project from project_stage where id = new.project_stage;
+      found := count(*) from team_project_relation where team = new.team and project = project_id;
+
+      raise notice '=======';
+      raise notice '%', found;
+
+      if (found = 0) then
+        raise notice 'Inserting %', (new.team, project_id);
+        insert into team_project_relation (team, project) values (new.team, project_id);
+      end if;
+      raise notice '=======';
+
+    elsif (TG_OP = 'DELETE') then
+      delete from team_project_relation where team = OLD.team and project = (SELECT ps.project
+              FROM project_stage as ps JOIN task as t ON t.project_stage = ps.id
+              WHERE t = OLD);
     end if;
     return null;
   end;
@@ -205,7 +215,7 @@ do $tasks$ begin
   create trigger update_team_project_relation
     after insert or update or delete on task
     for each row
-        execute procedure match_team_project_relation();
+        execute procedure match_team_project_relation_by_task();
 
 end $tasks$;
 

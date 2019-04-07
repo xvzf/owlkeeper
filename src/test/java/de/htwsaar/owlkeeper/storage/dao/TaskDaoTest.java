@@ -6,6 +6,7 @@ import de.htwsaar.owlkeeper.storage.entity.Task;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,7 +80,7 @@ class TaskDaoTest {
             return dao.getTasksForDeveloperAndProjectStage(1, 1);
         });
 
-        assertEquals(1, tasks.size());
+        assertEquals(2, tasks.size());
         tasks.forEach(task -> assertEquals(1, task.getProjectStage()));
     }
 
@@ -103,10 +104,18 @@ class TaskDaoTest {
             return dao.getPendingTasksForDeveloperAndProjectStage(1, 1);
         });
 
-        assertEquals(1, tasks.size());
-        Task task = tasks.get(0);
-        assertNull(task.getFulfilled());
-        assertEquals(4, task.getId());
+        assertEquals(2, tasks.size());
+        Task task1 = tasks.get(0);
+        Task task2 = tasks.get(1);
+        List<Long> expectedIds = new ArrayList<>();
+        expectedIds.add(3L);
+        expectedIds.add(4L);
+        List<Long> actualIds = new ArrayList<>();
+        actualIds.add(task1.getId());
+        actualIds.add(task2.getId());
+        assertNull(task1.getFulfilled());
+        assertNull(task2.getFulfilled());
+        assertTrue(expectedIds.containsAll(actualIds));
     }
 
 }

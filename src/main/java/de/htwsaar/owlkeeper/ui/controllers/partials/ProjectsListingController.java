@@ -11,6 +11,7 @@ import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
 import de.htwsaar.owlkeeper.ui.helper.Validator;
+import de.htwsaar.owlkeeper.ui.state.BaseState;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -114,6 +115,7 @@ public class ProjectsListingController extends Controller {
                 System.out.println(id);
                 ProjectStageModel newStage = new ProjectStageModel(stage.getText(), id, 0);
                 newStage.save();
+                BaseState.QUERY_COUNT++;
                 app.route("projects", new HashMap<>(), true);
             }
             validator.reset();
