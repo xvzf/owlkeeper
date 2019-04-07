@@ -29,18 +29,18 @@ public class TeamController extends Controller {
 
     private static final String NAME = "Name:";
     private static final String EMAIL = "Email:";
-    private static final String PASSWORD = "Password";
+    private static final String PASSWORD = "Password:";
     private static final String LEADER = "Leader:";
     private static final String MEMBERS = "Members:";
     private static final String TEAMS = "Teams:";
     private static final String DEVELOPERS = "Teamless developers";
-    private static final String DEVELOPER_NEW = "New Developer";
-    private static final String TEAM_NEW = "New Team";
-    private static final String SAVE_DEV = "save developer";
-    private static final String SAVE_TEAM = "save team";
-    private static final String REMOVE = "remove";
-    private static final String EXECUTE = "execute";
-    private static final String DEV_TEAM_FORM = "Add/Remove developer to/from a team";
+    private static final String DEVELOPER_NEW = "New developer";
+    private static final String TEAM_NEW = "New team";
+    private static final String SAVE_DEV = "Create developer";
+    private static final String SAVE_TEAM = "Create team";
+    private static final String REMOVE = "Remove";
+    private static final String ADD = "Add";
+    private static final String DEV_TEAM_FORM = "Change team members";
 
     private static final String STYLE_WRAPPER = "team__wrapper";
     private static final String STYLE_H2 = "h2";
@@ -63,10 +63,9 @@ public class TeamController extends Controller {
     private static final String VALIDATION_EMAIL_SYNTAX = "Email doesn't seem to be in a valid format.";
     private static final String VALIDATION_EMAIL_EXISTS = "Email already exists.";
     private static final String VALIDATION_PASSWORD = "Password can't be empty.";
-    private static final String VALIDATION_DEV_TEAM = "This developer is already in this team and therefore can't be added again.";
-    private static final String VALIDATION_DEV_TEAM_NOT = "This developer is not in this Team and therefore can't be removed from it.";
-    private static final String VALIDATION_DEV_LEADER = "This developer is the teams leader and can't be removed";
-
+    private static final String VALIDATION_DEV_TEAM = "This developer is already a member of this team and therefore can't be added again.";
+    private static final String VALIDATION_DEV_TEAM_NOT = "This developer is not a member of this team and therefore can't be removed from it.";
+    private static final String VALIDATION_DEV_LEADER = "This developer is the team's leader and can't be removed.";
 
     @FXML
     public VBox team;
@@ -85,14 +84,13 @@ public class TeamController extends Controller {
 
         this.team.getChildren().add(CommonNodes.Hr(600, true));
 
-
         VBox forms = new VBox();
         forms.getStyleClass().add(STYLE_TEAM_FORM_WRAPPER);
+        forms.getChildren().add(this.buildDevTeamForms(this.getApp(), developers, teams));
+        forms.getChildren().add(CommonNodes.Hr(600, true));
         forms.getChildren().add(this.buildNewDevForm(this.getApp(), teams));
         forms.getChildren().add(CommonNodes.Hr(600, true));
         forms.getChildren().add(this.buildNewTeamForm(this.getApp(), developers));
-        forms.getChildren().add(CommonNodes.Hr(600, true));
-        forms.getChildren().add(this.buildDevTeamForms(this.getApp(), developers, teams));
         this.team.getChildren().add(forms);
     }
 
@@ -126,7 +124,6 @@ public class TeamController extends Controller {
 
         return box;
     }
-
 
     /**
      * Builds the Team View Node
@@ -198,7 +195,7 @@ public class TeamController extends Controller {
     /**
      * Builds the New Developer form
      *
-     * @param app   main application
+     * @param app main application
      * @param teams List of all teams
      * @return new form node object
      */
@@ -250,7 +247,6 @@ public class TeamController extends Controller {
         submitWrapper.getChildren().addAll(submit, validator.getMessageField());
         form.getChildren().add(submitWrapper);
 
-
         // Team Select
         VBox teamSelect = new VBox();
         teamSelect.getStyleClass().add(STYLE_CHECK_GROUP);
@@ -278,7 +274,9 @@ public class TeamController extends Controller {
                     devModel.addToGroup("admin"); // TODO: 07.04.2019 change this after access-control is fully implemented
                     Developer savedDev = new DeveloperModel(dev.getEmail()).getContainer();
                     checkboxes.forEach(teamDataCheckbox -> {
-                        new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
+                        if (teamDataCheckbox.isSelected()){
+                            new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
+                        }
                     });
                     app.route("page-team", new HashMap<>(), true);
                 }
@@ -320,8 +318,8 @@ public class TeamController extends Controller {
         VBox leaderBox = new VBox();
         leaderBox.getStyleClass().add(STYLE_FORM_ITEM);
         leaderBox.getChildren().add(new Text(LEADER));
-        ChoiceBox<CommonNodes.EntityWrapper<Developer>> leader = CommonNodes
-                .ChoiceBox(developers, dev -> dev.getName() + " <" + dev.getEmail() + ">");
+        ChoiceBox<CommonNodes.EntityWrapper<Developer>> leader = CommonNodes.ChoiceBox(developers,
+                dev -> dev.getName() + " <" + dev.getEmail() + ">");
         leaderBox.getChildren().add(leader);
         box.getChildren().add(leaderBox);
 
@@ -332,7 +330,7 @@ public class TeamController extends Controller {
         submitWrapper.getChildren().addAll(submit, validator.getMessageField());
         box.getChildren().add(submitWrapper);
 
-        //         Submit event
+        // Submit event
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (validator.execute()) {
                 BaseState.QUERY_COUNT++;
@@ -371,50 +369,60 @@ public class TeamController extends Controller {
         box.setAlignment(Pos.CENTER_LEFT);
         box.getStyleClass().add(STYLE_FORM_ITEM);
         form.getChildren().add(box);
-        ChoiceBox<CommonNodes.EntityWrapper<Developer>> developer = CommonNodes
-                .ChoiceBox(developers, dev -> dev.getName() + " <" + dev.getEmail() + ">");
+        ChoiceBox<CommonNodes.EntityWrapper<Developer>> developer = CommonNodes.ChoiceBox(developers,
+                dev -> dev.getName() + " <" + dev.getEmail() + ">");
         ChoiceBox<CommonNodes.EntityWrapper<Team>> team = CommonNodes.ChoiceBox(teams, Team::getName);
-        CheckBox remove = new CheckBox(REMOVE);
-        box.getChildren().addAll(developer, team, remove);
+        box.getChildren().addAll(developer, team);
 
         // Submit
-        Button submit = new Button(EXECUTE);
-        submit.getStyleClass().addAll(STYLE_BUTTON, STYLE_BUTTON_SMALL);
+        HBox submit = new HBox();
+        submit.getStyleClass().add(STYLE_FORM_ITEM);
+        Button add = new Button(ADD);
+        Button remove = new Button(REMOVE);
+        add.getStyleClass().addAll(STYLE_BUTTON, STYLE_BUTTON_SMALL);
+        remove.getStyleClass().addAll(STYLE_BUTTON, STYLE_BUTTON_SMALL);
+        submit.getChildren().addAll(add, remove);
         form.getChildren().add(submit);
 
-        submit.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+        add.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             Developer d = developer.getValue().getItem();
             Team t = team.getValue().getItem();
-            boolean r = remove.isSelected();
-
-            // Validation
-            TeamModel tModel = new TeamModel(t);
-            if (r) {
-                if (t.getLeader() == d.getId()) {
-                    validator.getMessages().add(VALIDATION_DEV_LEADER);
-                } else if (!tModel.getDevelopers().contains(d)) {
-                    validator.getMessages().add(VALIDATION_DEV_TEAM_NOT);
-                }
-            } else {
-                if (tModel.getDevelopers().contains(d)) {
-                    validator.getMessages().add(VALIDATION_DEV_TEAM);
-                }
-            }
-
-            // Execute
-            if (validator.execute() && validator.getMessages().size() == 0){
-                BaseState.QUERY_COUNT++;
-                if (r){
-                    tModel.removeDeveloper(d);
-                } else {
-                    tModel.addDeveloper(d);
-                }
-                app.route("page-team", new HashMap<>(), true);
-            }
-            validator.reset();
+            changeTeamMember(t, d, false, validator, app);
+        });
+        remove.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            Developer d = developer.getValue().getItem();
+            Team t = team.getValue().getItem();
+            changeTeamMember(t, d, true, validator, app);
         });
         form.getChildren().add(validator.getMessageField());
 
         return form;
+    }
+
+    private void changeTeamMember(Team t, Developer d, boolean r, Validator validator, UiApp app) {
+        // Validation
+        TeamModel tModel = new TeamModel(t);
+        if (r) {
+            if (t.getLeader() == d.getId()) {
+                validator.getMessages().add(VALIDATION_DEV_LEADER);
+            } else if (!tModel.getDevelopers().contains(d)) {
+                validator.getMessages().add(VALIDATION_DEV_TEAM_NOT);
+            }
+        } else {
+            if (tModel.getDevelopers().contains(d)) {
+                validator.getMessages().add(VALIDATION_DEV_TEAM);
+            }
+        }
+
+        // Execute
+        if (validator.execute() && validator.getMessages().size() == 0) {
+            if (r) {
+                tModel.removeDeveloper(d);
+            } else {
+                tModel.addDeveloper(d);
+            }
+            app.route("page-team", new HashMap<>(), true);
+        }
+        validator.reset();
     }
 }

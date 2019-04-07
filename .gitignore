@@ -44,3 +44,6 @@ buildNumber.properties
 .vscode/
 .project
 .classpath
+
+# node files
+node_modules
