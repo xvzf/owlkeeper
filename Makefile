@@ -43,11 +43,17 @@ deploy-demo:
 	@sh -c ${PSQL_DEMO} < ${SQL_DIR}/bootstrap/functions.sql
 	@sh -c ${PSQL_DEMO} < ${SQL_DIR}/dummydatademo.sql
 
+deploy-demo-locally:
+	@sh -c ${PSQL} < ${SQL_DIR}/bootstrap/destroy.sql
+	@sh -c ${PSQL} < ${SQL_DIR}/bootstrap/tables.sql
+	@sh -c ${PSQL} < ${SQL_DIR}/bootstrap/functions.sql
+	@sh -c ${PSQL} < ${SQL_DIR}/dummydatademo.sql
+
 start-demo: compile
 	mvn exec:java
 
 start-no-db: compile
 	mvn exec:java
 
-start-locally: compile db-start
+start-demo-locally: compile db-start deploy-demo-locally
 	mvn exec:java -Dexec.args="/owlkeeper_local.properties"
