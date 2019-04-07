@@ -35,8 +35,10 @@ public final class TaskView {
     private static final String SUBMIT = "Submit";
     private static final String WRITE_COMMENT = "Write a comment…";
     private static final String IMG_CALENDAR = "/images/calendar.png";
-    private static final String IMG_CHECK_SQUARE = "/images/check-square.png";
+    private static final String IMG_CHECK_SQUARE_UNCHECKED = "/images/check-square-unchecked.png";
+    private static final String IMG_CHECK_SQUARE_UNCHECKED_HIGHLIGHT = "/images/check-square-unchecked-highlight.png";
     private static final String IMG_CHECK_SQUARE_CHECKED = "/images/check-square-checked.png";
+    private static final String IMG_CHECK_SQUARE_CHECKED_HIGHLIGHT = "/images/check-square-checked-highlight.png";
     private static final String IMG_USER = "/images/user.png";
     private static final String MSG_DEADLINE_NOT_DEFINED = "Deadline needs to be defined";
     private static final String MSG_COMMENT_EMPTY = "Comments can't be empty.";
@@ -298,13 +300,15 @@ public final class TaskView {
         task.getStyleClass().add(STYLE_TASK_LISTING);
 
         // Status icon
-        ImageView image = CommonNodes.Image(IMG_CHECK_SQUARE, 26, 25);
+        ImageView image = CommonNodes.Image(IMG_CHECK_SQUARE_UNCHECKED, 26, 25);
         image.getStyleClass().add(STYLE_TASK_LIST_ICON);
         if (taskEntity.getFulfilled() != null) {
             image.setImage(new Image(IMG_CHECK_SQUARE_CHECKED));
+            image.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> image.setImage(new Image(IMG_CHECK_SQUARE_CHECKED_HIGHLIGHT)));
+            image.addEventHandler(MouseEvent.MOUSE_EXITED, event -> image.setImage(new Image(IMG_CHECK_SQUARE_CHECKED)));
         } else {
-            image.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> image.setImage(new Image(IMG_CHECK_SQUARE_CHECKED)));
-            image.addEventHandler(MouseEvent.MOUSE_EXITED, event -> image.setImage(new Image(IMG_CHECK_SQUARE)));
+            image.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> image.setImage(new Image(IMG_CHECK_SQUARE_UNCHECKED_HIGHLIGHT)));
+            image.addEventHandler(MouseEvent.MOUSE_EXITED, event -> image.setImage(new Image(IMG_CHECK_SQUARE_UNCHECKED)));
         }
         image.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (taskEntity.getFulfilled() == null) {
