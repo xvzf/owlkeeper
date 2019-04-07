@@ -25,7 +25,7 @@ begin
   insert into developer (name, email, pw_hash) values ('Christian Conradt', 'CC@owlkeeper.de', '4aee0e4712257a91f834006fccf16394'); -- pw: password-3
   insert into developer (name, email, pw_hash) values ('David Degenhardt', 'DD@owlkeeper.de', '19fba5a514718a1ff009945297c65ffb'); -- pw: password-4
   insert into developer (name, email, pw_hash) values ('Emil Euler', 'EE@owlkeeper.de', '69a966c10c28bc4a1f54939c72aeaa69'); -- pw: password-5
-
+  insert into developer (name, email, pw_hash) values ('Fabian Frei', 'FF@owlkeeper.de', '4a2be5b9451851ded1bb67742ed13d89'); -- pw: password-6
   -- Dummy groups
   insert into developer_group_relation (developer, "group") values (
   (select id from developer where email = 'AA@owlkeeper.de')
@@ -79,7 +79,7 @@ begin
   );
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 1'),
-  (select id from developer where email = CC'@owlkeeper.de')
+  (select id from developer where email = 'CC@owlkeeper.de')
   );
   insert into developer_team_relation (team, developer) values (
   (select id from team where name = 'Team 2'),
@@ -97,43 +97,45 @@ raise notice '[+] Creating dummy project, project stages and tasks';
   begin
 
   insert into project (name, description, type) values (
-  'Kochbuch'
-  , 'Kochbuch in dem Rezepte gespeichert und bearbeitet werden können'
-  , 'waterfall'
+    'Kochbuch'
+    , 'Kochbuch in dem Rezepte gespeichert und bearbeitet werden'
+    , 'waterfall'
   );
 
   insert into project (name, description, type) values (
-  'Space Explorer'
-  , 'Ein Survival-Aufbauspiel im Weltraum'
-  , 'spiral'
-  );
-
-  insert into project_stage (name, project, index) values ( 'Machbarkeitsstudie'
-  , (select id from project where name = 'Kochbuch')
-  , 0);
-
-  insert into project_stage (name, project, index) values (
-  'Anforderungsanalyse'
-  , (select id from project where name = 'Kochbuch')
-  , 1
+    'Space Explorer'
+    , 'Ein Survival Aufbauspiel im Weltraum'
+    , 'spiral'
   );
 
   insert into project_stage (name, project, index) values (
-  'Systementwurf'
-  , (select id from project where name = 'Kochbuch')
-  , 2
+    'Machbarkeitsstudie'
+    , (select id from project where name = 'Kochbuch')
+    , 0
   );
 
   insert into project_stage (name, project, index) values (
-  'Idee + Konzeptenwicklung'
+    'Anforderungsanalyse'
+    , (select id from project where name = 'Kochbuch')
+    , 1
+  );
+
+  insert into project_stage (name, project, index) values (
+    'Systementwurf'
+    , (select id from project where name = 'Kochbuch')
+    , 2
+  );
+
+  insert into project_stage (name, project, index) values (
+  'Idee und Konzeptentwicklung'
   , (select id from project where name = 'Space Explorer')
-  , 0
+  , 3
   );
 
   insert into project_stage (name, project, index) values (
   'Produktion'
-  , (select id from project where name = 'Space Explorers')
-  , 1
+  , (select id from project where name = 'Space Explorer')
+  , 4
   );
 
   insert into task (name, description, deadline, fulfilled, project_stage, team) values (
@@ -155,24 +157,24 @@ raise notice '[+] Creating dummy project, project stages and tasks';
 
   insert into task (name, description, deadline, project_stage, team) values (
   'Gegner'
-  , 'Auswahl der möglichen Gegnergruppen'
-  , (select now() + interval '1 days')
-  , (select id from project_stage where name = 'Idee + Konzeptentwicklung' and project = 2)
+  , 'Auswahl der moeglichen Gegnergruppen'
+  , (select now() + interval '2 days')
+  , (select id from project_stage where name = 'Idee und Konzeptentwicklung' and project = 2)
   , (select id from team where name = 'Team 1')
   );
 
   insert into task (name, description, deadline, project_stage, team) values (
   'Planeten'
-  , 'Auswahl der möglichen Planten'
-  , (select now() + interval '1 days')
-  , (select id from project_stage where name = 'Idee + Konzeptentwicklung' and project = 2)
+  , 'Auswahl der moeglichen Planten'
+  , (select now() + interval '2 days')
+  , (select id from project_stage where name = 'Idee und Konzeptentwicklung' and project = 2)
   , (select id from team where name = 'Team 1')
                                                                                  );
 
   insert into task (name, description, deadline, fulfilled, project_stage, team) values (
-  'Kostenschätzung'
-  , 'Abschätzung der wahrscheinlichen Kosten'
-  , (select now() + interval '3 days')
+  'Kostenschaetzung'
+  , 'Abschaetzung der wahrscheinlichen Kosten'
+  , (select now() + interval '4 days')
   , (select now())
   , (select id from project_stage where name = 'Machbarkeitsstudie' and project = 1)
   , (select id from team where name = 'Team 1')
@@ -196,8 +198,8 @@ raise notice '[+] Creating dummy project, project stages and tasks';
   );
 
   insert into task (name, description, deadline, project_stage, team) values (
-  'Testfälle'
-  , 'Bestimmen der Testfälle'
+  'Testfaelle'
+  , 'Bestimmen der Testfaelle'
   , (select now() + interval '8 days')
   , (select id from project_stage where name = 'Anforderungsanalyse'and project = 1)
   , (select id from team where name = 'Team 2')
@@ -221,22 +223,22 @@ raise notice '[+] Creating dummy project, project stages and tasks';
 
   insert into task_dependency (task, depends) values (
   (select id from task where description = 'Erstellen des Lastenhefts')
-  , (select id from task where description = 'Abschätzung der wahrscheinlichen Kosten')
+  , (select id from task where description = 'Abschaetzung der wahrscheinlichen Kosten')
   );
 
   insert into task_dependency (task, depends) values (
   (select id from task where description = 'Erstellen eines Projektplan')
-  , (select id from task where description = 'Abschätzung der wahrscheinlichen Kosten')
+  , (select id from task where description = 'Abschaetzung der wahrscheinlichen Kosten')
   );
 
   insert into task_dependency (task, depends) values (
   (select id from task where description = 'Erstellen eines Pflichtenhefts')
-  , (select id from task where description = 'Bestimmen der Testfälle')
+  , (select id from task where description = 'Bestimmen der Testfaelle')
   );
 
   insert into team_project_relation (team, project) values (
   (select id from team where name = 'Team 2')
-  , (select id from project where name = 'Space Explorers')
+  , (select id from project where name = 'Space Explorer')
   ) on conflict do nothing;
 
 end $fill$;
@@ -264,7 +266,7 @@ end $fill$;
   );
 
   insert into task_comment (content, developer, task) values (
-  "ist fast fertig"
+  'ist fast fertig'
   , (select id from developer where email = 'CC@owlkeeper.de')
   , (select id from task where id = 3)
   );
