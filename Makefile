@@ -48,3 +48,6 @@ start-demo: compile
 
 start-no-db: compile
 	mvn exec:java
+
+start-locally: compile db-start
+	mvn exec:java -Dexec.args="/owlkeeper_local.properties"

@@ -1,5 +1,6 @@
 package de.htwsaar.owlkeeper.ui;
 
+import de.htwsaar.owlkeeper.storage.local.config.ConfigurationManager;
 import de.htwsaar.owlkeeper.ui.scenes.*;
 
 /**
@@ -37,6 +38,9 @@ public class Ui {
      * @param args CLI args
      */
     public static void main(String[] args) {
+        if(args.length >0){
+            ConfigurationManager.DEFAULT_CONFIG = args[0];
+        }
         new Ui();
     }
 }
