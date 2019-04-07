@@ -86,7 +86,7 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * Retrieves the group of the developer
      * @return the group
      */
-    public String getGroup() {
+    public List<String> getGroup() {
         return DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> dao.getGroup(getContainer().getId()));
     }
 

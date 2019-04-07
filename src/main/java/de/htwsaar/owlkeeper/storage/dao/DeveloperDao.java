@@ -86,7 +86,7 @@ public interface DeveloperDao {
             + "where d.id = ?"
     )
     @RegisterBeanMapper(Developer.class)
-    String getGroup(long id);
+    List<String> getGroup(long id);
 
     /**
      * Inserts a developer into a permission group
@@ -105,8 +105,9 @@ public interface DeveloperDao {
      * @param groupName
      * @return the former id of the record
      */
-    @SqlQuery("delete from developer_group_relation where developer = ? and \"group\" = ? "
-              + "returning id; ")
+    @SqlQuery("delete from developer_group_relation where developer = ? and \"group\" = "
+              + "(select id from \"group\" where name = ?) "
+              + "returning id;")
     int removeFromGroup(long devId, String groupName);
 
     /**
