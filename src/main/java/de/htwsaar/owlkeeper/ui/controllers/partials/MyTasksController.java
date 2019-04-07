@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MyTasksController extends SidebarController<Task> {
+
     private static final String OPEN_TASKS = "Open tasks";
     private static final String CLOSED_TASKS = "Closed tasks";
     private static final String STYLE_TASK_LIST = "task-list";
@@ -86,7 +87,7 @@ public class MyTasksController extends SidebarController<Task> {
      * @return the task Node
      */
     private HBox getTask(UiApp app, Task taskEntity) {
-        HBox task = TaskView.getTaskNode(app, taskEntity);
+        HBox task = TaskView.getTaskNode(app, taskEntity, this.getRedirectTarget());
         Node title = task.getChildren().get(1); // Get Title Text Node
         title.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             long stage = taskEntity.getProjectStage();
@@ -99,6 +100,14 @@ public class MyTasksController extends SidebarController<Task> {
             }
         });
         return task;
+    }
+
+    /**
+     * Returns the target-page for the task-checkbox
+     * @return page-name string
+     */
+    String getRedirectTarget(){
+        return "page";
     }
 
     @Override

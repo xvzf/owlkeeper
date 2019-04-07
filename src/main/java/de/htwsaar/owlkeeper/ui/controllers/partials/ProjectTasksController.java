@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import java.util.List;
 
 public class ProjectTasksController extends MyTasksController {
+
     private static final String NEW_TASK = "New task";
     private static final String STYLE_BUTTON = "button";
     private static final String STYLE_BUTTON_SMALL = "button--small";
@@ -48,5 +49,13 @@ public class ProjectTasksController extends MyTasksController {
             return TaskView.buildNewTaskSidebar(task, app);
         }
         return TaskView.buildSidebar(task, app);
+    }
+
+    /**
+     * Returns the target-page for the task-checkbox
+     * @return page-name string
+     */
+    String getRedirectTarget(){
+        return "page-iteration";
     }
 }
