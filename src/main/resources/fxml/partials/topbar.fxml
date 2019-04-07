@@ -10,19 +10,4 @@
    <children>
        <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="h2" text="topbar placeholder" />
    </children>
-    <!--<HBox alignment="CENTER_RIGHT" layoutX="117.0" layoutY="28.0" prefHeight="0.0"-->
-          <!--prefWidth="20000.0" styleClass="topbar__column">-->
-        <!--<HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0"-->
-              <!--styleClass="search">-->
-            <!--<ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true"-->
-                       <!--preserveRatio="true">-->
-                <!--<Image url="@/images/search.png"/>-->
-            <!--</ImageView>-->
-            <!--<TextField text="search"/>-->
-        <!--</HBox>-->
-        <!--<ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true"-->
-                   <!--preserveRatio="true">-->
-            <!--<Image url="@/images/users.png"/>-->
-        <!--</ImageView>-->
-    <!--</HBox>-->
 </HBox>
