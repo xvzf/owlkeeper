@@ -25,11 +25,11 @@ import javafx.scene.text.Text;
 public class ProjectsListingController extends Controller {
     private static final String CREATE_PROJECT = "Create project";
     private static final String CREATE_STAGE = "Create stage";
-    private static final String FIRST_STAGE_NAME = "First stage name";
+    private static final String FIRST_STAGE_NAME = "First stage name:";
     private static final String NEW_PROJECT = "New project";
-    private static final String NEW_STAGE = "New stage";
-    private static final String PROJECT_NAME = "Project name";
-    private static final String PROJECT_DESC = "Project description";
+    private static final String NEW_STAGE = "New stage:";
+    private static final String PROJECT_NAME = "Project name:";
+    private static final String PROJECT_DESC = "Project description:";
     private static final String STAGE_TITLE = "Stage title";
     private static final String MSG_INITIAL_STAGE_NAME_EMPTY = "The initial project stage needs to have a name.";
     private static final String MSG_NEW_STAGE_NAME_EMPTY = "The new stage must have a name.";
