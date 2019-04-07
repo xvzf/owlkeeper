@@ -59,6 +59,9 @@ public class TeamController extends Controller {
     private static final String VALIDATION_NAME = "Name can't be empty.";
     private static final String VALIDATION_EMAIL = "Email can't be empty.";
     private static final String VALIDATION_PASSWORD = "Password can't be empty.";
+    private static final String VALIDATION_DEV_TEAM = "This developer is already in this team and therefore can't be added again.";
+    private static final String VALIDATION_DEV_TEAM_NOT = "This developer is not in this Team and therefore can't be removed from it.";
+    private static final String VALIDATION_DEV_LEADER = "This developer is the teams leader and can't be removed";
 
 
     @FXML
@@ -338,6 +341,8 @@ public class TeamController extends Controller {
     }
 
     private VBox buildDevTeamForms(UiApp app, List<Developer> developers, List<Team> teams) {
+        Validator validator = new Validator();
+
         VBox form = new VBox();
         form.getStyleClass().add(STYLE_FORM);
 
@@ -366,15 +371,32 @@ public class TeamController extends Controller {
             Team t = team.getValue().getItem();
             boolean r = remove.isSelected();
 
+            // Validation
             TeamModel tModel = new TeamModel(t);
-            if (r && tModel.getDevelopers().contains(d)) {
-                tModel.removeDeveloper(d);
-            } else if (!tModel.getDevelopers().contains(d)) {
-                tModel.addDeveloper(d);
+            if (r) {
+                if (t.getLeader() == d.getId()){
+                    validator.getMessages().add(VALIDATION_DEV_LEADER);
+                } else if (!tModel.getDevelopers().contains(d)) {
+                    validator.getMessages().add(VALIDATION_DEV_TEAM_NOT);
+                }
+            } else {
+                if (tModel.getDevelopers().contains(d)) {
+                    validator.getMessages().add(VALIDATION_DEV_TEAM);
+                }
             }
-            app.route("page-team", new HashMap<>(), true);
 
+            // Execute
+            if (validator.execute() && validator.getMessages().size() == 0){
+                if (r){
+                    tModel.removeDeveloper(d);
+                } else{
+                    tModel.addDeveloper(d);
+                }
+                app.route("page-team", new HashMap<>(), true);
+            }
+            validator.reset();
         });
+        form.getChildren().add(validator.getMessageField());
 
         return form;
     }
