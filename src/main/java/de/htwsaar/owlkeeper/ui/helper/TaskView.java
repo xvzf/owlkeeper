@@ -147,7 +147,7 @@ public final class TaskView {
                 new TaskModel(taskEntity).save();
                 long stage = taskEntity.getProjectStage();
                 long project = new ProjectStageModel(stage).getContainer().getProject();
-                app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false), true);
+                app.route("page-iteration", TaskListState.getQueryMap(project, stage, taskEntity, false), true);
             }
             validator.reset();
         });
