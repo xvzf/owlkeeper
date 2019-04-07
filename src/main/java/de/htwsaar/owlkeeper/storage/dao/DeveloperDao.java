@@ -89,6 +89,27 @@ public interface DeveloperDao {
     String getGroup(long id);
 
     /**
+     * Inserts a developer into a permission group
+     * @param devId the developer
+     * @param groupName the permission group
+     * @return the id of the record
+     */
+    @SqlQuery("insert into developer_group_relation (developer,\"group\") "
+               + "values (?,(select id from \"group\" where name = ?)) "
+               + "returning id;")
+    int addToGroup(long devId, String groupName);
+
+    /**
+     * Deletes a developer from a group
+     * @param devId
+     * @param groupName
+     * @return the former id of the record
+     */
+    @SqlQuery("delete from developer_group_relation where developer = ? and \"group\" = ? "
+              + "returning id; ")
+    int removeFromGroup(long devId, String groupName);
+
+    /**
      * Queries all teams of a developer
      *
      * @param d developer

@@ -90,6 +90,27 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
         return DBConnection.getJdbi().withExtension(DeveloperDao.class, dao -> dao.getGroup(getContainer().getId()));
     }
 
+    /**
+     * Adds a developer to a group
+     *
+     * @param groupName the group he should be added to
+     * @return the id of the record
+     */
+    public int addToGroup(final String groupName) {
+        return DBConnection.getJdbi()
+                .withExtension(DeveloperDao.class, dao -> dao.addToGroup(getContainer().getId(), groupName));
+    }
+
+    /**
+     * Removes a developer from a group
+     * @param groupName the name of the group
+     * @return the former id of the record
+     */
+    public int removeFromGroup(final String groupName) {
+        return DBConnection.getJdbi()
+                .withExtension(DeveloperDao.class, dao -> dao.removeFromGroup(getContainer().getId(), groupName));
+    }
+
 
     /**
      * Retrieves all Developers
