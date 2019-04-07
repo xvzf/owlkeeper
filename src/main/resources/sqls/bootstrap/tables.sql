@@ -70,7 +70,7 @@ do $developers$ begin
     id serial primary key
     , created timestamp default now()
     , name text not null unique
-    , leader integer references developer (id)
+    , leader integer not null references developer (id)
   );
 
   -- Relation; Developers can be part of multiple teams
