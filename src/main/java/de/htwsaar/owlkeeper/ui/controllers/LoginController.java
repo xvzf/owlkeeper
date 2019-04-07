@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 
 public class LoginController extends Controller{
 
-    private static final String VALIDATION_ERROR = "Your Login Credentials are incorrect.\n Please check your inputs.";
+    private static final String VALIDATION_ERROR = "Your login credentials are incorrect.\nPlease check your inputs.";
     private static final String EMAIL_ADRESS = "Email adress:";
     private static final String PASSWORD = "Password:";
     private static final String LOGIN = "Login";
@@ -85,11 +85,6 @@ public class LoginController extends Controller{
             }
             return false;
         }, VALIDATION_ERROR));
-
-
-        // Prefill Credentials
-        email.setText("devel1@owlkeeper.de");
-        password.setText("password-1");
     }
 
     /**

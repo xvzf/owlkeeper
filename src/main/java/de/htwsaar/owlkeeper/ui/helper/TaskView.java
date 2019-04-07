@@ -293,7 +293,7 @@ public final class TaskView {
      *
      * @return the full listing Node
      */
-    public static HBox getTaskNode(UiApp app, Task taskEntity) {
+    public static HBox getTaskNode(UiApp app, Task taskEntity, String query) {
         HBox task = new HBox();
         task.setAlignment(Pos.CENTER_LEFT);
         task.getStyleClass().add(STYLE_TASK_LISTING);
@@ -319,7 +319,7 @@ public final class TaskView {
             model.save();
             long stage = taskEntity.getProjectStage();
             long project = new ProjectStageModel(stage).getContainer().getProject();
-            app.route("page-iteration", TaskListState.getQueryMap(project, stage, null, false), true);
+            app.route(query, TaskListState.getQueryMap(project, stage, null, false), true);
         });
         task.getChildren().add(image);
 
