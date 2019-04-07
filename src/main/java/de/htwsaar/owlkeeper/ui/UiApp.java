@@ -69,8 +69,8 @@ public class UiApp extends ViewApplication {
             throw new Exception("Scene with the name '" + this.getCurrentSceneName() + "' must be defined");
         }
         this.switchScene(this.getCurrentSceneName());
-        primaryStage.setMinHeight(500);
-        primaryStage.setMinWidth(750);
+        primaryStage.setMinHeight(650);
+        primaryStage.setMinWidth(950);
         primaryStage.setHeight(700);
         primaryStage.setWidth(1000);
         primaryStage.centerOnScreen();

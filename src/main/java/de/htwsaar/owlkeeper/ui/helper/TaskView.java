@@ -75,7 +75,7 @@ public final class TaskView {
         // Sidebar Pane
         ScrollPane sidebar = new ScrollPane();
         sidebar.setFitToHeight(true);
-        sidebar.setMinWidth(450);
+        sidebar.setMinWidth(600);
         sidebar.setHbarPolicy(ScrollBarPolicy.NEVER);
 
         // Sidebar Box
@@ -114,7 +114,7 @@ public final class TaskView {
         descriptionBox.getStyleClass().add(STYLE_FORM_ITEM);
         descriptionBox.getChildren().add(new Text(TASK_DESC));
         TextArea description = new TextArea();
-        description.setMaxWidth(400);
+        description.setMaxWidth(550);
         description.setWrapText(true);
         descriptionBox.getChildren().add(description);
         content.getChildren().add(descriptionBox);
@@ -173,7 +173,7 @@ public final class TaskView {
         // Title
         Text title = new Text(taskEntity.getName());
         title.getStyleClass().add(STYLE_SIDEBAR_TITLE);
-        title.setWrappingWidth(400);
+        title.setWrappingWidth(550);
         content.getChildren().add(title);
 
         // Date & Team -- Wrapper
@@ -201,7 +201,7 @@ public final class TaskView {
 
         // Description
         Text description = new Text(taskEntity.getDescription());
-        description.setWrappingWidth(400);
+        description.setWrappingWidth(550);
         content.getChildren().add(description);
 
         Button editButton = new Button(EDIT);
@@ -214,7 +214,7 @@ public final class TaskView {
         });
 
         // HairLine (hr)
-        content.getChildren().add(CommonNodes.Hr(375, true));
+        content.getChildren().add(CommonNodes.Hr(525, true));
 
         // Comments
         Validator validator = new Validator();
@@ -228,14 +228,14 @@ public final class TaskView {
             comment.getStyleClass().add(STYLE_COMMENTS_ITEM);
             comment.getChildren().add(CommonNodes.Image(IMG_USER, 25, 25));
             Text commentText = new Text(commentEntity.getContent());
-            commentText.setWrappingWidth(350);
+            commentText.setWrappingWidth(500);
             comment.getChildren().add(commentText);
             comments.getChildren().add(comment);
         }
 
         // TextArea
         TextArea input = new TextArea();
-        input.setMaxWidth(375);
+        input.setMaxWidth(525);
         input.setWrapText(true);
         input.getStyleClass().add(STYLE_COMMENTS_INPUT);
         input.setPromptText(WRITE_COMMENT);
