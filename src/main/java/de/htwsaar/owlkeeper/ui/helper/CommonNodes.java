@@ -48,31 +48,17 @@ public final class CommonNodes {
      *
      * @param date timestamp to render
      * @return Date represented as a Label Node Object
-     * @todo 28.02.2019 make date-color dynamic maybe switch string to timestamp
      */
     public static Text Date(Timestamp date) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         Text dateString = new Text(new SimpleDateFormat("dd.MM.yyyy").format(date));
         dateString.getStyleClass().add(STYLE_DATE);
-        // TODO: hardcoded switch
-        switch (0) {
-            case 2:
-                dateString.getStyleClass().add(STYLE_DATE_ERROR);
-                break;
-            case 1:
-                dateString.getStyleClass().add(STYLE_DATE_WARNING);
-                break;
-            default:
-                dateString.getStyleClass().add(STYLE_DATE_SUCCESS);
-                break;
-        }
-
+        dateString.getStyleClass().add(STYLE_DATE_SUCCESS);
         if (date.getTime() > (now.getTime() - 1000 * 60 * 60 * 24) && date.getTime() < now.getTime()) {
             dateString.getStyleClass().add(STYLE_DATE_WARNING);
         } else if (date.getTime() < now.getTime()) {
             dateString.getStyleClass().add(STYLE_DATE_ERROR);
         }
-
         return dateString;
     }
 

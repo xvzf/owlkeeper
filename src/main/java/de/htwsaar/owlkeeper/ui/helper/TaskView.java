@@ -271,7 +271,6 @@ public final class TaskView {
      * Builds the Task-Listing
      *
      * @return the full listing Node
-     * @todo 27.03.2019 finish dynamic content
      */
     public static HBox getTaskNode(UiApp app, Task taskEntity) {
         HBox task = new HBox();
