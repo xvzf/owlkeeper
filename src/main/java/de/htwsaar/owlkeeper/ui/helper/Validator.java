@@ -1,5 +1,7 @@
 package de.htwsaar.owlkeeper.ui.helper;
 
+import de.htwsaar.owlkeeper.storage.DBConnection;
+import de.htwsaar.owlkeeper.storage.dao.DeveloperDao;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.VBox;
@@ -7,12 +9,16 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 /**
  * Helper Class used to validate GUI-Forms
  */
 public class Validator {
     private static final String STYLE_FORM_ERROR = "form-error";
+    /** Thanks to: http://emailregex.com/    */
+    private static final Pattern EMAIL = Pattern
+            .compile ("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
 
     /**
      * Validation rule
@@ -134,6 +140,17 @@ public class Validator {
     public static boolean TextNotEmpty(Node node) {
         String text = ((TextInputControl) node).getText();
         return text != null && !text.trim().isEmpty();
+    }
+
+    public static boolean checkEmailSyntax(Node node) {
+        String text = ((TextInputControl) node).getText();
+        return EMAIL.matcher(text).matches();
+    }
+
+    public static boolean checkEmailExists(Node node) {
+        String text = ((TextInputControl) node).getText();
+        return DBConnection.getJdbi().withExtension(DeveloperDao.class, DeveloperDao::getDevelopers).stream()
+                .noneMatch(dev -> dev.getEmail().equals(text));
     }
 
 }
