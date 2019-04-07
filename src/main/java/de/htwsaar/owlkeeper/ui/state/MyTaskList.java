@@ -15,9 +15,8 @@ public class MyTaskList extends BaseState {
 
     public void handleQuery(HashMap<String, Object> query) {
         super.handleQuery(query);
-        long id = DeveloperManager.getCurrentDeveloper().getContainer().getId();
-        this.currentUser = new DeveloperModel(id).getContainer();
-        this.tasks = new DeveloperModel(currentUser).getTasks();
+        this.currentUser = DeveloperManager.getCurrentDeveloper().getContainer();
+        this.tasks = DeveloperManager.getCurrentDeveloper().getTasks();
     }
 
     @Override
