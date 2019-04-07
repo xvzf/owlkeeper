@@ -35,8 +35,8 @@ do $users$ begin
         id serial primary key
         , created timestamp default now()
         , name text not null
-        , email text not null UNIQUE CHECK(email LIKE '_%@__%.__%') -- Checks if E-Mail valid, not bulletproof
-        , pw_hash text -- not null @TODO nullable until pw authentication is implemented --SALT encoded in pw hash e.g. ${salt}:${pwhash}
+        , email text not null UNIQUE CHECK(email LIKE '_%@_%.__%') -- Checks if E-Mail valid, not bulletproof
+        , pw_hash text not null --@todo SALT encoded in pw hash e.g. ${salt}:${pwhash}
     );
 
     -- Group
