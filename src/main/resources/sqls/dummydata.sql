@@ -51,6 +51,10 @@ do $fill$ begin
     , (select id from "group" where name = 'task')
   ); -- devel4@owlkeeper.de -> project, task
 
+  insert into developer_group_relation (developer, "group") values (
+    (select id from developer where email = 'devel5@owlkeeper.de')
+    , (select id from "group" where name = 'project')
+  ); -- devel4@owlkeeper.de -> project, task
 
   -- Dummy teams
   insert into team (name, leader) values (
@@ -132,7 +136,7 @@ raise notice '[+] Creating dummy project, project stages and tasks';
     , 'Task 5 description'
     , (select now() + interval '7 days')
     , (select id from project_stage where name = 'Stage 1' and project = 2)
-    , null
+    , (select id from team where name = 'Team 2')
   );
 
   insert into task (name, description, deadline, project_stage, team) values (
@@ -140,7 +144,7 @@ raise notice '[+] Creating dummy project, project stages and tasks';
     , 'Task 6 description'
     , (select now() + interval '7 days')
     , (select id from project_stage where name = 'Stage 2' and project = 2)
-    , null
+    , (select id from team where name = 'Team 1')
   );
 
   insert into task (name, description, deadline, project_stage, team) values (
@@ -148,7 +152,7 @@ raise notice '[+] Creating dummy project, project stages and tasks';
     , 'Task 1 description'
     , (select now() + interval '7 days')
     , (select id from project_stage where name = 'Stage 1' and project = 1)
-    , null
+    , (select id from team where name = 'Team 1')
   );
 
   insert into task (name, description, deadline, project_stage, team) values (
@@ -156,8 +160,8 @@ raise notice '[+] Creating dummy project, project stages and tasks';
     , 'Task 2 description'
     , (select now() + interval '7 days')
     , (select id from project_stage where name = 'Stage 1'and project = 1)
-    , (select id from team where name = 'Team 1'
-  ));
+    , (select id from team where name = 'Team 1')
+  );
 
   insert into task (name, description, deadline, fulfilled, project_stage, team) values (
     'Task 3'
@@ -173,7 +177,7 @@ raise notice '[+] Creating dummy project, project stages and tasks';
     , 'Task 4 description'
     , (select now() + interval '7 days')
     , (select id from project_stage where name = 'Stage 2'and project = 1)
-    , null
+    , (select id from team where name = 'Team 2')
   );
 
   insert into task_dependency (task, depends) values (
@@ -183,7 +187,8 @@ raise notice '[+] Creating dummy project, project stages and tasks';
 
   insert into team_project_relation (team, project) values (
     (select id from team where name = 'Team 2')
-    , (select id from project where name = 'Testproject2'));
+    , (select id from project where name = 'Testproject2')
+  ) on conflict do nothing;
 
 end $fill$;
 
