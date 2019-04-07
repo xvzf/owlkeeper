@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.htwsaar.owlkeeper.helper.DeveloperManager;
 import de.htwsaar.owlkeeper.storage.entity.Developer;
 import de.htwsaar.owlkeeper.storage.entity.Team;
 import de.htwsaar.owlkeeper.storage.model.DeveloperModel;
@@ -259,20 +260,24 @@ public class TeamController extends Controller {
 
         // Submit event
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            if (validator.execute()) {
-                BaseState.QUERY_COUNT++;
-                Developer dev = new Developer();
-                dev.setName(name.getText());
-                dev.setEmail(email.getText());
-                dev.setPwhash(password.getText());
-                DeveloperModel devModel = new DeveloperModel(dev);
-                devModel.save();
-                // TODO: 07.04.2019 make new developers admin as long as the access controll feature is not implemented
-                Developer savedDev = new DeveloperModel(dev.getEmail()).getContainer();
-                checkboxes.forEach(teamDataCheckbox -> {
-                    new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
-                });
-                app.route("page-team", new HashMap<>(), true);
+            try {
+                if (validator.execute()) {
+                    BaseState.QUERY_COUNT++;
+                    Developer dev = new Developer();
+                    dev.setName(name.getText());
+                    dev.setEmail(email.getText());
+                    dev.setPwhash(DeveloperModel.getHash(password.getText()));
+                    DeveloperModel devModel = new DeveloperModel(dev);
+                    devModel.save();
+                    devModel.addToGroup("admin"); // TODO: 07.04.2019 change this after access-control is fully implemented
+                    Developer savedDev = new DeveloperModel(dev.getEmail()).getContainer();
+                    checkboxes.forEach(teamDataCheckbox -> {
+                        new TeamModel(teamDataCheckbox.getData()).addDeveloper(savedDev);
+                    });
+                    app.route("page-team", new HashMap<>(), true);
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
             validator.reset();
         });
