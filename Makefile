@@ -1,4 +1,4 @@
-PSQL="PGPASSWORD=owlkeeper psql -h lanarama.rocketlan.de owlkeeper owlkeeper"
+PSQL="PGPASSWORD=owlkeeper psql -h 127.0.0.1 owlkeeper owlkeeper"
 PSQL_DEMO="PGPASSWORD=owlkeeper1337 psql -h lanarama.rocketlan.de owlkeeper owlkeeper"
 SQL_DIR=./src/main/resources/sqls
 DOCKER_FILE=./src/main/resources/docker-compose.yml
