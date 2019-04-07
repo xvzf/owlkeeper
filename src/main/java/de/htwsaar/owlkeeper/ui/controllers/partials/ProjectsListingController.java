@@ -23,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class ProjectsListingController extends Controller {
+
     private static final String CREATE_PROJECT = "Create project";
     private static final String CREATE_STAGE = "Create stage";
     private static final String FIRST_STAGE_NAME = "First stage name:";
