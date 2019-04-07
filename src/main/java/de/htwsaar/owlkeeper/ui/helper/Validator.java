@@ -133,7 +133,7 @@ public class Validator {
      */
     public static boolean TextNotEmpty(Node node) {
         String text = ((TextInputControl) node).getText();
-        return text != null && !text.isEmpty();
+        return text != null && !text.trim().isEmpty();
     }
 
 }

@@ -20,6 +20,6 @@ public class Team extends Page{
 
     @Override
     public boolean getForce(){
-        return false;
+        return true;
     }
 }

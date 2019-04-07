@@ -1,5 +1,8 @@
 package de.htwsaar.owlkeeper.ui.controllers.partials;
 
+import java.util.HashMap;
+import java.util.List;
+
 import de.htwsaar.owlkeeper.storage.entity.Project;
 import de.htwsaar.owlkeeper.storage.entity.ProjectStage;
 import de.htwsaar.owlkeeper.storage.model.ProjectModel;
@@ -8,21 +11,16 @@ import de.htwsaar.owlkeeper.ui.UiApp;
 import de.htwsaar.owlkeeper.ui.controllers.Controller;
 import de.htwsaar.owlkeeper.ui.helper.CommonNodes;
 import de.htwsaar.owlkeeper.ui.helper.Validator;
+import de.htwsaar.owlkeeper.ui.state.BaseState;
 import de.htwsaar.owlkeeper.ui.state.TaskListState;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class ProjectsListingController extends Controller {
     private static final String CREATE_PROJECT = "Create project";
@@ -33,7 +31,6 @@ public class ProjectsListingController extends Controller {
     private static final String PROJECT_NAME = "Project name";
     private static final String PROJECT_DESC = "Project description";
     private static final String STAGE_TITLE = "Stage title";
-    private static final String TYPE = "Type";
     private static final String MSG_INITIAL_STAGE_NAME_EMPTY = "The initial project stage needs to have a name.";
     private static final String MSG_NEW_STAGE_NAME_EMPTY = "The new stage must have a name.";
     private static final String MSG_PROJECT_NAME_EMPTY = "Project name can't be empty.";
@@ -50,9 +47,6 @@ public class ProjectsListingController extends Controller {
     private static final String STYLE_PROJECT_STAGE_FORM = "project__stage-form";
     private static final String STYLE_PROJECT_STAGE_LISTING = "project__stage-listing";
     private static final String STYLE_PROJECT_STAGE_WRAPPER = "project__stage-wrapper";
-
-    private static final ObservableList<String> MODELS = FXCollections.observableArrayList("V-Model", "Waterfall",
-            "Spiral");
 
     @FXML
     private VBox listing;
@@ -109,27 +103,19 @@ public class ProjectsListingController extends Controller {
         stageBox.getChildren().add(stage);
         form.getChildren().add(stageBox);
 
-        // Project type
-        VBox typeBox = new VBox();
-        typeBox.getStyleClass().add(STYLE_PROJECT_FORM_ITEM);
-        typeBox.getChildren().add(new Text(TYPE));
-        ChoiceBox<String> type = new ChoiceBox<>(MODELS);
-        type.getSelectionModel().select(0);
-        typeBox.getChildren().add(type);
-        form.getChildren().add(typeBox);
-
         // Submit button
         Button submit = new Button(CREATE_PROJECT);
         submit.getStyleClass().addAll(STYLE_BUTTON);
         form.getChildren().add(submit);
         submit.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if (validator.execute()) {
-                ProjectModel newProject = new ProjectModel(name.getText(), desc.getText(), type.getValue());
+                ProjectModel newProject = new ProjectModel(name.getText(), desc.getText(), "none");
                 newProject.save();
                 long id = newProject.getContainer().getId();
                 System.out.println(id);
                 ProjectStageModel newStage = new ProjectStageModel(stage.getText(), id, 0);
                 newStage.save();
+                BaseState.QUERY_COUNT++;
                 app.route("projects", new HashMap<>(), true);
             }
             validator.reset();

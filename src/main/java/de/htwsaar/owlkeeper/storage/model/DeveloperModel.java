@@ -10,12 +10,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import java.lang.String;
-import java.security.*;
 
 import static de.htwsaar.owlkeeper.service.PermissionHandler.checkPermission;
 
@@ -37,16 +37,17 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
 
     /**
      * Developer Model, creates a new developer
-     *
-     * @param name  Name
+     *  @param name  Name
      * @param email Email
+     * @param pwhash
      */
-    public DeveloperModel(String name, String email) {
+    public DeveloperModel(String name, String email, String pwhash) {
         super(logger, DeveloperDao.class, loadCallbackFactory1, deleteCallbackFactory, saveCallbackFactory1);
         setContainer(new Developer());
         Developer d = getContainer();
         d.setName(name);
         d.setEmail(email);
+        d.setPwhash(pwhash);
     }
 
     /**
@@ -127,20 +128,10 @@ public class DeveloperModel extends AbstractModel<Developer, DeveloperDao> {
      * @param pw the password
      * @return the hash
      */
-    private String getHash(String pw) {
-        MessageDigest digest;
-        try {
-            digest = MessageDigest.getInstance("MD5");
-        } catch (java.security.NoSuchAlgorithmException e) {
-            return "Nicht gefunden!";   //TODO Something better than that
-        }
-        byte[] hash;
-        try {
-            hash = digest.digest(pw.getBytes("UTF_8"));
-        }catch(java.io.UnsupportedEncodingException e){
-            return "FEHLER";            //TODO something better
-        }
-        return Arrays.toString(hash);
-
+    public static String getHash(String pw) throws Exception{
+        MessageDigest digest = MessageDigest.getInstance("MD5");
+        byte[] hash = digest.digest(pw.getBytes(StandardCharsets.UTF_8));
+        BigInteger bigInt = new BigInteger(1, hash);
+        return bigInt.toString(16);
     }
 }

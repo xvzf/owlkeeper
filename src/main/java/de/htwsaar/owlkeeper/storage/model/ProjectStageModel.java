@@ -35,7 +35,8 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
                 checkPermission(Permissions.CREATE_PROJECT_STAGE.get());
                 checkPermission(user -> // Check that the user is assigned to the project.
                         DBConnection.getJdbi().withExtension(ProjectDao.class,
-                                projectDao -> projectDao.getProjectsOfUser(user.getId())).contains(dao.getProject(p.getId())));
+                                projectDao -> projectDao.getProjectsOfUser(user.getId()))
+                                .contains(new ProjectModel(p.getProject()).getContainer()));
                 return (p.getId() != 0 ? dao.updateProjectStage(p) : dao.insertProjectStage(p));
             });
 
@@ -89,18 +90,7 @@ public class ProjectStageModel extends AbstractModel<ProjectStage, ProjectStageD
      * @return all Teams
      */
     public List<Team> getTeams() {
-        List<Task> tasks = getTasks();
-        ArrayList<Team> teams = new ArrayList<>();
-        for (Task task : tasks) {
-            long team_id = task.getTeam();
-            if (team_id == 0) {
-                continue;
-            }
-            Team team = new TeamModel(team_id).getContainer();
-            teams.add(team);
-
-        }
-        return teams;
+        return DBConnection.getJdbi().withExtension(ProjectStageDao.class, dao -> dao.getTeams(getContainer().getId()));
     }
 
 }

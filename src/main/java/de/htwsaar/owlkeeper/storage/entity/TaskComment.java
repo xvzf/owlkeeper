@@ -32,8 +32,6 @@ public class TaskComment extends HasID {
     }
 
     public void setContent(String content) {
-        // You may not edit comments of other users
-        PermissionHandler.checkPermission(user -> user.getId() == developer);
         this.content = content;
     }
 

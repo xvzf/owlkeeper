@@ -1,5 +1,8 @@
 package de.htwsaar.owlkeeper.ui.helper;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
@@ -7,6 +10,8 @@ import javafx.scene.text.Text;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.function.Function;
 
 public final class CommonNodes {
     private static final String STYLE_BACKGROUND_COLOR = "-fx-background-color: ";
@@ -18,14 +23,14 @@ public final class CommonNodes {
     private static final String STYLE_HR_LIGHT = "hr--light";
     private static final String STYLE_TAG = "tag";
 
-    private CommonNodes() {
+    private CommonNodes(){
     }
 
     /**
      * Builds an ImageView Node
      *
-     * @param uri path to the image
-     * @param width fit width
+     * @param uri    path to the image
+     * @param width  fit width
      * @param height fit height
      * @return ImageView Node object
      */
@@ -51,15 +56,15 @@ public final class CommonNodes {
         dateString.getStyleClass().add(STYLE_DATE);
         // TODO: hardcoded switch
         switch (0) {
-        case 2:
-            dateString.getStyleClass().add(STYLE_DATE_ERROR);
-            break;
-        case 1:
-            dateString.getStyleClass().add(STYLE_DATE_WARNING);
-            break;
-        default:
-            dateString.getStyleClass().add(STYLE_DATE_SUCCESS);
-            break;
+            case 2:
+                dateString.getStyleClass().add(STYLE_DATE_ERROR);
+                break;
+            case 1:
+                dateString.getStyleClass().add(STYLE_DATE_WARNING);
+                break;
+            default:
+                dateString.getStyleClass().add(STYLE_DATE_SUCCESS);
+                break;
         }
 
         if (date.getTime() > (now.getTime() - 1000 * 60 * 60 * 24) && date.getTime() < now.getTime()) {
@@ -105,7 +110,7 @@ public final class CommonNodes {
     /**
      * Builds a Tag element with a custom color as a Label Node
      *
-     * @param text the tags text
+     * @param text  the tags text
      * @param color the tags color value as hex
      * @return Label Node Object
      */
@@ -113,5 +118,48 @@ public final class CommonNodes {
         Label tag = CommonNodes.Tag(text);
         tag.setStyle(STYLE_BACKGROUND_COLOR + color);
         return tag;
+    }
+
+
+    /**
+     * Wraps a Entity to allow better customisation
+     * of the to string method
+     */
+    public static class EntityWrapper<T> {
+
+        private T item;
+        private Function<T, String> function;
+
+        public EntityWrapper(T item, Function<T, String> function){
+            this.item = item;
+            this.function = function;
+        }
+
+        @Override
+        public String toString(){
+            return this.function.apply(this.item);
+        }
+
+        public T getItem(){
+            return this.item;
+        }
+    }
+
+    /**
+     * Builds a choice box using the EntityWrapper
+     * allowing for deeper customisation of the select options string
+     * while still giving access to the root object
+     * @param items list of items
+     * @param function toString method
+     * @param <T> type of the items
+     * @return ChoiceBox
+     */
+    public static <T> ChoiceBox<EntityWrapper<T>> ChoiceBox(List<T> items, Function<T, String> function) {
+        ChoiceBox<EntityWrapper<T>> choiceBox = new ChoiceBox<>();
+        ObservableList list = FXCollections.observableArrayList();
+        items.forEach(item -> list.add(new EntityWrapper<T>(item, function)));
+        choiceBox.setItems(list);
+        choiceBox.getSelectionModel().select(0);
+        return choiceBox;
     }
 }
