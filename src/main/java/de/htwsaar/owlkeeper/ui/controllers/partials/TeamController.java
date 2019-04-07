@@ -370,6 +370,7 @@ public class TeamController extends Controller {
 
         // Submit
         HBox submit = new HBox();
+        submit.getStyleClass().add(STYLE_FORM_ITEM);
         Button add = new Button(ADD);
         Button remove = new Button(REMOVE);
         add.getStyleClass().addAll(STYLE_BUTTON, STYLE_BUTTON_SMALL);
