@@ -1,4 +1,5 @@
-PSQL="PGPASSWORD=owlkeeper1337 psql -h lanarama.rocketlan.de owlkeeper owlkeeper"
+PSQL="PGPASSWORD=owlkeeper psql -h lanarama.rocketlan.de owlkeeper owlkeeper"
+PSQL_DEMO="PGPASSWORD=owlkeeper1337 psql -h lanarama.rocketlan.de owlkeeper owlkeeper"
 SQL_DIR=./src/main/resources/sqls
 DOCKER_FILE=./src/main/resources/docker-compose.yml
 
@@ -23,9 +24,6 @@ bootstrap:
 dummydata:
 	@sh -c ${PSQL} < ${SQL_DIR}/dummydata.sql
 
-dummydata-demo:
-	@sh -c ${PSQL} < ${SQL_DIR}/dummydatademo.sql
-
 clean: bootstrap dummydata db-debug
 
 # =======================
@@ -39,7 +37,11 @@ test: bootstrap dummydata
 start: compile db-start
 	mvn exec:java
 
-deploy-demo: bootstrap dummydata-demo
+deploy-demo:
+	@sh -c ${PSQL_DEMO} < ${SQL_DIR}/bootstrap/destroy.sql
+	@sh -c ${PSQL_DEMO} < ${SQL_DIR}/bootstrap/tables.sql
+	@sh -c ${PSQL_DEMO} < ${SQL_DIR}/bootstrap/functions.sql
+	@sh -c ${PSQL_DEMO} < ${SQL_DIR}/dummydatademo.sql
 
 start-demo: compile
 	mvn exec:java
